@@ -38,13 +38,9 @@ export function PdfPreviewPane({
   const [error, setError] = useState<string | null>(null);
   const [unlockedState, setUnlockedState] = useState<boolean>(isUnlocked);
 
-  // Check URL params or legitimate storage for unlock status
+  // Check legitimate storage for unlock status
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get("unlocked") === "true" || urlParams.get("success") === "true") {
-        setUnlockedState(true);
-      }
       const storedUnlock = localStorage.getItem(`ldp_unlocked_${config.id}`);
       if (storedUnlock === "true") {
         setUnlockedState(true);
@@ -182,7 +178,21 @@ export function PdfPreviewPane({
       </div>
 
       {/* PDF View Container */}
-      <div className="relative flex-1 min-h-[460px] lg:min-h-[560px] bg-slate-950 flex items-center justify-center p-2">
+      <div className="relative flex-1 min-h-[460px] lg:min-h-[560px] bg-slate-950 flex flex-col items-center justify-center p-2">
+        {pdfUrl && (
+          <div className="lg:hidden w-full flex items-center justify-between px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-lg mb-2 text-[11px] text-slate-300">
+            <span>Mobile Preview:</span>
+            <a
+              href={pdfUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400 hover:text-blue-300 font-semibold underline flex items-center gap-1"
+            >
+              <span>Tap for Fullscreen</span>
+              <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+        )}
         {error ? (
           <div className="text-center p-6 text-red-400 space-y-2">
             <AlertCircle className="w-8 h-8 mx-auto" />

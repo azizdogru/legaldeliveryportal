@@ -1201,6 +1201,366 @@ export function getStatuteForDocumentAndState(docSlug: string, stateCode: string
         `Recording an Affidavit of Surviving Spouse in ${state.name} legally clears real estate title without requiring full formal probate court administration.`,
       ];
       break;
+    case "subcontractor-agreement":
+      noticeDays = profile.lienNoticeDays || 30;
+      statuteCitation = `${profile.legalCodePrefix} Construction Prompt Payment & Subcontractor Mechanics Lien Act`;
+      statuteName = `${state.name} Construction Contracts and Subcontractor Protection Code`;
+      summary = `Under ${state.name} construction law, general contractors must pay subcontractors within statutory prompt payment deadlines following owner disbursement, with retainage capped and subject to mandatory lien waiver rules.`;
+      penalties = `Late payments incur statutory interest, attorney fees, and permit subcontractor suspension of work or recording of mechanic's liens in ${state.courtSystemName}.`;
+      keyRequirements = [
+        "Prompt payment deadlines following general contractor receipt of owner progress draws",
+        `Compliance with ${state.name} statutory retainage caps (typically 5% to 10% maximum)`,
+        "Mandatory delivery of statutory progress lien waivers with each payment application",
+        "OSHA safety compliance and mutual indemnification holding contractor harmless",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Construction prompt payment statutes in ${state.name} void contractual "pay-if-paid" clauses if used to unreasonably delay trade subcontractor compensation.`,
+      ];
+      break;
+
+    case "property-management-agreement":
+      noticeDays = 30;
+      statuteCitation = `${profile.legalCodePrefix} Real Estate Licensing & Property Management Trust Accounting Laws`;
+      statuteName = `${state.name} Real Estate Brokerage and Property Management Standards`;
+      summary = `In ${state.name}, property management contracts establish licensed fiduciary agency, requiring segregation of tenant security deposits in state-compliant trust accounts and written financial reporting to owners.`;
+      penalties = `Commingling tenant trust funds or operating without proper real estate broker licensing triggers administrative revocation of licenses and treble civil damages.`;
+      keyRequirements = [
+        "Segregation of all tenant rental and security deposit funds in dedicated trust accounts",
+        "Itemized monthly income and expenditure accountings delivered to property owner",
+        "Clear contractual caps on manager discretionary repair and maintenance expenditures",
+        "Mandatory property casualty and comprehensive general liability insurance coverage",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Real estate licensing commissions in ${state.name} require property managers to hold active real estate broker licenses when leasing or negotiating rents for third-party owners.`,
+      ];
+      break;
+
+    case "joint-ventures-agreement":
+      noticeDays = "Immediate upon Execution";
+      statuteCitation = `${profile.legalCodePrefix} Commercial Partnerships & Joint Venture Common Law Principles`;
+      statuteName = `${state.name} Business Organizations and Joint Venture Commercial Standards`;
+      summary = `Under ${state.name} commercial jurisprudence, joint ventures create a specialized partnership for a single commercial or real estate enterprise without imposing general entity liability.`;
+      penalties = `Co-venturers breaching fiduciary duties of loyalty, fair dealing, or misappropriating joint opportunities face judicial accounting and personal damages in ${state.courtSystemName}.`;
+      keyRequirements = [
+        "Itemization of initial capital contributions and capital call funding mechanics",
+        "Clear dilution penalties and default interest for non-funding co-venturers",
+        "Management Steering Committee governance with unanimous approval for major debt and sales",
+        "Waterfall distribution mechanics prioritizing return of capital before profit splits",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Commercial joint ventures in ${state.name} are construed under partnership fiduciary principles unless expressly disclaimed in the written venture agreement.`,
+      ];
+      break;
+
+    case "llc-membership-transfer":
+      noticeDays = "Immediate upon Closing";
+      statuteCitation = `${profile.legalCodePrefix} Revised Uniform Limited Liability Company Act (RULLCA)`;
+      statuteName = `${state.name} Limited Liability Company Act on Transfer of Membership Interests`;
+      summary = `Governed by the Limited Liability Company Act in ${state.name}. Regulates assignment of economic rights, capital accounts, and admission of substitute voting members subject to operating agreement consent.`;
+      penalties = `Unauthorized transfers violate company operating agreements, conferring only economic assignee rights without voting authority or manager access.`;
+      keyRequirements = [
+        "Written assignment instrument conveying specified membership percentage and units",
+        "Formal consent and approval of manager or non-transferring members for voting admission",
+        "Assignee written assumption of company operating agreement obligations and liabilities",
+        "Closing date profit and loss tax allocation pursuant to Internal Revenue Code Section 706",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Under ${state.name} LLC law, an assignee of a membership interest is entitled to receive only distributions until formally admitted as a full member by company consent.`,
+      ];
+      break;
+
+    case "sales-agency-commission":
+      noticeDays = 30;
+      statuteCitation = `${profile.legalCodePrefix} Independent Sales Representative Protection Act`;
+      statuteName = `${state.name} Sales Representative Commission Payment and Contract Act`;
+      summary = `In ${state.name}, state sales representative statutes require written contracts and strictly enforce timely commission payments upon contract termination, with post-termination tail protections.`;
+      penalties = `Failure to remit earned commissions within state statutory deadlines following termination triggers mandatory treble damages, court costs, and attorney fees.`;
+      keyRequirements = [
+        "Written agreement setting forth precise commission percentage and net invoice basis",
+        "Defined geographic sales territory and authorized commercial product lines",
+        "Regular monthly commission disbursement and itemized customer accounting statements",
+        "Mandatory statutory tail period protecting commissions on orders booked prior to exit",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Sales representative protection statutes in ${state.name} impose severe civil penalties on principals who fail to pay post-termination commissions within statutory deadlines.`,
+      ];
+      break;
+
+    case "special-warranty-deed":
+      noticeDays = "Recording Immediate";
+      statuteCitation = `${profile.legalCodePrefix} Conveyancing, Limited Warranty Covenants & Real Property Titles`;
+      statuteName = `${state.name} Real Property Code on Special and Limited Warranty Deeds`;
+      summary = `Under ${state.name} conveyancing statutes, a Special Warranty Deed limits Grantor warranty of title solely to claims arising by, through, or under Grantor, standard in commercial and institutional real estate sales.`;
+      penalties = `Grantor remains liable for clouds on title or unreleased encumbrances created during Grantor period of ownership.`;
+      keyRequirements = [
+        "Accurate legal property description, metes and bounds, and county parcel identification number",
+        "Granting clause with express covenants of special and limited warranty defense",
+        "Execution before a commissioned Notary Public conforming to county clerk recording rules",
+        "Specification of permitted exceptions: current ad valorem taxes, easements, and covenants of record",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `In ${state.name}, special warranty deeds must be recorded in the county land records office where the real property is situated to impart constructive notice to bona fide purchasers.`,
+      ];
+      break;
+
+    case "unconditional-notice-to-quit":
+      noticeDays = profile.defaultNoticeDays < 5 ? profile.defaultNoticeDays : 3;
+      statuteCitation = `${profile.legalCodePrefix} Expedited Eviction & Non-Curable Lease Forfeiture Statutes`;
+      statuteName = `${state.name} Expedited Unlawful Detainer for Illegal Activity Code`;
+      summary = `Under ${state.name} unlawful detainer statutes, landlords can serve an immediate, non-curable notice to quit when a tenant engages in illegal narcotics activity, violent felonies, weapons offenses, or severe waste.`;
+      penalties = `Tenant has zero statutory right to cure; failure to vacate within the expedited window results in immediate court eviction filing, holdover damages, and sheriff removal.`;
+      keyRequirements = [
+        "Unambiguous statement that tenancy is unconditionally terminated with zero right to cure",
+        "Factual summary of criminal offenses, narcotics violations, or irreparable property destruction",
+        `Strict adherence to ${state.name} expedited statutory notice period (typically 24 hours to 3 days)`,
+        "Verified Certificate of Service proving personal hand delivery or statutory substituted service",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Courts in ${state.name} require clear and convincing factual proof of statutory non-curable offenses before granting expedited writs of possession without prior cure notice.`,
+      ];
+      break;
+
+    case "rent-receipt-document":
+      noticeDays = "Contemporaneous Delivery";
+      statuteCitation = `${profile.legalCodePrefix} Mandatory Landlord Rent Receipt & Payment Record Law`;
+      statuteName = `${state.name} Landlord-Tenant Rent Payment Recordation Standards`;
+      summary = `Mandated by residential tenancy laws in ${state.name}. Landlords must deliver a written receipt for cash or upon tenant request, documenting date, amount, property address, and rental period.`;
+      penalties = `Refusal to provide mandated rent receipts subjects landlords to statutory fines, administrative tenant complaints, and evidentiary presumptions of payment in rent disputes.`;
+      keyRequirements = [
+        "Itemized payment amount, tender method (cash, ACH, certified funds), and date received",
+        "Clear identification of rental premises, tenant of record, and rental coverage period",
+        "Allocation of funds showing base rent, late fees, and remaining balance (zero balance confirmation)",
+        "Authorized signature of landlord, property manager, or leasing agent accepting payment",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `In ${state.name}, landlords are statutorily required to maintain written rent receipt records and payment ledgers for a minimum statutory retention period (typically 3 years).`,
+      ];
+      break;
+
+    case "landlord-verification-form":
+      noticeDays = "Upon Applicant Request";
+      statuteCitation = `15 U.S.C. Section 1681 (Fair Credit Reporting Act) & ${profile.legalCodePrefix} Tenant Screening Laws`;
+      statuteName = `Federal FCRA & ${state.name} Tenant History Verification Standards`;
+      summary = `In ${state.name}, landlord verification inquiries require signed applicant FCRA authorization, allowing prior housing providers to truthfully disclose rental payment history, property condition, and lease compliance.`;
+      penalties = `Making false or defamatory statements regarding former tenants exposes prior landlords to tort liability and statutory defamation claims in ${state.courtSystemName}.`;
+      keyRequirements = [
+        "Applicant signed Fair Credit Reporting Act (FCRA) information release authorization",
+        "Factual audit of tenancy dates, monthly rent rate, and payment timeliness history",
+        "Objective documentation of lease compliance, noise complaints, pets, and property condition",
+        "Direct re-rental eligibility confirmation and verified property manager signature",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Tenant screening practices in ${state.name} must strictly adhere to federal Fair Housing Act and FCRA non-discrimination guidelines during rental verification checks.`,
+      ];
+      break;
+
+    case "model-release-agreement":
+      noticeDays = "Effective upon Execution";
+      statuteCitation = `${profile.legalCodePrefix} Right of Publicity & Commercial Likeness Protection Laws`;
+      statuteName = `${state.name} Commercial Misappropriation and Likeness Release Standards`;
+      summary = `Governed by the Right of Publicity in ${state.name}. Grants irrevocable commercial rights to photograph, film, and commercially exploit an individual's likeness, name, and voice worldwide in perpetuity.`;
+      penalties = `Using an individual's image or voice in commercial advertising without a signed release constitutes commercial misappropriation and invasion of privacy, triggering actual, statutory, and punitive damages.`;
+      keyRequirements = [
+        "Irrevocable, worldwide, perpetual grant of commercial rights across all media formats",
+        "Acknowledgment of valuable consideration received in full satisfaction of all claims",
+        "Express waiver of inspection rights, editorial alterations, and future royalty claims",
+        "Representation of legal age and capacity, or attached parent/guardian consent for minors",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Right of publicity statutes in ${state.name} protect individuals from unauthorized commercial exploitation of their name, portrait, picture, or voice for advertising purposes.`,
+      ];
+      break;
+
+    case "music-media-license":
+      noticeDays = "Effective upon Execution";
+      statuteCitation = `17 U.S.C. Section 106 & ${profile.legalCodePrefix} Commercial Licensing Principles`;
+      statuteName = `Federal Copyright Act & ${state.name} Commercial Media Contracts Code`;
+      summary = `Grants synchronization and master use rights under federal copyright law, permitting integration of musical compositions and sound recordings into films, digital media, podcasts, and commercial broadcasts.`;
+      penalties = `Unauthorized synchronization or distribution constitutes willful copyright infringement under 17 U.S.C. Section 504, carrying statutory damages up to $150,000 per infringed work and federal injunctions.`;
+      keyRequirements = [
+        "Dual grant of synchronization rights (publishing) and master use rights (sound recording)",
+        "Flat synchronization buyout fee or defined streaming revenue participation schedule",
+        "Explicit definition of authorized media projects, digital platforms, and worldwide territory",
+        "Mandatory screen credit attribution and licensor warranty of original authorship",
+      ];
+      stateRules = [
+        "Federal copyright law exclusively governs musical composition and sound recording ownership across all 50 states.",
+        `Commercial contract enforcement and licensing interpretations are governed by the contract law of ${state.name}.`,
+      ];
+      break;
+
+    case "fitness-liability-waiver":
+      noticeDays = "Effective upon Execution";
+      statuteCitation = `${profile.legalCodePrefix} Express Assumption of Risk & Exculpatory Agreement Standards`;
+      statuteName = `${state.name} Recreational Liability and Express Assumption of Risk Code`;
+      summary = `In ${state.name}, clear and unambiguous exculpatory contracts release athletic facilities and trainers from liability for ordinary negligence, provided the waiver explicitly mentions negligence and inherent hazards.`;
+      penalties = `An improperly drafted waiver failing to expressly cite negligence will be struck down in personal injury litigation in ${state.courtSystemName}.`;
+      keyRequirements = [
+        "Clear, unambiguous exculpatory release language specifically mentioning ordinary negligence",
+        "Voluntary assumption of inherent physical risks: fractures, tears, cardiovascular events, equipment defects",
+        "Participant warranty of physical health and medical physician clearance prior to exercise",
+        "Emergency medical consent authorizing facility staff to summon paramedic ambulance transport",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Courts in ${state.name} strictly enforce exculpatory liability waivers for adult participants when the contract explicitly states that ordinary negligence is released.`,
+      ];
+      break;
+
+    case "catering-event-contract":
+      noticeDays = "14-Day Headcount Lock";
+      statuteCitation = `${profile.legalCodePrefix} Commercial Food Service & Liquidated Damages Hospitality Code`;
+      statuteName = `${state.name} Commercial Contracts and Public Health Food Regulations`;
+      summary = `Under ${state.name} commercial hospitality law, catering contracts govern food preparation, minimum headcount guarantees, non-refundable deposits, and food safety standards.`;
+      penalties = `Client breach triggers contract liquidated damages and deposit forfeiture; caterer breach requires return of deposits plus cover damages.`;
+      keyRequirements = [
+        "Guaranteed guest headcount lock deadline prior to event date for culinary provisions",
+        "Customized menu course specifications, bar beverage service, and service staff ratios",
+        "Non-refundable initial retainer deposit and milestone payment schedule prior to event",
+        "Health department food safety disclaimers prohibiting takeaway of leftover perishable items",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Commercial hospitality and catering contracts in ${state.name} are subject to state public health sanitary food codes and commercial contract liquidated damages standards.`,
+      ];
+      break;
+
+    case "daycare-services-contract":
+      noticeDays = "14-Day Advance Notice for Withdrawal";
+      statuteCitation = `${profile.legalCodePrefix} Child Daycare Licensing & Early Childhood Education Regulations`;
+      statuteName = `${state.name} Department of Human Services Childcare Standards`;
+      summary = `Governed by ${state.name} child care licensing standards. Regulates tuition payment terms, per-minute late pickup penalties, mandatory sick-child exclusion rules, and authorized pickup security.`;
+      penalties = `Operating or admitting children in violation of state licensing ratios or health rules results in administrative citations, fines, or facility license suspension.`;
+      keyRequirements = [
+        "Weekly or monthly tuition schedule payable in advance, regardless of child attendance",
+        "Late pickup penalty fee calculated per minute past designated facility closing time",
+        "Mandatory sick-child exclusion policy adhering to state health department guidelines",
+        "Enumeration of verified authorized pickup guardians and emergency pediatric medical consent",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Child care centers in ${state.name} must maintain strict staff-to-child supervision ratios and verified emergency medical consent forms for every enrolled minor.`,
+      ];
+      break;
+
+    case "postnuptial-agreement":
+      noticeDays = "Effective upon Execution";
+      statuteCitation = `${profile.legalCodePrefix} Postmarital Agreements & Separate Property Code`;
+      statuteName = `${state.name} Marital Agreements and Equitable Property Rights Act`;
+      summary = `Under ${state.name} family law, married spouses may execute an enforceable postnuptial agreement clarifying separate assets, allocating debts, and waiving spousal support during ongoing marriage.`;
+      penalties = `Concealment of assets, coercion, or lack of fair consideration invalidates postnuptial agreements in family court dissolution proceedings.`;
+      keyRequirements = [
+        "Voluntary execution during ongoing marriage with shared intent to settle property rights",
+        "Full, fair, and reasonable written disclosure of all assets, debts, and income streams",
+        "Itemization of designated separate property, business equity, and debt indemnifications",
+        "Waiver or specification of spousal maintenance and probate elective share inheritance rights",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Postmarital agreements in ${state.name} are subject to heightened fiduciary scrutiny in family court to ensure neither spouse was coerced or subjected to unfair advantage.`,
+      ];
+      break;
+
+    case "puppy-pet-bill-of-sale":
+      noticeDays = "72-Hour Veterinary Exam Window";
+      statuteCitation = `${profile.legalCodePrefix} Pet Purchaser Protection Act (Puppy Lemon Law)`;
+      statuteName = `${state.name} Companion Animal Commercial Sales and Health Warranty Code`;
+      summary = `In ${state.name}, pet purchaser protection laws mandate that breeders warrant animals against pre-existing infectious illnesses for 7 to 14 days and congenital genetic defects for 1 to 2 years.`;
+      penalties = `Selling a diseased pet without disclosure obligates seller to refund the full purchase price, provide a replacement animal, or reimburse veterinary medical expenses up to the purchase price.`;
+      keyRequirements = [
+        "15-digit ISO microchip identification number, breed registry data, and date of birth",
+        "Breeder warranty certifying pet is in sound health with up to date vaccinations and deworming",
+        "Mandatory 48 to 72 hour post-delivery veterinary wellness examination window for buyer",
+        "One-year (or statutory) congenital genetic defect warranty providing replacement or medical refund",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Pet lemon laws in ${state.name} provide statutory remedies if a licensed veterinarian certifies a pet was unfit for purchase due to congenital illness contracted prior to sale.`,
+      ];
+      break;
+
+    case "vehicle-dmv-power-of-attorney":
+      noticeDays = "Effective for Transaction Duration";
+      statuteCitation = `49 U.S.C. Section 32705 & ${profile.legalCodePrefix} Motor Vehicle Titling and Powers of Attorney Laws`;
+      statuteName = `Federal Truth in Mileage Act & ${state.name} Department of Motor Vehicles Code`;
+      summary = `Official limited power of attorney authorizing an attorney-in-fact to execute title transfers, certificate assignments, duplicate title applications, and federal odometer disclosure statements with state motor vehicle agencies.`;
+      penalties = `Misrepresenting vehicle ownership or falsifying odometer mileage constitutes a federal felony and state motor vehicle code violation with substantial criminal penalties.`;
+      keyRequirements = [
+        "17-character Vehicle Identification Number (VIN), model year, make, and body model",
+        "State certificate of title number and principal registered owner identity",
+        "Limited grant of authority restricted exclusively to motor vehicle agency transactions",
+        "Express authority to sign federal Truth in Mileage Act odometer statements and Notary Jurat",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Motor vehicle departments in ${state.name} require limited powers of attorney to be notarized and accompanied by verified vehicle identification numbers to process title transfers.`,
+      ];
+      break;
+
+    case "loan-default-acceleration":
+      noticeDays = profile.defaultNoticeDays;
+      statuteCitation = `${profile.legalCodePrefix} Commercial Paper Default, Acceleration & Pre-Suit Demand Laws`;
+      statuteName = `${state.name} Commercial Code Article 3 and Promissory Note Remedies`;
+      summary = `In ${state.name}, serving formal notice of default and acceleration on a promissory note is a mandatory prerequisite to demand immediate full payoff and preserve claims for statutory court costs and attorney fees.`;
+      penalties = `Continued non-payment triggers civil court complaint filing in ${state.courtSystemName}, pre-judgment attachment, post-judgment wage garnishment, and statutory interest accrual at ${profile.statutoryInterest}.`;
+      keyRequirements = [
+        "Reference to original promissory note execution date, original sum, and holder title",
+        "Itemization of delinquent monthly installments in arrears, contractual late fees, and interest",
+        "Formal exercise of contractual acceleration clause demanding 100% of unpaid debt balance",
+        `Strict notice cure window complying with ${state.name} pre-suit presentment statutes`,
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `In ${state.name}, formal acceleration of a promissory note starts the applicable statute of limitations for commercial contract litigation and fixes total prejudgment interest.`,
+      ];
+      break;
+
+    case "affidavit-of-domicile":
+      noticeDays = "Immediate for Fiduciary Transfer";
+      statuteCitation = `${profile.legalCodePrefix} Estate Administration, Probate Domicile & Inheritance Tax Laws`;
+      statuteName = `${state.name} Probate and Fiduciary Tax Domicile Standards`;
+      summary = `Sworn affidavit executed by an executor or administrator certifying the decedent permanent residence and legal tax domicile, legally required by stock transfer agents and financial institutions to transfer shares and close accounts.`;
+      penalties = `False statements regarding decedent domicile constitute perjury and fraudulent inducement, creating personal fiduciary liability for uncollected state inheritance taxes.`;
+      keyRequirements = [
+        "Sworn deposition by qualified executor, administrator, or surviving family heir",
+        "Certification of decedent exact permanent street address and tenure at primary domicile",
+        "Affirmation that all estate and inheritance taxes owed to the jurisdiction have been satisfied",
+        "Itemization of target stock certificates, securities, or financial accounts to be transferred",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Financial institutions and stock transfer agents require an Affidavit of Domicile to establish state jurisdiction for estate tax clearance before releasing registered shares.`,
+      ];
+      break;
+
+    case "internship-agreement-flsa":
+      noticeDays = "Duration of Training Program";
+      statuteCitation = `29 U.S.C. Section 201 (Fair Labor Standards Act) & DOL Fact Sheet #71 Standards`;
+      statuteName = `Federal FLSA Primary Beneficiary Test & ${state.name} Labor Code`;
+      summary = `Regulated by the U.S. Department of Labor Primary Beneficiary Test under the FLSA. Distinguishes lawful educational training from standard employment, defining learning milestones, academic credit, stipends, and work-for-hire IP assignments.`;
+      penalties = `Misclassifying productive company workers as unpaid interns violates the FLSA, subjecting employers to back wages, liquidated damages, and civil monetary penalties under federal and ${state.name} labor law.`;
+      keyRequirements = [
+        "Conformance with the seven-factor DOL Fact Sheet #71 Primary Beneficiary Test criteria",
+        "Clear educational learning objectives, practical mentorship, and academic credit coordination",
+        "Statement confirming internship does not entitle participant to permanent post-internship employment",
+        "Work-made-for-hire assignment of intellectual property and trade secrets nondisclosure covenants",
+      ];
+      stateRules = [
+        "The federal Fair Labor Standards Act Primary Beneficiary Test governs internship classifications nationwide.",
+        `Labor departments in ${state.name} require compliance with state minimum wage laws if educational training does not primarily benefit the student intern.`,
+      ];
+      break;
+
 
   }
 

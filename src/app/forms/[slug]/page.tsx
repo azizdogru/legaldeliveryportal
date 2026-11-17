@@ -91,17 +91,26 @@ export default function DocumentOverviewPage({ params }: PageProps) {
     },
   };
 
-  const jsonLdLegalService = {
+  const jsonLdService = {
     "@context": "https://schema.org",
-    "@type": "LegalService",
-    name: "Legal Delivery Portal",
+    "@type": "Service",
+    name: doc.title,
+    serviceType: "Automated Legal Document Preparation",
     url: `https://legaldeliveryportal.com/forms/${doc.slug}`,
     description: "Nationwide legal document preparation, statutory notice generation, and instant delivery portal.",
-    priceRange: "$9.90",
-    telephone: "+1-800-555-0199",
+    offers: {
+      "@type": "Offer",
+      price: doc.priceAmount.toFixed(2),
+      priceCurrency: "USD",
+    },
     areaServed: {
       "@type": "Country",
       name: "United States",
+    },
+    provider: {
+      "@type": "Organization",
+      name: "Legal Delivery Portal",
+      url: "https://legaldeliveryportal.com",
     },
   };
 
@@ -162,7 +171,7 @@ export default function DocumentOverviewPage({ params }: PageProps) {
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdLegalService) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdService) }}
       />
       <script
         type="application/ld+json"

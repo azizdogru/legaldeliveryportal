@@ -147,22 +147,26 @@ export default function StateDocumentLandingPage({ params }: PageProps) {
     },
   };
 
-  const jsonLdLegalService = {
+  const jsonLdService = {
     "@context": "https://schema.org",
-    "@type": "LegalService",
-    name: `Legal Delivery Portal: ${state.name}`,
+    "@type": "Service",
+    name: `${doc.title} Preparation (${state.name})`,
+    serviceType: "Automated Legal Notice & Document Delivery",
     url: `https://legaldeliveryportal.com/forms/${doc.slug}/${state.slug}`,
     description: `Automated official legal document and statutory notice portal for ${state.name}. Compliant with ${statute.statuteCitation}.`,
-    priceRange: "$9.90",
-    telephone: "+1-800-555-0199",
+    offers: {
+      "@type": "Offer",
+      price: doc.priceAmount.toFixed(2),
+      priceCurrency: "USD",
+    },
     areaServed: {
       "@type": "AdministrativeArea",
       name: state.name,
     },
-    address: {
-      "@type": "PostalAddress",
-      addressCountry: "US",
-      addressRegion: state.code,
+    provider: {
+      "@type": "Organization",
+      name: "Legal Delivery Portal",
+      url: "https://legaldeliveryportal.com",
     },
   };
 
@@ -242,7 +246,7 @@ export default function StateDocumentLandingPage({ params }: PageProps) {
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdLegalService) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdService) }}
       />
       <script
         type="application/ld+json"

@@ -51,6 +51,7 @@ export function DynamicDocumentForm({
   const [emailError, setEmailError] = useState<string | null>(null);
   const [mobileTab, setMobileTab] = useState<"form" | "preview">("form");
   const [lastSavedTime, setLastSavedTime] = useState<string | null>(null);
+  const [isRedirecting, setIsRedirecting] = useState<boolean>(false);
 
   const storageKey = config ? `ldp_form_${config.id}_${selectedStateCode}` : "";
 
@@ -257,6 +258,47 @@ export function DynamicDocumentForm({
   const baseCheckout =
     process.env.NEXT_PUBLIC_LEMON_CHECKOUT_URL ||
     "https://depositdemand.lemonsqueezy.com/checkout/buy/e5a2b41d-69b2-4d5a-bb86-0218378c2373";
+
+  const handleProceedToCheckout = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsRedirecting(true);
+
+    const sessionId = "ldp_" + Date.now() + "_" + Math.random().toString(36).substring(2, 9);
+
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("ldp_latest_session_id", sessionId);
+        localStorage.setItem("ldp_latest_doc_slug", config.slug);
+        localStorage.setItem("ldp_latest_state_code", selectedStateCode);
+        localStorage.setItem("ldp_delivery_email", userDeliveryEmail);
+      } catch (err) {
+        console.error("Storage error:", err);
+      }
+    }
+
+    try {
+      await fetch("/api/checkout/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sessionId,
+          docSlug: config.slug,
+          stateCode: selectedStateCode,
+          customerEmail: userDeliveryEmail,
+          customerName: formData.senderName || formData.claimantName || formData.landlordName || "",
+          formData,
+        }),
+      });
+    } catch (err) {
+      console.error("Failed to sync checkout session to S3:", err);
+    }
+
+    const emailParam = userDeliveryEmail ? `&checkout[email]=${encodeURIComponent(userDeliveryEmail)}` : "";
+    const customParams = `&checkout[custom][session_id]=${encodeURIComponent(sessionId)}&checkout[custom][doc]=${encodeURIComponent(config.slug)}&checkout[custom][state]=${encodeURIComponent(selectedStateCode)}`;
+    const checkoutUrl = `${baseCheckout}${baseCheckout.includes("?") ? "&" : "?"}${emailParam}${customParams}`;
+
+    window.location.href = checkoutUrl;
+  };
 
   const emailParam = userDeliveryEmail ? `&checkout[email]=${encodeURIComponent(userDeliveryEmail)}` : "";
   const customParams = `&checkout[custom][doc]=${encodeURIComponent(config.slug)}&checkout[custom][state]=${encodeURIComponent(selectedStateCode)}`;
@@ -584,16 +626,20 @@ export function DynamicDocumentForm({
 
             {/* Action Buttons */}
             <div className="space-y-3 pt-2">
-              <a
-                href={checkoutUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-3.5 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl text-sm shadow-xl shadow-blue-950/50 flex items-center justify-center space-x-2 transition-all"
+              <button
+                type="button"
+                onClick={handleProceedToCheckout}
+                disabled={isRedirecting}
+                className="w-full py-3.5 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl text-sm shadow-xl shadow-blue-950/50 flex items-center justify-center space-x-2 transition-all disabled:opacity-75 disabled:cursor-not-allowed"
               >
                 <Lock className="w-4 h-4" />
-                <span>Proceed to Secure Delivery ($9.90)</span>
-                <ExternalLink className="w-4 h-4 ml-1 opacity-80" />
-              </a>
+                <span>
+                  {isRedirecting
+                    ? "Securing Document & Connecting..."
+                    : "Proceed to Secure Delivery ($9.90)"}
+                </span>
+                {!isRedirecting && <ExternalLink className="w-4 h-4 ml-1 opacity-80" />}
+              </button>
 
               {/* Authority Trust Seals */}
               <div className="pt-2 border-t border-slate-800/80 grid grid-cols-3 gap-2 text-center">

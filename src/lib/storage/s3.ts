@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
 
 interface UploadPdfOptions {
   pdfBuffer: Buffer | Uint8Array;
@@ -7,6 +7,16 @@ interface UploadPdfOptions {
   stateCode: string;
   customerEmail?: string;
   customerName?: string;
+}
+
+export interface CheckoutSessionData {
+  sessionId: string;
+  docSlug: string;
+  stateCode: string;
+  customerEmail?: string;
+  customerName?: string;
+  formData: Record<string, any>;
+  createdAt: string;
 }
 
 export async function uploadPdfToVault({
@@ -69,5 +79,83 @@ export async function uploadPdfToVault({
       success: false,
       error: err.message || "Failed to upload document to AWS S3 vault",
     };
+  }
+}
+
+/**
+ * Saves pending checkout session form data to S3 so webhook can access real user data
+ */
+export async function saveCheckoutSession(session: CheckoutSessionData): Promise<{ success: boolean; error?: string }> {
+  const bucketName = process.env.AWS_S3_BUCKET_NAME || "legaldeliveryportal-vault-892401";
+  const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
+  const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+  const region = process.env.AWS_REGION || "us-east-1";
+
+  if (!accessKeyId || !secretAccessKey) {
+    return { success: false, error: "AWS credentials not configured" };
+  }
+
+  const s3Client = new S3Client({
+    region,
+    credentials: { accessKeyId, secretAccessKey },
+  });
+
+  const s3Key = `checkout-sessions/${session.sessionId}.json`;
+
+  try {
+    const command = new PutObjectCommand({
+      Bucket: bucketName,
+      Key: s3Key,
+      Body: JSON.stringify(session),
+      ContentType: "application/json",
+      Metadata: {
+        docslug: session.docSlug,
+        statecode: session.stateCode,
+        customeremail: session.customerEmail || "unspecified",
+      },
+    });
+
+    await s3Client.send(command);
+    return { success: true };
+  } catch (err: any) {
+    console.error("Save checkout session error:", err);
+    return { success: false, error: err.message || "Failed to save session to S3" };
+  }
+}
+
+/**
+ * Retrieves pending checkout session form data from S3 by sessionId
+ */
+export async function getCheckoutSession(sessionId: string): Promise<CheckoutSessionData | null> {
+  const bucketName = process.env.AWS_S3_BUCKET_NAME || "legaldeliveryportal-vault-892401";
+  const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
+  const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+  const region = process.env.AWS_REGION || "us-east-1";
+
+  if (!accessKeyId || !secretAccessKey || !sessionId) {
+    return null;
+  }
+
+  const s3Client = new S3Client({
+    region,
+    credentials: { accessKeyId, secretAccessKey },
+  });
+
+  const s3Key = `checkout-sessions/${sessionId}.json`;
+
+  try {
+    const command = new GetObjectCommand({
+      Bucket: bucketName,
+      Key: s3Key,
+    });
+
+    const response = await s3Client.send(command);
+    if (!response.Body) return null;
+
+    const bodyStr = await response.Body.transformToString();
+    return JSON.parse(bodyStr) as CheckoutSessionData;
+  } catch (err: any) {
+    console.error("Get checkout session error:", err?.message || err);
+    return null;
   }
 }

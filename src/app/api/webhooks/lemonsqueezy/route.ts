@@ -5,7 +5,7 @@ import { getDocumentBySlug, ALL_DOCUMENTS } from "@/config/documents";
 import { getStateByCode } from "@/data/usStates";
 import { getStatuteForDocumentAndState } from "@/data/statutes";
 import { generateDocumentPdf } from "@/lib/pdf/pdfGenerator";
-import { uploadPdfToVault } from "@/lib/storage/s3";
+import { uploadPdfToVault, getCheckoutSession } from "@/lib/storage/s3";
 
 export async function POST(req: NextRequest) {
   try {
@@ -40,19 +40,39 @@ export async function POST(req: NextRequest) {
       const doc = getDocumentBySlug(docSlug) || ALL_DOCUMENTS[1];
       const state = getStateByCode(stateCode) || { name: "California", code: "CA" };
 
-      // Generate official clean PDF
+      const sessionId = customData.session_id;
+      let userFormData: Record<string, any> = { ...doc.defaultValues, stateCode: state.code };
+
+      if (sessionId) {
+        try {
+          const session = await getCheckoutSession(sessionId);
+          if (session && session.formData) {
+            userFormData = { ...doc.defaultValues, ...session.formData, stateCode: state.code };
+          }
+        } catch (sErr) {
+          console.error("Failed to load checkout session from S3 in webhook:", sErr);
+        }
+      }
+
+      const effectiveCustomerName =
+        userFormData.senderName ||
+        userFormData.claimantName ||
+        userFormData.landlordName ||
+        userName;
+
+      // Generate official clean PDF with real user input data
       let pdfBase64: string | undefined;
       let pdfBuffer: Buffer | undefined;
 
       try {
         const statute = getStatuteForDocumentAndState(doc.slug, state.code);
-        const sections = doc.generatePdfSections(doc.defaultValues, statute);
+        const sections = doc.generatePdfSections(userFormData, statute);
         const pdfBytes = await generateDocumentPdf({
           title: doc.title,
           documentId: doc.id,
           stateInfo: statute,
           sections,
-          formData: { ...doc.defaultValues, stateCode: state.code },
+          formData: userFormData,
           previewMode: false,
         });
 
@@ -71,7 +91,7 @@ export async function POST(req: NextRequest) {
             docSlug: doc.slug,
             stateCode: state.code,
             customerEmail: userEmail,
-            customerName: userName,
+            customerName: effectiveCustomerName,
           });
         } catch (s3Err) {
           console.error("Webhook S3 archive error:", s3Err);
@@ -85,7 +105,7 @@ export async function POST(req: NextRequest) {
           documentTitle: doc.title,
           stateName: state.name,
           stateCode: state.code,
-          customerName: userName,
+          customerName: effectiveCustomerName,
           pdfBase64,
           pdfFileName: `${doc.slug}-${state.code}-OFFICIAL.pdf`,
         });
@@ -96,7 +116,7 @@ export async function POST(req: NextRequest) {
       const chatId = process.env.TELEGRAM_CHAT_ID;
       if (botToken && chatId) {
         try {
-          const telegramMessage = `New Order Confirmed ($9.90 USD)\nDocument: ${doc.title}\nState: ${state.name} (${state.code})\nCustomer: ${userName} (${userEmail})\nDelivery: Resend Dispatched & AWS S3 Archived`;
+          const telegramMessage = `New Order Confirmed ($9.90 USD)\nDocument: ${doc.title}\nState: ${state.name} (${state.code})\nCustomer: ${effectiveCustomerName} (${userEmail})\nDelivery: Resend Dispatched & AWS S3 Archived`;
           await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },

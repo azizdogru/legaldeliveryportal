@@ -41,8 +41,8 @@ const FAQ_ITEMS = [
     a: "Traditional legal tech competitors lock users into recurring $39 to $59 monthly subscriptions with tricky cancellation traps. LegalDeliveryPortal operates on a straightforward pay-per-document model: you pay once and receive immediate, permanent access to download your court-ready PDF without recurring charges.",
   },
   {
-    q: "How does the client-side PDF engine protect my privacy?",
-    a: "Your sensitive personal, property, and financial information is processed directly in your web browser using client-side vector compilation. We do not store your confidential legal data in external databases, ensuring complete privacy and zero data leak exposure.",
+    q: "How does LegalDeliveryPortal protect my privacy and data?",
+    a: "Your document draft is compiled directly in your web browser using client-side vector compilation with zero ad trackers. When your order is placed, your finalized court document is encrypted with bank-grade 256-bit SSL and securely archived in your private AWS S3 vault solely for your delivery and recovery. We never sell, monetize, or share your confidential legal information with third parties.",
   },
   {
     q: "What delivery options are provided?",

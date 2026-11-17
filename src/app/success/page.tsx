@@ -21,16 +21,32 @@ import { generateDocumentPdf } from "@/lib/pdf/pdfGenerator";
 
 function OrderSuccessContent() {
   const searchParams = useSearchParams();
-  const docSlug = searchParams.get("doc") || "demand-letter";
-  const stateCode = (searchParams.get("state") || "CA").toUpperCase();
+  const initialDocSlug = searchParams.get("doc") || (typeof window !== "undefined" ? localStorage.getItem("ldp_latest_doc_slug") : null) || "demand-letter";
+  const initialStateCode = (searchParams.get("state") || (typeof window !== "undefined" ? localStorage.getItem("ldp_latest_state_code") : null) || "CA").toUpperCase();
 
-  const doc = getDocumentBySlug(docSlug) || ALL_DOCUMENTS[1];
-  const state = getStateByCode(stateCode) || US_STATES[4];
+  const [doc, setDoc] = useState(() => getDocumentBySlug(initialDocSlug) || ALL_DOCUMENTS[1]);
+  const [state, setState] = useState(() => getStateByCode(initialStateCode) || US_STATES[4]);
 
   const [downloading, setDownloading] = useState(false);
   const [deliveryEmail, setDeliveryEmail] = useState("");
   const [emailStatus, setEmailStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [emailMessage, setEmailMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    // If not in query params, resolve from localStorage
+    if (typeof window !== "undefined") {
+      const storedSlug = localStorage.getItem("ldp_latest_doc_slug");
+      const storedCode = localStorage.getItem("ldp_latest_state_code");
+      if (storedSlug && !searchParams.get("doc")) {
+        const d = getDocumentBySlug(storedSlug);
+        if (d) setDoc(d);
+      }
+      if (storedCode && !searchParams.get("state")) {
+        const s = getStateByCode(storedCode.toUpperCase());
+        if (s) setState(s);
+      }
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     // Launch celebratory confetti
@@ -70,6 +86,8 @@ function OrderSuccessContent() {
       const statute = getStatuteForDocumentAndState(doc.slug, state.code);
 
       let formData = doc.defaultValues;
+      const sessionId = searchParams.get("session_id") || (typeof window !== "undefined" ? localStorage.getItem("ldp_latest_session_id") : null);
+
       if (typeof window !== "undefined") {
         const stored = localStorage.getItem(`ldp_form_${doc.id}_${state.code}`);
         if (stored) {
@@ -78,6 +96,21 @@ function OrderSuccessContent() {
           } catch {
             // fallback
           }
+        }
+      }
+
+      // If user came from a different tab/device, load from saved checkout session
+      if (sessionId) {
+        try {
+          const sRes = await fetch(`/api/checkout/session?sessionId=${sessionId}`);
+          if (sRes.ok) {
+            const sData = await sRes.json();
+            if (sData?.session?.formData) {
+              formData = { ...formData, ...sData.session.formData };
+            }
+          }
+        } catch (sErr) {
+          console.error("Session fetch error:", sErr);
         }
       }
 
@@ -147,6 +180,8 @@ function OrderSuccessContent() {
       const statute = getStatuteForDocumentAndState(doc.slug, state.code);
 
       let formData = doc.defaultValues;
+      const sessionId = searchParams.get("session_id") || (typeof window !== "undefined" ? localStorage.getItem("ldp_latest_session_id") : null);
+
       if (typeof window !== "undefined") {
         const stored = localStorage.getItem(`ldp_form_${doc.id}_${state.code}`);
         if (stored) {
@@ -155,6 +190,21 @@ function OrderSuccessContent() {
           } catch {
             // fallback
           }
+        }
+      }
+
+      // If user came from a different tab/device, load from saved checkout session
+      if (sessionId) {
+        try {
+          const sRes = await fetch(`/api/checkout/session?sessionId=${sessionId}`);
+          if (sRes.ok) {
+            const sData = await sRes.json();
+            if (sData?.session?.formData) {
+              formData = { ...formData, ...sData.session.formData };
+            }
+          }
+        } catch (sErr) {
+          console.error("Session fetch error:", sErr);
         }
       }
 

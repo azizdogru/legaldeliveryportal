@@ -235,8 +235,14 @@ export async function generateDocumentPdf(options: GeneratePdfOptions): Promise<
     color: rgb(0.72, 0.76, 0.82),
   });
 
-  // Tracking and date details inside caption box
-  const trackingNumber = `LDP-${stateInfo.stateCode}-${Math.floor(100000 + Math.random() * 900000)}`;
+  // Deterministic tracking reference based on document and party details (consistent across preview, download, and email)
+  const hashSeed = `${documentId}_${stateInfo.stateCode}_${formData.senderName || formData.claimantName || formData.landlordName || "Issuer"}_${formData.recipientName || ""}_${formData.noticeDate || ""}`;
+  let hashVal = 0;
+  for (let i = 0; i < hashSeed.length; i++) {
+    hashVal = (hashVal << 5) - hashVal + hashSeed.charCodeAt(i);
+    hashVal |= 0;
+  }
+  const trackingNumber = formData.trackingNumber || `LDP-${stateInfo.stateCode}-${Math.abs(hashVal % 900000) + 100000}`;
   const dateFormatted = cleanText(formData.noticeDate || new Date().toISOString().split("T")[0]);
 
   engine.currentPage.drawText(`NOTICE REF: ${trackingNumber}`, {
@@ -284,14 +290,22 @@ export async function generateDocumentPdf(options: GeneratePdfOptions): Promise<
     }
 
     if (section.metaTable && section.metaTable.length > 0) {
-      engine.ensureSpace(section.metaTable.length * 13 + 6);
       for (const row of section.metaTable) {
-        engine.ensureSpace(13);
+        const valText = cleanText(row.value || "");
+        const valLines = engine.wrapText(valText, engine.fontRegular, 8.8, engine.contentWidth - 146);
+        const rowHeight = Math.max(1, valLines.length) * 12 + 2;
+        engine.ensureSpace(rowHeight);
+
         engine.drawText(row.label + ":", engine.fontBold, 8.8, rgb(0.2, 0.24, 0.3), engine.marginLeft + 6);
-        engine.drawText(row.value, engine.fontRegular, 8.8, rgb(0.1, 0.1, 0.1), engine.marginLeft + 140);
-        engine.currentY -= 12;
+        for (let lIdx = 0; lIdx < valLines.length; lIdx++) {
+          engine.drawText(valLines[lIdx], engine.fontRegular, 8.8, rgb(0.1, 0.1, 0.1), engine.marginLeft + 140);
+          if (lIdx < valLines.length - 1) {
+            engine.currentY -= 11;
+          }
+        }
+        engine.currentY -= 13;
       }
-      engine.currentY -= 3;
+      engine.currentY -= 2;
     }
 
     if (section.paragraphs && section.paragraphs.length > 0) {
@@ -337,7 +351,9 @@ export async function generateDocumentPdf(options: GeneratePdfOptions): Promise<
       });
 
       const signerName = cleanText(formData.senderName || formData.landlordName || formData.claimantName || "Authorized Signer");
-      engine.currentPage.drawText(`Printed Name: ${signerName} | Date: ${dateFormatted}`, {
+      const signerLine = `Printed Name: ${signerName} | Date: ${dateFormatted}`;
+      const signerLines = engine.wrapText(signerLine, engine.fontRegular, 7, colWidth);
+      engine.currentPage.drawText(signerLines[0] || signerLine, {
         x: col1X,
         y: sigLineY - 20,
         size: 7,
@@ -362,7 +378,9 @@ export async function generateDocumentPdf(options: GeneratePdfOptions): Promise<
       });
 
       const recipientName = cleanText(formData.recipientName || formData.tenantName || formData.debtorName || "Recipient");
-      engine.currentPage.drawText(`Printed Name: ${recipientName} | Date: ____________`, {
+      const recipientLine = `Printed Name: ${recipientName} | Date: ____________`;
+      const recipientLines = engine.wrapText(recipientLine, engine.fontRegular, 7, colWidth);
+      engine.currentPage.drawText(recipientLines[0] || recipientLine, {
         x: col2X,
         y: sigLineY - 20,
         size: 7,

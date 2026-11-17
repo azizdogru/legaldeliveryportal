@@ -40,7 +40,7 @@ import { childTravelConsentConfig } from "./childTravelConsent";
 import { childMedicalConsentConfig } from "./childMedicalConsent";
 import { debtValidationLetterConfig } from "./debtValidationLetter";
 
-// New batch of 20 high-demand documents (41-60)
+// Batch 2 (documents 41-60)
 import { monthToMonthLeaseConfig } from "./monthToMonthLease";
 import { commercialLeaseAgreementConfig } from "./commercialLeaseAgreement";
 import { leadPaintDisclosureConfig } from "./leadPaintDisclosure";
@@ -61,6 +61,28 @@ import { bouncedCheckDemandLetterConfig } from "./bouncedCheckDemandLetter";
 import { boatBillOfSaleConfig } from "./boatBillOfSale";
 import { satisfactionOfLienConfig } from "./satisfactionOfLien";
 import { affidavitSurvivingSpouseConfig } from "./affidavitSurvivingSpouse";
+
+// Batch 3 (documents 61-80)
+import { subcontractorAgreementConfig } from "./subcontractorAgreement";
+import { propertyManagementAgreementConfig } from "./propertyManagementAgreement";
+import { jointVenturesAgreementConfig } from "./jointVenturesAgreement";
+import { llcMembershipTransferConfig } from "./llcMembershipTransfer";
+import { salesAgencyCommissionConfig } from "./salesAgencyCommission";
+import { specialWarrantyDeedConfig } from "./specialWarrantyDeed";
+import { unconditionalNoticeToQuitConfig } from "./unconditionalNoticeToQuit";
+import { rentReceiptDocumentConfig } from "./rentReceiptDocument";
+import { landlordVerificationFormConfig } from "./landlordVerificationForm";
+import { modelReleaseAgreementConfig } from "./modelReleaseAgreement";
+import { musicMediaLicenseConfig } from "./musicMediaLicense";
+import { fitnessLiabilityWaiverConfig } from "./fitnessLiabilityWaiver";
+import { cateringEventContractConfig } from "./cateringEventContract";
+import { daycareServicesContractConfig } from "./daycareServicesContract";
+import { postnuptialAgreementConfig } from "./postnuptialAgreement";
+import { puppyPetBillOfSaleConfig } from "./puppyPetBillOfSale";
+import { vehicleDmvPowerOfAttorneyConfig } from "./vehicleDmvPowerOfAttorney";
+import { loanDefaultAccelerationConfig } from "./loanDefaultAcceleration";
+import { affidavitOfDomicileConfig } from "./affidavitOfDomicile";
+import { internshipAgreementFlsaConfig } from "./internshipAgreementFlsa";
 
 export const ALL_DOCUMENTS: DocumentConfig[] = [
   ceaseAndDesistConfig,
@@ -103,7 +125,7 @@ export const ALL_DOCUMENTS: DocumentConfig[] = [
   childTravelConsentConfig,
   childMedicalConsentConfig,
   debtValidationLetterConfig,
-  // 20 new documents (total 60)
+  // 41-60
   monthToMonthLeaseConfig,
   commercialLeaseAgreementConfig,
   leadPaintDisclosureConfig,
@@ -124,6 +146,27 @@ export const ALL_DOCUMENTS: DocumentConfig[] = [
   boatBillOfSaleConfig,
   satisfactionOfLienConfig,
   affidavitSurvivingSpouseConfig,
+  // 61-80 (total 80)
+  subcontractorAgreementConfig,
+  propertyManagementAgreementConfig,
+  jointVenturesAgreementConfig,
+  llcMembershipTransferConfig,
+  salesAgencyCommissionConfig,
+  specialWarrantyDeedConfig,
+  unconditionalNoticeToQuitConfig,
+  rentReceiptDocumentConfig,
+  landlordVerificationFormConfig,
+  modelReleaseAgreementConfig,
+  musicMediaLicenseConfig,
+  fitnessLiabilityWaiverConfig,
+  cateringEventContractConfig,
+  daycareServicesContractConfig,
+  postnuptialAgreementConfig,
+  puppyPetBillOfSaleConfig,
+  vehicleDmvPowerOfAttorneyConfig,
+  loanDefaultAccelerationConfig,
+  affidavitOfDomicileConfig,
+  internshipAgreementFlsaConfig,
 ];
 
 export function getDocumentBySlug(slug: string): DocumentConfig | undefined {
