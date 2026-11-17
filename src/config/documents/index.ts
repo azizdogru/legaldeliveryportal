@@ -19,6 +19,26 @@ import { parkingSpaceLeaseConfig } from "./parkingSpaceLease";
 import { temporaryGuardianshipAgreementConfig } from "./temporaryGuardianshipAgreement";
 import { affidavitOfHeirshipConfig } from "./affidavitOfHeirship";
 import { nonCompeteAgreementConfig } from "./nonCompeteAgreement";
+import { residentialLeaseAgreementConfig } from "./residentialLeaseAgreement";
+import { evictionNoticeNonPaymentConfig } from "./evictionNoticeNonPayment";
+import { noticeOfIntentToVacateConfig } from "./noticeOfIntentToVacate";
+import { roommateAgreementConfig } from "./roommateAgreement";
+import { subleaseAgreementConfig } from "./subleaseAgreement";
+import { securityDepositDemandConfig } from "./securityDepositDemand";
+import { esaHousingLetterRequestConfig } from "./esaHousingLetterRequest";
+import { motorVehicleBillOfSaleConfig } from "./motorVehicleBillOfSale";
+import { dmvReleaseOfLiabilityConfig } from "./dmvReleaseOfLiability";
+import { quitclaimDeedConfig } from "./quitclaimDeed";
+import { generalBillOfSaleConfig } from "./generalBillOfSale";
+import { llcOperatingAgreementConfig } from "./llcOperatingAgreement";
+import { standardNdaConfig } from "./standardNda";
+import { promissoryNoteConfig } from "./promissoryNote";
+import { employmentSeparationAgreementConfig } from "./employmentSeparationAgreement";
+import { durablePowerOfAttorneyConfig } from "./durablePowerOfAttorney";
+import { lastWillAndTestamentConfig } from "./lastWillAndTestament";
+import { childTravelConsentConfig } from "./childTravelConsent";
+import { childMedicalConsentConfig } from "./childMedicalConsent";
+import { debtValidationLetterConfig } from "./debtValidationLetter";
 
 export const ALL_DOCUMENTS: DocumentConfig[] = [
   ceaseAndDesistConfig,
@@ -41,6 +61,26 @@ export const ALL_DOCUMENTS: DocumentConfig[] = [
   temporaryGuardianshipAgreementConfig,
   affidavitOfHeirshipConfig,
   nonCompeteAgreementConfig,
+  residentialLeaseAgreementConfig,
+  evictionNoticeNonPaymentConfig,
+  noticeOfIntentToVacateConfig,
+  roommateAgreementConfig,
+  subleaseAgreementConfig,
+  securityDepositDemandConfig,
+  esaHousingLetterRequestConfig,
+  motorVehicleBillOfSaleConfig,
+  dmvReleaseOfLiabilityConfig,
+  quitclaimDeedConfig,
+  generalBillOfSaleConfig,
+  llcOperatingAgreementConfig,
+  standardNdaConfig,
+  promissoryNoteConfig,
+  employmentSeparationAgreementConfig,
+  durablePowerOfAttorneyConfig,
+  lastWillAndTestamentConfig,
+  childTravelConsentConfig,
+  childMedicalConsentConfig,
+  debtValidationLetterConfig,
 ];
 
 export function getDocumentBySlug(slug: string): DocumentConfig | undefined {

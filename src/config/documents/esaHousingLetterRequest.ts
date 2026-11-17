@@ -1,0 +1,230 @@
+import { DocumentConfig, DocumentSection, StateStatuteInfo } from "@/types/document";
+
+export const esaHousingLetterRequestConfig: DocumentConfig = {
+  id: "esa-housing-letter-request",
+  slug: "esa-housing-letter-request",
+  title: "ESA Reasonable Accommodation Request (Fair Housing Act)",
+  shortTitle: "ESA Housing Request",
+  category: "Landlord & Tenant",
+  description: "Official federal Fair Housing Act reasonable accommodation request submitted to housing provider or HOA, exempting an Emotional Support Animal (ESA) from pet prohibitions, pet rent, and breed or weight restrictions.",
+  metaDescription: "Generate a federal Fair Housing Act ESA Reasonable Accommodation Request. Legally mandates waiver of pet fees, deposits, and breed bans for all 50 states. PDF for $9.90.",
+  priceFormatted: "$9.90",
+  priceAmount: 9.9,
+  badgeText: "Federal FHA Form",
+  iconName: "Heart",
+  searchKeywords: [
+    "esa housing accommodation letter template",
+    "emotional support animal housing request",
+    "fair housing act esa letter to landlord",
+    "emotional support animal no pet fee letter",
+    "hud assistance animal reasonable accommodation",
+    "esa letter for apartment pdf",
+  ],
+  features: [
+    "Grounds legal rights under federal Fair Housing Act (42 U.S.C. 3604(f)(3)(B)) and HUD Notice FHEO-2020-01",
+    "Legally waives all pet deposits, monthly pet rent, and weight or breed prohibitions",
+    "Includes formal healthcare provider nexus verification reference block",
+    "Mandates prompt written response from landlord or HOA within 10 business days",
+  ],
+  defaultValues: {
+    noticeDate: new Date().toISOString().split("T")[0],
+    stateCode: "CA",
+    tenantName: "",
+    tenantPhone: "",
+    tenantEmail: "",
+    rentalAddress: "",
+    landlordName: "",
+    landlordAddress: "",
+    animalName: "Buddy",
+    animalType: "Dog",
+    animalBreed: "Golden Retriever mix",
+    animalWeight: "45 lbs",
+    providerName: "Dr. Sarah Jenkins, MD / Licensed Psychologist",
+    providerLicenseNumber: "PSY-98421",
+    providerLetterDate: new Date().toISOString().split("T")[0],
+  },
+  steps: [
+    {
+      id: "parties_housing",
+      title: "Tenant & Housing Provider",
+      description: "Enter your contact details, rental address, and housing provider or HOA details.",
+      fields: [
+        {
+          name: "tenantName",
+          label: "Tenant / Resident Legal Name",
+          type: "text",
+          placeholder: "e.g., Samantha Miller",
+          required: true,
+          gridCols: 1,
+        },
+        {
+          name: "tenantPhone",
+          label: "Tenant Phone",
+          type: "text",
+          placeholder: "e.g., (555) 789-0123",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "tenantEmail",
+          label: "Tenant Email",
+          type: "email",
+          placeholder: "e.g., samantha@example.com",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "rentalAddress",
+          label: "Residential Dwelling Address & Unit",
+          type: "text",
+          placeholder: "e.g., 500 South Congress Ave, Apt 310, Austin, TX 78704",
+          required: true,
+          gridCols: 1,
+        },
+        {
+          name: "landlordName",
+          label: "Landlord / Property Manager / HOA Board",
+          type: "text",
+          placeholder: "e.g., River City Property Management LLC",
+          required: true,
+          gridCols: 1,
+        },
+        {
+          name: "landlordAddress",
+          label: "Landlord Notice Delivery Address",
+          type: "text",
+          placeholder: "e.g., 1200 Barton Springs Rd, Austin, TX 78704",
+          required: true,
+          gridCols: 1,
+        },
+      ],
+    },
+    {
+      id: "assistance_animal",
+      title: "Assistance Animal & Healthcare Nexus",
+      description: "Provide details regarding the animal and your licensed medical or mental health provider.",
+      fields: [
+        {
+          name: "animalName",
+          label: "Assistance Animal Name",
+          type: "text",
+          placeholder: "e.g., Buddy",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "animalType",
+          label: "Animal Type / Species",
+          type: "text",
+          placeholder: "e.g., Dog, Cat",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "animalBreed",
+          label: "Animal Breed",
+          type: "text",
+          placeholder: "e.g., Labrador Retriever mix",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "animalWeight",
+          label: "Animal Weight",
+          type: "text",
+          placeholder: "e.g., 35 lbs",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "providerName",
+          label: "Treating Healthcare Professional Name & Title",
+          type: "text",
+          placeholder: "e.g., Dr. Eleanor Vance, Psy.D, Licensed Clinical Psychologist",
+          required: true,
+          gridCols: 1,
+        },
+        {
+          name: "providerLicenseNumber",
+          label: "Provider State License Number",
+          type: "text",
+          placeholder: "e.g., State Medical/Psychology License #654321",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "providerLetterDate",
+          label: "Date of Healthcare Documentation",
+          type: "date",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "noticeDate",
+          label: "Date Request Submitted",
+          type: "date",
+          required: true,
+          gridCols: 2,
+        },
+      ],
+    },
+  ],
+  generatePdfSections: (data: Record<string, any>, statute?: StateStatuteInfo): DocumentSection[] => {
+    const tenant = data.tenantName || "Tenant";
+    const landlord = data.landlordName || "Housing Provider";
+    const animal = `${data.animalName || "Animal"} (${data.animalType || "Canine"}, ${data.animalBreed || "Breed"}, ${data.animalWeight || "Weight"})`;
+    const provider = `${data.providerName || "Licensed Healthcare Professional"} (License #${data.providerLicenseNumber || "On File"}, Dated: ${data.providerLetterDate || "Current"})`;
+
+    return [
+      {
+        type: "parties",
+        paragraphs: [],
+        metaTable: [
+          { label: "REQUEST TYPE", value: "REASONABLE ACCOMMODATION REQUEST UNDER FAIR HOUSING ACT" },
+          { label: "FROM RESIDENT", value: `${tenant} (Phone: ${data.tenantPhone || "On File"})` },
+          { label: "TO HOUSING PROVIDER", value: `${landlord}, ${data.landlordAddress || ""}` },
+          { label: "DWELLING PREMISES", value: `${data.rentalAddress || "Residential dwelling"}` },
+          { label: "ASSISTANCE ANIMAL", value: `${animal}` },
+          { label: "HEALTHCARE PROFESSIONAL", value: `${provider}` },
+          { label: "FEDERAL STATUTORY CITATION", value: "42 U.S.C. Section 3604(f)(3)(B) & HUD Notice FHEO-2020-01" },
+        ],
+      },
+      {
+        title: "1. Formal Request for Reasonable Accommodation",
+        type: "body",
+        paragraphs: [
+          `PLEASE TAKE NOTICE that resident ${tenant} hereby submits this formal request for a reasonable accommodation under the federal Fair Housing Act (42 U.S.C. Section 3601 et seq.) and ${statute?.stateName || "state"} civil rights statutes.`,
+          `Resident requests an accommodation to allow the presence of resident's emotional support assistance animal, ${animal}, in the dwelling unit and all common residential areas, and an exemption from any pet prohibition, pet security deposits, initial pet fees, and monthly pet rent surcharges.`,
+        ],
+      },
+      {
+        title: "2. Federal Statutory Grounds & HUD Guidance",
+        type: "body",
+        paragraphs: [
+          `Under the Fair Housing Act, 42 U.S.C. Section 3604(f)(3)(B), it is unlawful discrimination to refuse to make reasonable accommodations in rules, policies, practices, or services, when such accommodations may be necessary to afford an individual with a disability equal opportunity to use and enjoy a dwelling.`,
+          `Pursuant to official guidance issued by the U.S. Department of Housing and Urban Development (HUD Notice FHEO-2020-01), assistance animals (including emotional support animals) are not considered pets. Accordingly, housing providers may not apply standard pet rules, size or breed limits, pet deposits, or pet fees to assistance animals.`,
+        ],
+      },
+      {
+        title: "3. Healthcare Provider Verification & Nexus",
+        type: "body",
+        paragraphs: [
+          `Resident has a disability-related need for this assistance animal. Attached hereto is written documentation from resident's treating licensed healthcare professional: ${provider}.`,
+          `This documentation confirms that the healthcare professional possesses personal knowledge of resident, has evaluated resident's condition, and has verified that the animal provides therapeutic support that alleviates one or more identified symptoms of resident's disability.`,
+        ],
+      },
+      {
+        title: "4. Housing Provider Obligations & Response Deadline",
+        type: "body",
+        paragraphs: [
+          `Under HUD and Department of Justice regulations, a housing provider must promptly review and grant a reasonable accommodation request supported by reliable healthcare documentation. Unreasonable delays or demands for detailed psychiatric histories or medical charts constitute constructive denials and unlawful disability discrimination.`,
+          `Please provide written confirmation approving this accommodation within ten (10) business days of receipt of this notice.`,
+        ],
+      },
+      {
+        type: "signatures",
+        paragraphs: [],
+      },
+    ];
+  },
+};

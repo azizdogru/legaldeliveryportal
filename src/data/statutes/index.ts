@@ -466,6 +466,382 @@ export function getStatuteForDocumentAndState(docSlug: string, stateCode: string
         `Courts in ${state.name} may exercise blue-pencil discretion to narrow overbroad restrictions rather than declaring the entire agreement void.`,
       ];
       break;
+
+    case "residential-lease-agreement":
+      noticeDays = profile.defaultNoticeDays;
+      statuteCitation = `${profile.legalCodePrefix} Residential Landlord and Tenant Act`;
+      statuteName = `${state.name} Uniform Residential Landlord and Tenant Code`;
+      summary = `In ${state.name}, residential lease contracts are governed by statutory habitability requirements, security deposit accounting rules, and mandatory advance notice periods for landlord entry.`;
+      penalties = `Lease breach authorizes statutory cure-or-quit notice, lease forfeiture, and judicial eviction proceedings in ${state.courtSystemName}.`;
+      keyRequirements = [
+        "Compliance with state statutory security deposit ceilings and escrow rules",
+        "Adherence to mandatory advance written notice before landlord property entry",
+        "Strict warranty of habitability under state housing safety codes",
+        "Mandatory federal lead-based paint disclosure for dwellings built before 1978",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Landlord entry in ${state.name} requires at least ${profile.entryNoticeHours} advance written notice for routine inspections or repairs.`,
+        `Deposit disputes under this lease are subject to the small claims ceiling of ${state.smallClaimsLimit} in ${state.courtSystemName}.`,
+      ];
+      break;
+
+    case "eviction-notice-non-payment":
+      noticeDays = profile.cureDays;
+      statuteCitation = `${profile.legalCodePrefix} Summary Eviction & Unlawful Detainer Code`;
+      statuteName = `${state.name} Notice to Pay Rent or Quit Statute`;
+      summary = `In ${state.name}, a landlord must serve a formal statutory written notice to pay rent or quit, granting a mandatory cure window before initiating summary eviction proceedings.`;
+      penalties = `Failure to pay delinquent rent or surrender possession within ${profile.cureDays} days authorizes immediate filing of an unlawful detainer complaint, writ of restitution, and judgment for unpaid rent and court costs in ${state.courtSystemName}.`;
+      keyRequirements = [
+        `Strict adherence to the mandatory state statutory ${profile.cureDays}-day cure period`,
+        "Itemized delinquent rent ledger with clear breakdown of rent and lawful late fees",
+        "Clear payment delivery instructions and accepted payment methods",
+        "Formal server Affidavit and Certificate of Service meeting judicial standards",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `In ${state.name}, eviction complaints filed before the full statutory notice period has elapsed are dismissed with prejudice.`,
+        `Service must comply with strict state rules: personal in-hand delivery, substituted service, or conspicuous posting with follow-up certified mail.`,
+      ];
+      break;
+
+    case "notice-of-intent-to-vacate":
+      noticeDays = 30;
+      statuteCitation = `${profile.legalCodePrefix} Periodic Tenancy Termination & Deposit Accounting Law`;
+      statuteName = `${state.name} Residential Tenancy Notice of Surrender Code`;
+      summary = `Under ${state.name} law, periodic tenants must provide written notice (typically 30 or 60 days) to terminate tenancy, initiating the landlord's statutory security deposit accounting timeline.`;
+      penalties = `Surrendering possession without required statutory notice may leave tenant liable for continued rent until unit is re-rented or term expires under ${state.name} mitigation rules.`;
+      keyRequirements = [
+        "Delivery of written notice at least 30 days prior to the periodic rental cycle expiration",
+        "Designation of formal forwarding address for mandatory security deposit accounting",
+        "Request for statutory pre-move joint walkthrough inspection where authorized by state law",
+        "Surrender of all keys, remotes, and possession on or before the stated vacate date",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Landlords in ${state.name} must mitigate damages by making reasonable commercial efforts to re-rent the premises following tenant move-out.`,
+        `Providing a forwarding address triggers the landlord mandatory statutory return deadline for security deposit accounting.`,
+      ];
+      break;
+
+    case "roommate-agreement":
+      noticeDays = 30;
+      statuteCitation = `${profile.legalCodePrefix} General Contract & Joint Obligation Principles`;
+      statuteName = `${state.name} Co-Tenant Contract & Contribution Law`;
+      summary = `In ${state.name}, roommate contracts establish enforceable rights of contribution and indemnity among co-tenants for rent, utilities, and damage independently of the master landlord.`;
+      penalties = `Breaching co-tenant is liable for unpaid rent shares, utility debts, and attorney fees recoverable in ${state.courtSystemName} (Limit: ${state.smallClaimsLimit}).`;
+      keyRequirements = [
+        "Clear itemization of individual monthly rent shares and utility split ratios",
+        "Agreed house rules covering quiet hours, guest stays, and chore rotations",
+        "Notice protocol (at least 30 days) and replacement roommate approval procedures for early move-out",
+        "Division and reimbursement protocol for shared security deposits",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Contracts between co-tenants are enforceable in ${state.courtSystemName} small claims division up to ${state.smallClaimsLimit}.`,
+        `Under ${state.name} law, co-signers on a master lease remain jointly and severally liable to the landlord regardless of private roommate agreements.`,
+      ];
+      break;
+
+    case "sublease-agreement":
+      noticeDays = profile.defaultNoticeDays;
+      statuteCitation = `${profile.legalCodePrefix} Subletting and Lease Assignment Regulations`;
+      statuteName = `${state.name} Residential Subtenancy Law`;
+      summary = `In ${state.name}, sublease agreements are subordinate to the prime master lease and require landlord consent when stipulated by contract. Subtenants are bound by all master covenants.`;
+      penalties = `Unauthorized subletting or subtenant default empowers prime lessor to terminate tenancy and evict all occupants through ${state.courtSystemName}.`;
+      keyRequirements = [
+        "Incorporation and subordinate compliance with the underlying master lease agreement",
+        "Written landlord consent rider to prevent lease forfeiture for unauthorized transfer",
+        "Distinct sublease security deposit holding and accounting pursuant to state law",
+        "Subtenant indemnification protecting prime tenant from lease violations",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `In ${state.name}, prime tenants remain fully liable to the master landlord for rent and property damage during the sublease term.`,
+        `Subtenants acquire statutory tenant protections and can only be evicted through formal court proceedings in ${state.courtSystemName}.`,
+      ];
+      break;
+
+    case "security-deposit-demand":
+      noticeDays = 10;
+      statuteCitation = `${profile.legalCodePrefix} Security Deposit Holding, Accounting & Penalty Act`;
+      statuteName = `${state.name} Security Deposit Return and Treble Damages Law`;
+      summary = `Under ${state.name} statutory deposit laws, landlords must return security deposits with itemized invoices within mandatory statutory windows following surrender.`;
+      penalties = `Bad-faith withholding in ${state.name} exposes landlord to statutory punitive damages of double or treble the deposit amount, plus court costs and attorney fees in ${state.courtSystemName}.`;
+      keyRequirements = [
+        "Clear citation of the state statutory deadline following tenant surrender of keys",
+        "Itemized contest of improper wear-and-tear deductions or demand for unreturned sum",
+        "Formal demand for itemized contractor invoices and actual receipts",
+        "Pre-suit notice of intent to sue in small claims court for statutory penalty multipliers",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Landlords in ${state.name} forfeiting statutory deposit deadlines lose all rights to withhold funds and face statutory multiplier damages.`,
+        `Small claims lawsuits for unreturned deposits can be filed in ${state.courtSystemName} up to ${state.smallClaimsLimit} without an attorney.`,
+      ];
+      break;
+
+    case "esa-housing-letter-request":
+      noticeDays = 10;
+      statuteCitation = `42 U.S.C. Section 3604(f)(3)(B) & ${profile.legalCodePrefix} Fair Housing Act`;
+      statuteName = `Federal Fair Housing Act & ${state.name} Human Rights Law`;
+      summary = `Governed by federal Fair Housing Act regulations and ${state.name} disability rights statutes. Housing providers must grant reasonable accommodations for emotional support animals.`;
+      penalties = `Unlawful denial or imposition of pet fees on assistance animals exposes housing provider to HUD discrimination complaints, state licensing audits, and civil damages.`;
+      keyRequirements = [
+        "Grounding under federal Fair Housing Act (42 U.S.C. 3604) and HUD Notice FHEO-2020-01",
+        "Exemption from all pet deposits, monthly pet rent surcharges, and breed/weight limits",
+        "Verification letter from a licensed medical or mental healthcare professional",
+        "Mandatory prompt response protocol requiring provider action within 10 business days",
+      ];
+      stateRules = [
+        `Under federal and ${state.name} law, assistance animals are not classified as pets and cannot be charged pet rent.`,
+        `Housing providers in ${state.name} cannot demand access to confidential psychiatric records or diagnostic test charts.`,
+      ];
+      break;
+
+    case "motor-vehicle-bill-of-sale":
+      noticeDays = "Immediate upon Delivery";
+      statuteCitation = `49 U.S.C. Section 32705 & ${profile.legalCodePrefix} Motor Vehicle Code`;
+      statuteName = `Federal Truth in Mileage Act & ${state.name} Vehicle Title Code`;
+      summary = `Private motor vehicle transfers in ${state.name} require certified odometer disclosure under federal law, VIN verification, and proper endorsement of state Certificate of Title.`;
+      penalties = `False odometer disclosure carries federal and state felony penalties, statutory civil liability, and treble damages.`;
+      keyRequirements = [
+        "Federal Truth in Mileage Act odometer disclosure statement with mechanical limit certification",
+        "Full 17-digit Vehicle Identification Number (VIN), make, model, year, and body type",
+        "Express 'as-is, where-is' warranty disclaimer shielding transferor from mechanical claims",
+        "Endorsement and physical handover of the valid state Certificate of Title",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Purchasers in ${state.name} must register the vehicle and transfer title with the DMV within state statutory deadlines (typically 10 to 30 days).`,
+        `Sellers must promptly file a transfer notification with the state motor vehicle division to eliminate parking and toll liability.`,
+      ];
+      break;
+
+    case "dmv-release-of-liability":
+      noticeDays = 5;
+      statuteCitation = `${profile.legalCodePrefix} Motor Vehicle Transfer & Civil Immunity Statute`;
+      statuteName = `${state.name} DMV Notice of Transfer and Release of Liability Law`;
+      summary = `In ${state.name}, filing a timely Notice of Transfer with the state DMV protects the former owner from civil liability for subsequent traffic accidents, parking violations, and toll charges.`;
+      penalties = `Failure to file notice of transfer leaves seller exposed to civil presumption of registered ownership and toll/towing collections.`;
+      keyRequirements = [
+        "Accurate record of purchaser full legal name, physical address, and contact information",
+        "Exact date and odometer reading at the moment of physical custody transfer",
+        "Complete vehicle identification: 17-digit VIN, license plate number, year, make, and model",
+        "Sworn certification under penalty of perjury meeting DMV submission standards",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Under ${state.name} motor vehicle statutes, timely delivery of transfer notification establishes an affirmative defense against civil traffic liability.`,
+        `Toll authorities and parking enforcement agencies in ${state.name} dismiss citations issued after the certified transfer timestamp.`,
+      ];
+      break;
+
+    case "quitclaim-deed":
+      noticeDays = "Immediate upon Recording";
+      statuteCitation = `${profile.legalCodePrefix} Real Property Conveyance & Recording Acts`;
+      statuteName = `${state.name} Statutory Quitclaim Deed and Land Records Law`;
+      summary = `In ${state.name}, a quitclaim deed conveys all existing right, title, and interest of grantor without warranty. Proper county recording gives public constructive notice.`;
+      penalties = `Unrecorded deeds are void as against subsequent bona fide purchasers for value under ${state.name} recording acts.`;
+      keyRequirements = [
+        "Compliant first-page recording margins (3-inch top margin for county recorder stamps)",
+        "Assessor's Parcel Number (APN / Tax ID) and formal legal real property description",
+        "Nominal consideration recitation ($10.00) and tax statement mailing address",
+        "Formal Notary Public acknowledgment jurat conforming to state statutory notary law",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `In ${state.name}, deeds must be recorded in the county where the real property is physically situated to establish priority.`,
+        `Grantors transfer only their present interest; a quitclaim deed contains no title warranties or encumbrance covenants.`,
+      ];
+      break;
+
+    case "general-bill-of-sale":
+      noticeDays = "Immediate upon Execution";
+      statuteCitation = `UCC Article 2 & ${profile.legalCodePrefix} Commercial Code`;
+      statuteName = `${state.name} Uniform Commercial Code Sales Law`;
+      summary = `Governs sales of personal property and equipment in ${state.name}. Incorporates UCC warranty of title (UCC 2-312) and lawful 'as-is' warranty disclaimers (UCC 2-316).`;
+      penalties = `Breach of title warranty authorizes buyer action for purchase price refund and consequential damages in ${state.courtSystemName}.`;
+      keyRequirements = [
+        "Unencumbered title warranty confirming property is free of liens, loans, and chattel mortgages",
+        "Prominent 'as-is, where-is' disclaimer excluding implied warranties of merchantability and fitness",
+        "Detailed identification numbers (make, model, serial number, or vessel registration)",
+        "Written receipt acknowledging delivery and payment in full of agreed purchase price",
+      ];
+      stateRules = [
+        `Sales of goods exceeding $500 in ${state.name} must satisfy UCC Statute of Frauds writing requirements.`,
+        `Disputes arising under this bill of sale may be litigated in ${state.courtSystemName} up to ${state.smallClaimsLimit} in small claims division.`,
+      ];
+      break;
+
+    case "llc-operating-agreement":
+      noticeDays = "Immediate upon Adoption";
+      statuteCitation = `${profile.legalCodePrefix} Limited Liability Company Act (ULLCA)`;
+      statuteName = `${state.name} Limited Liability Company Code`;
+      summary = `Under ${state.name} corporate law, an operating agreement establishes member governance, capital ownership, voting rules, and preserves the corporate veil shielding owners personal assets.`;
+      penalties = `Operating without a written agreement subjects the LLC to statutory default rules and increases vulnerability to piercing of the corporate veil in ${state.courtSystemName}.`;
+      keyRequirements = [
+        "Designation of operational structure: Member-Managed vs Manager-Managed",
+        "Detailed initial capital contributions, ownership percentage interests, and profit distribution rules",
+        "Corporate veil protection explicitly shielding members from personal liability for company debts",
+        "IRS federal tax classification election (Disregarded Entity, Partnership, or S-Corp)",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `In ${state.name}, an executed operating agreement is required by commercial banks to open entity checking and credit accounts.`,
+        `Limited liability protection under ${state.name} law shields personal assets from business creditors absent intentional fraud.`,
+      ];
+      break;
+
+    case "standard-nda":
+      noticeDays = "Term of Agreement";
+      statuteCitation = `18 U.S.C. Section 1836 & ${profile.legalCodePrefix} Uniform Trade Secrets Act`;
+      statuteName = `Defend Trade Secrets Act & ${state.name} Trade Secret Law`;
+      summary = `In ${state.name}, non-disclosure agreements protect proprietary trade secrets, technical know-how, and commercial data with temporary restraining orders and preliminary injunctions.`;
+      penalties = `Breach authorizes immediate emergency injunctive relief, recovery of actual damages, unjust enrichment, and attorney fees in ${state.courtSystemName}.`;
+      keyRequirements = [
+        "Precise definition of confidential information with standard exclusions (public knowledge, prior possession)",
+        "Stated duration of confidentiality (multi-year term with trade secrets protected in perpetuity)",
+        "Equitable injunctive relief remedies without necessity of posting bond",
+        "Mandatory federal Defend Trade Secrets Act (DTSA) whistleblower immunity notice",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Trade secrets under ${state.name} UTSA jurisprudence remain protected indefinitely so long as secrecy is reasonably maintained.`,
+        `Injunctions to prevent disclosure may be filed as emergency ex parte applications in ${state.courtSystemName}.`,
+      ];
+      break;
+
+    case "promissory-note":
+      noticeDays = profile.defaultNoticeDays;
+      statuteCitation = `UCC Article 3 & ${profile.legalCodePrefix} Usury and Interest Statutes`;
+      statuteName = `${state.name} Commercial Paper and Lawful Interest Code`;
+      summary = `In ${state.name}, promissory notes represent negotiable instruments governed by UCC Article 3, subject to state statutory usury ceilings (${profile.statutoryInterest}).`;
+      penalties = `Default authorizes balance acceleration, collection lawsuits, judgment liens, and recovery of statutory collection attorney fees in ${state.courtSystemName}.`;
+      keyRequirements = [
+        "Unconditional promise to pay a sum certain in money on demand or at a definite time",
+        "Fixed interest rate strictly adhering to state usury caps and non-usurious savings clauses",
+        "Default acceleration clause making entire unpaid balance immediately due upon default",
+        "Waiver of presentment, demand, notice of dishonor, and recovery of collection attorney fees",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Contract interest in ${state.name} cannot exceed statutory usury caps; excess interest forfeits lender collection rights.`,
+        `Promissory notes qualify for expedited summary judgment on negotiable instruments in ${state.courtSystemName}.`,
+      ];
+      break;
+
+    case "employment-separation-agreement":
+      noticeDays = 21;
+      statuteCitation = `29 U.S.C. Section 626(f) & ${profile.legalCodePrefix} Fair Employment Practices Act`;
+      statuteName = `Older Workers Benefit Protection Act & ${state.name} Labor Code`;
+      summary = `In ${state.name}, severance releases require valid consideration beyond earned wages, OWBPA statutory review periods (21/45 days), and 7-day post-execution revocation windows.`;
+      penalties = `Failing to comply with statutory waiver formalities renders employee releases of age discrimination and wage claims unenforceable in ${state.courtSystemName}.`;
+      keyRequirements = [
+        "OWBPA statutory compliance: 21-day consideration period and mandatory 7-day post-execution revocation window",
+        "Written advice to consult with independent legal counsel before signing",
+        "Comprehensive waiver of federal Title VII, ADA, ADEA, FMLA, and state wage claims",
+        "Severance pay consideration paid in excess of all earned wages, commissions, and accrued PTO",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Under ${state.name} labor law, severance cannot be made conditional on waiving non-waivable statutory unemployment or worker compensation rights.`,
+        `Earned wages and accrued PTO must be paid regardless of whether employee signs the separation release.`,
+      ];
+      break;
+
+    case "durable-power-of-attorney":
+      noticeDays = "Immediate upon Execution";
+      statuteCitation = `${profile.legalCodePrefix} Uniform Power of Attorney Act (UPOAA)`;
+      statuteName = `${state.name} Durable Power of Attorney Code`;
+      summary = `Under ${state.name} probate statutes, a durable financial power of attorney authorizes an agent to manage real estate, banking, and tax affairs, surviving the principal's mental incapacity.`;
+      penalties = `Third parties unreasonably refusing to honor a statutory durable POA in ${state.name} may face court injunctions and liability for attorney fees.`;
+      keyRequirements = [
+        "Statutory durability provision: 'This power of attorney is not affected by subsequent disability or incapacity of the principal'",
+        "Specific enumeration of banking, real estate, business, and tax (IRS Form 2848) powers",
+        "Nomination of successor alternate agents to avoid judicial guardianship proceedings",
+        "Formal execution before a licensed Notary Public and qualified adult witnesses",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Financial institutions in ${state.name} honoring an executed statutory durable power of attorney are held harmless by statute.`,
+        `Agents owe a strict fiduciary duty of loyalty and must maintain accurate financial accountings under ${state.name} probate law.`,
+      ];
+      break;
+
+    case "last-will-and-testament":
+      noticeDays = "Upon Testator Demise";
+      statuteCitation = `${profile.legalCodePrefix} Probate Code & Uniform Probate Code`;
+      statuteName = `${state.name} Estates and Probate Law`;
+      summary = `In ${state.name}, a Last Will and Testament directs distribution of estate assets, nominates executors and minor child guardians, and avoids intestacy laws.`;
+      penalties = `Dying without a valid will triggers intestate succession in ${state.courtSystemName}, distributing property under state formulas rather than testator intent.`;
+      keyRequirements = [
+        "Testator legal capacity, testamentary intent, and express revocation of all prior wills",
+        "Appointment of primary Executor (Personal Representative) and alternate without bond requirement",
+        "Testamentary guardian designation for minor children to prevent state custody disputes",
+        "Statutory Self-Proving Affidavit with two disinterested adult witnesses and Notary Public jurat",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `A self-proving affidavit in ${state.name} allows the will to be admitted to probate without requiring live witness court testimony.`,
+        `Surviving spouses in ${state.name} retain statutory elective share rights that cannot be completely disinherited by will.`,
+      ];
+      break;
+
+    case "child-travel-consent":
+      noticeDays = "Travel Itinerary Window";
+      statuteCitation = `8 U.S.C. Section 1182 & U.S. Customs and Border Protection Travel Regulations`;
+      statuteName = `Federal Border Protection & ${state.name} Parental Custody Standards`;
+      summary = `Complies with CBP, TSA, and international airline requirements for minors traveling abroad or domestically with one parent, grandparents, or authorized chaperones.`;
+      penalties = `Traveling without verifiable notarized parental consent can lead to denied airline boarding, international border delays, or travel refusal by foreign authorities.`;
+      keyRequirements = [
+        "Identification of consenting custodial parent(s), minor child, and designated travel chaperone",
+        "Complete travel itinerary including departure/return dates, flight details, and destination countries",
+        "Passport, birth certificate, or state identification numbers for minor and chaperone",
+        "Emergency medical authorization permitting chaperone to consent to emergency physician care",
+      ];
+      stateRules = [
+        `U.S. Customs and Border Protection (CBP) strongly recommends that minor children traveling without both parents carry a notarized consent letter.`,
+        `Child custody orders in ${state.name} must be reviewed to ensure travel complies with geographic court restrictions.`,
+      ];
+      break;
+
+    case "child-medical-consent":
+      noticeDays = "Term of Caregiver Authorization";
+      statuteCitation = `45 C.F.R. Section 164.508 & ${profile.legalCodePrefix} Minor Medical Consent Law`;
+      statuteName = `Federal HIPAA Privacy Rule & ${state.name} Minor Healthcare Consent Code`;
+      summary = `Under ${state.name} family law, custodial parents can delegate temporary medical consent authority to trusted caregivers for pediatric, dental, hospital, and emergency treatment.`;
+      penalties = `Without valid parental authorization, healthcare facilities may refuse non-emergency medical treatment until parental contact is verified.`;
+      keyRequirements = [
+        "Parental delegation of medical, pediatric, dental, diagnostic, and surgical consent authority",
+        "Full HIPAA medical records privacy authorization under 45 C.F.R. Section 164.508",
+        "Detailed medical history: allergies, ongoing prescriptions, chronic conditions, and pediatrician contact",
+        "Health insurance provider data, policy ID numbers, and guarantor financial responsibility terms",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Healthcare providers in ${state.name} require notarized parental consent before administering non-emergency medical care to minors.`,
+        `Parents may revoke caregiver medical consent at any time upon written notice to the healthcare provider.`,
+      ];
+      break;
+
+    case "debt-validation-letter":
+      noticeDays = 30;
+      statuteCitation = `15 U.S.C. Section 1692g & ${profile.legalCodePrefix} Fair Debt Collection Law`;
+      statuteName = `Federal Fair Debt Collection Practices Act & ${state.name} Debt Collection Act`;
+      summary = `Under federal law (15 U.S.C. 1692g), consumers have 30 days from initial contact to demand validation. Debt collectors must cease all collection activities until proof is provided.`;
+      penalties = `Continuing collection efforts without providing validation violates the FDCPA, subjecting the debt collector to statutory damages of $1,000, actual damages, and attorney fees.`;
+      keyRequirements = [
+        "Timely dispute invoked within the 30-day statutory window of initial collection contact",
+        "Mandatory directive forcing collector to cease all collection efforts until validation is mailed",
+        "Demand for complete accounting ledger, original contract, chain of assignment, and state license",
+        "Instruction restricting all future communications strictly to writing, barring telephone calls",
+      ];
+      stateRules = [
+        `Under 15 U.S.C. 1692g(b), reporting unverified debts to credit bureaus after receiving a dispute violates federal law.`,
+        `Debt collection practices in ${state.name} are subject to state consumer protection statutes and ${state.courtSystemName} civil remedies.`,
+      ];
+      break;
   }
 
   return {

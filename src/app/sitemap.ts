@@ -51,7 +51,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // 10 Document Hub URLs
+  // 40 Document Hub URLs
   for (const doc of ALL_DOCUMENTS) {
     routes.push({
       url: `${baseUrl}/forms/${doc.slug}`,
@@ -61,7 +61,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   }
 
-  // 10 Documents x 51 States = 510 State-Specific pSEO landing pages
+  // 40 Documents x 51 States = 2,040 State-Specific pSEO landing pages
   for (const doc of ALL_DOCUMENTS) {
     for (const state of US_STATES) {
       routes.push({

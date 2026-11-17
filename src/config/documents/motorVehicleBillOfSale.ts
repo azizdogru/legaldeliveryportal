@@ -1,0 +1,273 @@
+import { DocumentConfig, DocumentSection, StateStatuteInfo } from "@/types/document";
+
+export const motorVehicleBillOfSaleConfig: DocumentConfig = {
+  id: "motor-vehicle-bill-of-sale",
+  slug: "motor-vehicle-bill-of-sale",
+  title: "Motor Vehicle Bill of Sale (DMV & Odometer Disclosure)",
+  shortTitle: "Vehicle Bill of Sale",
+  category: "Bill of Sale",
+  description: "Official DMV-compliant motor vehicle bill of sale including federal Truth in Mileage Act odometer disclosure statement, VIN verification, and as-is warranty disclaimer for private vehicle sales.",
+  metaDescription: "Generate an official Motor Vehicle Bill of Sale. Includes federal odometer disclosure, DMV transfer terms, and as-is warranty disclaimers for all 50 states. PDF for $9.90.",
+  priceFormatted: "$9.90",
+  priceAmount: 9.9,
+  badgeText: "DMV Title Standard",
+  iconName: "Truck",
+  searchKeywords: [
+    "motor vehicle bill of sale template",
+    "dmv car bill of sale with odometer",
+    "used car sales receipt pdf",
+    "auto bill of sale form as is",
+    "private vehicle transfer document",
+    "motorcycle and truck bill of sale",
+  ],
+  features: [
+    "Complies with federal Truth in Mileage Act (49 U.S.C. 32705) odometer disclosure standards",
+    "Includes complete vehicle VIN, year, make, model, trim, and title certificate numbers",
+    "Protects seller with ironclad 'as-is, where-is' warranty disclaimer and liability cut-off",
+    "Accepted by state DMV and Department of Licensing offices nationwide",
+  ],
+  defaultValues: {
+    noticeDate: new Date().toISOString().split("T")[0],
+    stateCode: "CA",
+    sellerName: "",
+    sellerAddress: "",
+    sellerPhone: "",
+    buyerName: "",
+    buyerAddress: "",
+    buyerPhone: "",
+    vehicleYear: "2021",
+    vehicleMake: "Toyota",
+    vehicleModel: "Camry SE",
+    vehicleVin: "",
+    vehicleBodyStyle: "Sedan 4D",
+    vehicleColor: "Silver",
+    odometerReading: "48250",
+    odometerStatus: "actual",
+    purchasePrice: "18500.00",
+    paymentMethod: "Cashier Check",
+  },
+  steps: [
+    {
+      id: "buyer_seller",
+      title: "Buyer & Seller Information",
+      description: "Enter legal identifying information and addresses for the vehicle seller and purchaser.",
+      fields: [
+        {
+          name: "sellerName",
+          label: "Seller Full Legal Name",
+          type: "text",
+          placeholder: "e.g., Robert Thomas Clark",
+          required: true,
+          gridCols: 1,
+        },
+        {
+          name: "sellerAddress",
+          label: "Seller Physical Address",
+          type: "text",
+          placeholder: "e.g., 420 Oak Street, Columbus, OH 43215",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "sellerPhone",
+          label: "Seller Phone Number",
+          type: "text",
+          placeholder: "e.g., (555) 321-7654",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "buyerName",
+          label: "Buyer Full Legal Name",
+          type: "text",
+          placeholder: "e.g., Jessica Marie Hayes",
+          required: true,
+          gridCols: 1,
+        },
+        {
+          name: "buyerAddress",
+          label: "Buyer Physical Address",
+          type: "text",
+          placeholder: "e.g., 880 High Street, Columbus, OH 43201",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "buyerPhone",
+          label: "Buyer Phone Number",
+          type: "text",
+          placeholder: "e.g., (555) 987-1234",
+          required: true,
+          gridCols: 2,
+        },
+      ],
+    },
+    {
+      id: "vehicle_specs",
+      title: "Vehicle Specifications & Odometer",
+      description: "Enter the complete vehicle description, 17-digit VIN, and odometer reading.",
+      fields: [
+        {
+          name: "vehicleVin",
+          label: "Vehicle Identification Number (17-Character VIN)",
+          type: "text",
+          placeholder: "e.g., 4T1B11HK5MU123456",
+          required: true,
+          gridCols: 1,
+        },
+        {
+          name: "vehicleYear",
+          label: "Model Year",
+          type: "text",
+          placeholder: "e.g., 2021",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "vehicleMake",
+          label: "Make",
+          type: "text",
+          placeholder: "e.g., Toyota",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "vehicleModel",
+          label: "Model & Trim",
+          type: "text",
+          placeholder: "e.g., Camry SE",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "vehicleBodyStyle",
+          label: "Body Style",
+          type: "text",
+          placeholder: "e.g., 4-Door Sedan, SUV, Coupe",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "vehicleColor",
+          label: "Exterior Color",
+          type: "text",
+          placeholder: "e.g., Silver Metallic",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "odometerReading",
+          label: "Current Odometer Mileage (No Tenths)",
+          type: "text",
+          placeholder: "e.g., 48250",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "odometerStatus",
+          label: "Federal Odometer Certification",
+          type: "select",
+          required: true,
+          gridCols: 1,
+          options: [
+            { label: "Actual Mileage (Reflects the actual mileage to the best of knowledge)", value: "actual" },
+            { label: "Exceeds Mechanical Limits (Odometer rolled over mechanical limits)", value: "exceeds_limits" },
+            { label: "Warning: Odometer Discrepancy (Not the actual mileage)", value: "discrepancy" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "purchase_terms",
+      title: "Price & Payment",
+      description: "Define purchase price, payment instrument, and transfer date.",
+      fields: [
+        {
+          name: "purchasePrice",
+          label: "Total Agreed Purchase Price ($ USD)",
+          type: "currency",
+          placeholder: "e.g., 18500.00",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "paymentMethod",
+          label: "Method of Payment",
+          type: "select",
+          required: true,
+          gridCols: 2,
+          options: [
+            { label: "Cashier Check / Certified Bank Draft", value: "Cashier Check" },
+            { label: "Cash in US Currency", value: "Cash" },
+            { label: "Bank Wire Transfer", value: "Wire Transfer" },
+            { label: "Personal Check (Subject to clearance)", value: "Personal Check" },
+          ],
+        },
+        {
+          name: "noticeDate",
+          label: "Date of Sale & Title Transfer",
+          type: "date",
+          required: true,
+          gridCols: 2,
+        },
+      ],
+    },
+  ],
+  generatePdfSections: (data: Record<string, any>, statute?: StateStatuteInfo): DocumentSection[] => {
+    const seller = data.sellerName || "Seller";
+    const buyer = data.buyerName || "Buyer";
+    const price = parseFloat(data.purchasePrice || "0").toFixed(2);
+    const vin = data.vehicleVin || "VIN ON RECORD";
+    const vehicleDesc = `${data.vehicleYear || ""} ${data.vehicleMake || ""} ${data.vehicleModel || ""} (${data.vehicleBodyStyle || "Vehicle"}, Color: ${data.vehicleColor || "N/A"})`;
+    const statuteCite = statute?.statuteCitation || "State Motor Vehicle Code & UCC Article 2";
+
+    return [
+      {
+        type: "parties",
+        paragraphs: [],
+        metaTable: [
+          { label: "DOCUMENT TYPE", value: "MOTOR VEHICLE BILL OF SALE & ODOMETER DISCLOSURE" },
+          { label: "SELLER (TRANSFEROR)", value: `${seller}, ${data.sellerAddress || ""} (Phone: ${data.sellerPhone || "On File"})` },
+          { label: "BUYER (TRANSFEREE)", value: `${buyer}, ${data.buyerAddress || ""} (Phone: ${data.buyerPhone || "On File"})` },
+          { label: "MOTOR VEHICLE", value: `${vehicleDesc}` },
+          { label: "VEHICLE VIN", value: `${vin}` },
+          { label: "ODOMETER MILEAGE", value: `${data.odometerReading || "0"} Miles (${data.odometerStatus === "actual" ? "Actual Mileage" : "Exceeds Limits / Discrepancy"})` },
+          { label: "PURCHASE PRICE", value: `$${price} USD paid via ${data.paymentMethod || "Certified Funds"}` },
+          { label: "GOVERNING LAW", value: `${statuteCite}` },
+        ],
+      },
+      {
+        title: "1. Transfer of Ownership & Title Warranty",
+        type: "body",
+        paragraphs: [
+          `FOR VALUABLE CONSIDERATION in the total amount of $${price} USD, receipt and sufficiency of which are hereby acknowledged, Seller ${seller} sells, transfers, assigns, and conveys all right, title, and interest in the motor vehicle described above to Buyer ${buyer}.`,
+          `Seller warrants and covenants that Seller is the lawful owner of the vehicle, holds full legal authority to transfer the same, and that the vehicle is free and clear of all liens, mortgages, pledges, encumbrances, or security interests of any third party. Seller agrees to immediately deliver the properly endorsed Certificate of Title to Buyer.`,
+        ],
+      },
+      {
+        title: "2. Federal Odometer Disclosure Statement",
+        type: "body",
+        paragraphs: [
+          `Federal law (49 U.S.C. Section 32705 and 49 C.F.R. Part 580) requires that the transferor state the mileage upon transfer of ownership. Providing a false statement or failure to complete this form may result in fines and/or imprisonment under federal and state law.`,
+          `Seller certifies to the best of Seller knowledge that the odometer reading is ${data.odometerReading || "0"} miles and that it reflects the: ${data.odometerStatus === "actual" ? "ACTUAL MILEAGE of the vehicle described above." : "MILEAGE IN EXCESS OF MECHANICAL LIMITS or ODOMETER DISCREPANCY."}`,
+        ],
+      },
+      {
+        title: "3. 'As-Is' Warranty Disclaimer & Risk of Loss",
+        type: "body",
+        paragraphs: [
+          `THE VEHICLE IS SOLD STRICTLY 'AS-IS, WHERE-IS' WITH ALL FAULTS AND WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES OF ANY KIND, INCLUDING BUT NOT LIMITED TO ANY IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.`,
+          `Buyer acknowledges having inspected the vehicle, having had full opportunity to conduct an independent mechanical examination, and agrees to accept the vehicle in its present operating condition. All risk of loss, maintenance, repairs, and operating liability transfer exclusively to Buyer upon delivery of possession.`,
+        ],
+      },
+      {
+        type: "signatures",
+        paragraphs: [],
+      },
+      {
+        type: "notary",
+        paragraphs: [],
+      },
+    ];
+  },
+};
