@@ -1,0 +1,242 @@
+import { DocumentConfig, DocumentSection, StateStatuteInfo } from "@/types/document";
+
+export const boatBillOfSaleConfig: DocumentConfig = {
+  id: "boat-bill-of-sale",
+  slug: "boat-bill-of-sale",
+  title: "Boat & Watercraft Bill of Sale (Vessel, Motor & Trailer)",
+  shortTitle: "Boat Bill of Sale",
+  category: "Bill of Sale",
+  description: "Official watercraft bill of sale transferring boat vessel, outboard motor, and boat trailer with Hull Identification Number (HIN), state registration number, and as-is warranty disclaimer.",
+  metaDescription: "Generate an official Boat & Watercraft Bill of Sale. Includes Hull ID Number (HIN), outboard motor, trailer VIN, and as-is warranty disclaimer for all 50 states. PDF for $9.90.",
+  priceFormatted: "$9.90",
+  priceAmount: 9.9,
+  badgeText: "HIN & Vessel Transfer",
+  iconName: "Anchor",
+  searchKeywords: [
+    "boat bill of sale template",
+    "watercraft bill of sale pdf",
+    "vessel and trailer bill of sale",
+    "hin hull identification bill of sale",
+    "outboard motor bill of sale form",
+    "boat purchase sales receipt as is",
+  ],
+  features: [
+    "Transfers legal title for vessel, outboard motor, and boat trailer on a single instrument",
+    "Verifies Hull Identification Number (HIN) and state wildlife/DNR registration numbers",
+    "Includes complete outboard engine horsepower, make, and serial number fields",
+    "Features comprehensive 'as-is, where-is' seller warranty disclaimer with lien-free covenants",
+  ],
+  defaultValues: {
+    noticeDate: new Date().toISOString().split("T")[0],
+    stateCode: "FL",
+    sellerName: "Captain Gregory Allen Vance",
+    sellerAddress: "1400 Harbor Drive, Slip 24, Fort Lauderdale, FL 33316",
+    buyerName: "Travis Keith Henderson",
+    buyerAddress: "880 Ocean Boulevard, Pompano Beach, FL 33062",
+    vesselYear: "2021",
+    vesselMake: "Sea Hunt",
+    vesselModel: "Ultra 234 Center Console",
+    vesselLength: "23 ft 4 in",
+    hullIdNumber: "SXK12489C121",
+    stateRegistrationNumber: "FL-8924-EJ",
+    outboardMotor: "Yamaha 250HP Four Stroke (Serial: 6CG-1049281)",
+    trailerDetails: "2021 Magic Tilt Aluminum Dual-Axle Trailer (VIN: 4M8BA2327M1094821)",
+    purchasePrice: "54500.00",
+    paymentMethod: "Bank Wire Transfer / Certified Cashier Check",
+  },
+  steps: [
+    {
+      id: "vessel_parties",
+      title: "Seller & Buyer Information",
+      description: "Enter legal contact details for the vessel seller and buyer.",
+      fields: [
+        {
+          name: "sellerName",
+          label: "Seller Full Legal Name",
+          type: "text",
+          placeholder: "e.g., Captain Gregory Allen Vance",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "sellerAddress",
+          label: "Seller Residential / Marina Address",
+          type: "text",
+          placeholder: "e.g., 1400 Harbor Drive, Fort Lauderdale, FL 33316",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "buyerName",
+          label: "Buyer Full Legal Name",
+          type: "text",
+          placeholder: "e.g., Travis Keith Henderson",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "buyerAddress",
+          label: "Buyer Residential Address",
+          type: "text",
+          placeholder: "e.g., 880 Ocean Boulevard, Pompano Beach, FL 33062",
+          required: true,
+          gridCols: 2,
+        },
+      ],
+    },
+    {
+      id: "vessel_specs",
+      title: "Vessel, Motor & Trailer Details",
+      description: "Enter Hull ID (HIN), state registration, motor serial, and trailer info.",
+      fields: [
+        {
+          name: "vesselYear",
+          label: "Vessel Model Year",
+          type: "text",
+          placeholder: "e.g., 2021",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "vesselMake",
+          label: "Vessel Manufacturer / Make",
+          type: "text",
+          placeholder: "e.g., Sea Hunt, Boston Whaler, Grady-White",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "vesselModel",
+          label: "Vessel Model & Type",
+          type: "text",
+          placeholder: "e.g., Ultra 234 Center Console",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "vesselLength",
+          label: "Vessel Overall Length",
+          type: "text",
+          placeholder: "e.g., 23 ft 4 in",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "hullIdNumber",
+          label: "Hull Identification Number (HIN)",
+          type: "text",
+          placeholder: "e.g., SXK12489C121 (12-character HIN)",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "stateRegistrationNumber",
+          label: "State Wildlife / Vessel Reg. No.",
+          type: "text",
+          placeholder: "e.g., FL-8924-EJ (Bow Number)",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "outboardMotor",
+          label: "Outboard Motor Make, HP & Serial",
+          type: "text",
+          placeholder: "e.g., Yamaha 250HP Four Stroke (Serial: 6CG-1049281)",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "trailerDetails",
+          label: "Boat Trailer Make, Year & VIN",
+          type: "text",
+          placeholder: "e.g., 2021 Magic Tilt Dual-Axle Trailer (VIN: 4M8BA...)",
+          required: true,
+          gridCols: 1,
+        },
+        {
+          name: "purchasePrice",
+          label: "Total Agreed Purchase Price ($ USD)",
+          type: "currency",
+          placeholder: "e.g., 54500.00",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "paymentMethod",
+          label: "Payment Tender Method",
+          type: "text",
+          placeholder: "e.g., Certified Cashier Check, Wire Transfer, Cash",
+          required: true,
+          gridCols: 2,
+        },
+        {
+          name: "noticeDate",
+          label: "Sale & Delivery Date",
+          type: "date",
+          required: true,
+          gridCols: 2,
+        },
+      ],
+    },
+  ],
+  generatePdfSections: (data: Record<string, any>, statute?: StateStatuteInfo): DocumentSection[] => {
+    const seller = data.sellerName || "Vessel Seller";
+    const buyer = data.buyerName || "Vessel Buyer";
+    const price = parseFloat(data.purchasePrice || "0").toLocaleString("en-US", { minimumFractionDigits: 2 });
+    const hin = data.hullIdNumber || "HIN on file";
+    const regNo = data.stateRegistrationNumber || "N/A";
+    const statuteCite = statute?.statuteCitation || "Uniform Commercial Code Article 2 & State Vessel Titling Act";
+
+    return [
+      {
+        type: "parties",
+        paragraphs: [],
+        metaTable: [
+          { label: "INSTRUMENT", value: "OFFICIAL BOAT & WATERCRAFT BILL OF SALE" },
+          { label: "SELLER (TRANSFEROR)", value: `${seller}` },
+          { label: "BUYER (TRANSFEREE)", value: `${buyer}` },
+          { label: "VESSEL DESCRIPTION", value: `${data.vesselYear || ""} ${data.vesselMake || ""} ${data.vesselModel || ""} (${data.vesselLength || ""})` },
+          { label: "HULL ID NUMBER (HIN)", value: `${hin}` },
+          { label: "STATE BOW REG. NO.", value: `${regNo}` },
+          { label: "OUTBOARD ENGINE", value: `${data.outboardMotor || "Engine on file"}` },
+          { label: "TRAILER & VIN", value: `${data.trailerDetails || "Included / None"}` },
+          { label: "TOTAL PURCHASE PRICE", value: `$${price} USD (${data.paymentMethod || "Certified Funds"})` },
+          { label: "VESSEL JURISDICTION", value: `${statuteCite}` },
+        ],
+      },
+      {
+        title: "1. Vessel Conveyance & Transfer of Title",
+        type: "body",
+        paragraphs: [
+          `KNOW ALL PERSONS BY THESE PRESENTS that for and in consideration of the sum of $${price} USD, the receipt and sufficiency of which are hereby formally acknowledged, ${seller} ("Seller") does hereby grant, bargain, sell, convey, and deliver unto ${buyer} ("Buyer") all right, title, and interest in and to the watercraft, outboard propulsion equipment, and marine transport trailer described above.`,
+          `Delivery Date: Seller confirms physical transfer and delivery of the vessel, motor, trailer, and accompanying manufacturer keys, titles, and registration cards on this ${data.noticeDate || "date of execution"}.`,
+        ],
+      },
+      {
+        title: "2. Seller Lien-Free Title Warranty",
+        type: "body",
+        paragraphs: [
+          `Seller covenants, warrants, and represents to Buyer that Seller is the sole lawful owner of the vessel, motor, and trailer, possessing absolute legal power and authority to convey clear title.`,
+          `Seller warrants that the vessel and equipment are free and clear of all liens, mortgages, maritime claims, salvage claims, hypothecations, taxes, and encumbrances of any kind or nature whatsoever, and Seller agrees to defend and indemnify Buyer against any and all adverse claims.`,
+        ],
+      },
+      {
+        title: "3. 'As-Is' Warranty Disclaimer & Buyer Inspection",
+        type: "body",
+        paragraphs: [
+          `THE VESSEL, PROPULSION MOTOR, AND TRAILER ARE SOLD AND DELIVERED "AS-IS, WHERE-IS," WITH ALL FAULTS AND DEFECTS, WHETHER LATENT OR PATENT.`,
+          `SELLER MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR MARINE PURPOSE.`,
+          `Buyer acknowledges having conducted or waived independent sea trials, marine surveyor inspections, and engine mechanical compression audits, accepting the vessel in its present condition.`,
+        ],
+      },
+      {
+        type: "signatures",
+        paragraphs: [],
+      },
+      {
+        type: "notary",
+        paragraphs: [],
+      },
+    ];
+  },
+};

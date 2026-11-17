@@ -842,6 +842,366 @@ export function getStatuteForDocumentAndState(docSlug: string, stateCode: string
         `Debt collection practices in ${state.name} are subject to state consumer protection statutes and ${state.courtSystemName} civil remedies.`,
       ];
       break;
+    case "month-to-month-lease":
+      noticeDays = profile.rentIncreaseNoticeDays || 30;
+      statuteCitation = `${profile.legalCodePrefix} Periodic Tenancy & Month-to-Month Termination Statutes`;
+      statuteName = `${state.name} Periodic Tenancy and Landlord-Tenant Act`;
+      summary = `In ${state.name}, month-to-month periodic tenancies may be terminated by either landlord or tenant upon delivering timely advance written notice (typically 30 or 60 days depending on tenancy duration).`;
+      penalties = `Improper or deficient notice renders the termination legally ineffective, obligating landlord to continue tenancy or exposing landlord to wrongful eviction counterclaims.`;
+      keyRequirements = [
+        `Delivery of formal written notice at least ${noticeDays} days prior to termination date`,
+        "Clear identification of leased premises, tenant of record, and surrender date",
+        `Compliance with ${state.name} security deposit accounting and refund deadlines`,
+        "Strict prohibition against retaliatory or discriminatory lease terminations",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Tenancy termination notices in ${state.name} must adhere to statutory delivery methods to be legally enforceable in ${state.courtSystemName}.`,
+      ];
+      break;
+
+    case "commercial-lease-agreement":
+      noticeDays = 30;
+      statuteCitation = `${profile.legalCodePrefix} Commercial Real Property Leasing & Landlord Remedies`;
+      statuteName = `${state.name} Commercial Landlord and Tenant Act`;
+      summary = `Under ${state.name} commercial property codes, commercial leases grant broad contractual autonomy for Gross, Modified Gross, and Triple-Net (NNN) expense allocations and default remedies.`;
+      penalties = `Breach triggers commercial eviction, lockout under statutory lease terms, default interest, acceleration of rent, and foreclosure on landlord statutory liens.`;
+      keyRequirements = [
+        "Lease term duration, base rent schedule, and percentage rent or annual CPI escalations",
+        "Allocation of Common Area Maintenance (CAM), real property taxes, and building insurance (NNN)",
+        "Commercial security deposit terms, permitted business uses, and exclusive use covenants",
+        "Default cure periods, landlord re-entry rights, and commercial dispute forum selection",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Commercial tenancies in ${state.name} are not subject to residential rent control statutes and are enforced according to the express terms of the agreement.`,
+      ];
+      break;
+
+    case "lead-paint-disclosure":
+      noticeDays = 10;
+      statuteCitation = `42 U.S.C. Section 4852d (Residential Lead-Based Paint Hazard Reduction Act) & EPA Title X`;
+      statuteName = `Federal Title X Residential Lead Hazard Disclosure & ${state.name} Health Code`;
+      summary = `Federally mandated disclosure for all residential housing constructed prior to 1978. Requires landlords and sellers to disclose known lead-based paint and provide the EPA-approved pamphlet.`;
+      penalties = `Violations of federal lead disclosure laws carry EPA civil penalties up to $19,507 per violation, treble damages in civil litigation, and criminal sanctions for willful non-compliance.`;
+      keyRequirements = [
+        "Federally mandated Lead Warning Statement text signed by landlord/seller, tenant/buyer, and agent",
+        "Explicit disclosure of known presence of lead-based paint and lead hazards in the housing unit",
+        "Provision of all available records, inspection reports, and risk assessments concerning lead hazards",
+        "Mandatory 10-day evaluation window for purchasers to conduct independent lead risk assessment",
+      ];
+      stateRules = [
+        "Federal EPA Title X requirements apply in all 50 states without exception for pre-1978 residential properties.",
+        `State and local health authorities in ${state.name} may impose additional lead abatement inspection mandates.`,
+      ];
+      break;
+
+    case "rental-inspection-checklist":
+      noticeDays = profile.defaultNoticeDays;
+      statuteCitation = `${profile.legalCodePrefix} Security Deposit Itemization & Move-In Inspection Law`;
+      statuteName = `${state.name} Move-In / Move-Out Rental Condition Inspection Standards`;
+      summary = `Under ${state.name} security deposit statutes, a signed move-in condition checklist is essential to substantiate lawful damage deductions against tenant security deposits upon lease termination.`;
+      penalties = `Failure to document pre-existing conditions bars landlords from withholding deposit funds for disputed damage and can result in statutory bad-faith penalties up to 2x or 3x the deposit amount.`;
+      keyRequirements = [
+        "Room-by-room condition assessment covering floors, walls, appliances, fixtures, and windows",
+        "Identification of pre-existing wear, tear, chips, stains, and functional defects prior to occupancy",
+        "Joint signatures of landlord and tenant at move-in and at formal move-out checkout inspection",
+        "Written itemization of damage deductions with contractor invoices delivered within statutory deposit deadline",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `In ${state.name}, courts strictly construe damage deductions against landlords who fail to maintain contemporaneous move-in condition documentation.`,
+      ];
+      break;
+
+    case "notice-of-belief-of-abandonment":
+      noticeDays = 15;
+      statuteCitation = `${profile.legalCodePrefix} Real Property Abandonment & Personal Property Disposal Act`;
+      statuteName = `${state.name} Notice of Belief of Abandonment of Real and Personal Property`;
+      summary = `In ${state.name}, landlords must serve formal statutory notice when rent is unpaid for 14+ consecutive days and the landlord reasonably believes the tenant has vacated the premises.`;
+      penalties = `Entering or disposing of tenant property without statutory abandonment notice constitutes wrongful eviction and civil conversion, triggering actual and punitive damages.`;
+      keyRequirements = [
+        "Unpaid rent for the statutory minimum period (typically 14 consecutive days)",
+        "Reasonable belief based on facts that tenant has vacated the premises without intent to return",
+        `Mandatory notice window (15 days if served personally, 18 days if mailed) for tenant to respond`,
+        "Inventory and safe storage of personal property left behind prior to statutory public sale or disposal",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Landlords in ${state.name} must strictly adhere to statutory abandonment procedures before retaking possession without a judicial eviction order.`,
+      ];
+      break;
+
+    case "general-warranty-deed":
+      noticeDays = "Recording Immediate";
+      statuteCitation = `${profile.legalCodePrefix} Conveyancing, Real Property Covenants & Warranty Deeds`;
+      statuteName = `${state.name} Real Property Conveyance and Statutory Warranty Deed Code`;
+      summary = `Under ${state.name} real estate law, a General Warranty Deed conveys fee simple title with full statutory covenants, including seisin, right to convey, against encumbrances, and warranty of quiet enjoyment.`;
+      penalties = `Grantor is legally liable for damages and defense costs if any cloud or superior third-party title claim arises against the conveyed parcel.`;
+      keyRequirements = [
+        "Accurate legal property description, metes and bounds, and Assessor Parcel Number (APN)",
+        "Express granting language with full statutory covenants of title and general warranty defense",
+        "Execution by Grantor before a commissioned Notary Public with formal jurat acknowledgment",
+        `Compliance with ${state.name} county recorder margin, font, and transfer tax documentation rules`,
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Warranty deeds in ${state.name} must be recorded in the county land records where the real property is situated to impart constructive legal notice to third parties.`,
+      ];
+      break;
+
+    case "prenuptial-agreement":
+      noticeDays = "Pre-Marriage Execution";
+      statuteCitation = `${profile.legalCodePrefix} Uniform Premarital Agreement Act (UPAA)`;
+      statuteName = `${state.name} Premarital Agreements and Separate Property Act`;
+      summary = `Governed by the Uniform Premarital Agreement Act (UPAA) as enacted in ${state.name}. Establishes enforceable terms governing separate property, marital debt liability, and spousal support waiver.`;
+      penalties = `Involuntary execution, lack of fair and reasonable financial disclosure, or unconscionability at execution invalidates premarital agreements in family court.`;
+      keyRequirements = [
+        "Voluntary written agreement executed prior to solemnization of marriage without duress or coercion",
+        "Full, fair, and reasonable written disclosure of all assets, debts, real estate, and financial liabilities",
+        "Clear opportunity for independent legal counsel representation for each party",
+        "Enforceable waiver or specification of spousal maintenance, separate property, and inheritance rights",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Family courts in ${state.name} closely scrutinize premarital agreements signed immediately prior to the wedding date; sufficient review time is essential.`,
+      ];
+      break;
+
+    case "marital-separation-agreement":
+      noticeDays = "Effective upon Execution";
+      statuteCitation = `${profile.legalCodePrefix} Domestic Relations & Marital Settlement Agreement Law`;
+      statuteName = `${state.name} Legal Separation and Marital Property Settlement Code`;
+      summary = `In ${state.name}, spouses living separate and apart may execute a binding separation agreement dividing marital property, allocating marital debts, and establishing spousal maintenance.`;
+      penalties = `Violation of an executed marital separation agreement allows the non-breaching spouse to obtain court enforcement, contempt orders, and wage garnishments.`;
+      keyRequirements = [
+        "Equitable division of marital real property, retirement plans (QDROs), vehicles, and personal effects",
+        "Allocation of marital debts and mutual indemnification holding each party harmless from assigned debts",
+        "Terms governing spousal maintenance or express waiver thereof with mutual living-apart covenants",
+        "Provision for incorporation and merger into any future dissolution or divorce decree",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Separation agreements in ${state.name} become enforceable contracts upon execution and may be submitted to ${state.courtSystemName} for formal judicial ratification.`,
+      ];
+      break;
+
+    case "codicil-to-will":
+      noticeDays = "Effective with Last Will";
+      statuteCitation = `${profile.legalCodePrefix} Wills, Codicils & Probate Code`;
+      statuteName = `${state.name} Probate Code on Execution and Amendment of Wills`;
+      summary = `Under ${state.name} probate statutes, a Codicil formally modifies, amends, or adds specific provisions to an existing Last Will and Testament while republishing the unamended remainder.`;
+      penalties = `An improperly executed codicil will be declared invalid by the probate court, causing the prior will or statutory intestacy rules to govern disputed bequests.`;
+      keyRequirements = [
+        "Clear identification and date of original Last Will and Testament being amended",
+        "Specific revocation, alteration, or addition of specific bequests, executors, or guardians",
+        "Express republication and ratification of all unamended provisions of the underlying will",
+        "Execution before two disinterested adult witnesses and a commissioned Notary Public with Self-Proving Affidavit",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `In ${state.name}, codicils must strictly comply with the same statutory execution formalities required for original wills to be admitted to probate.`,
+      ];
+      break;
+
+    case "partnership-agreement":
+      noticeDays = "Immediate upon Execution";
+      statuteCitation = `${profile.legalCodePrefix} Revised Uniform Partnership Act (RUPA)`;
+      statuteName = `${state.name} General Partnership and Business Entities Code`;
+      summary = `Governed by the Revised Uniform Partnership Act (RUPA) in ${state.name}. Defines partner capital accounts, profit allocations, management authority, and buy-sell buyout mechanics.`;
+      penalties = `Partners breaching fiduciary duties of loyalty and care face partnership accounting actions, dissociation, and personal liability for damages.`;
+      keyRequirements = [
+        "Itemization of initial capital contributions (cash and property) and percentage equity ownership",
+        "Clear rules for allocation of net profits, operational losses, and periodic partner distributions",
+        "Management voting standards, banking signature thresholds, and veto powers on extraordinary debts",
+        "Ironclad buy-sell provisions with valuation formula upon death, disability, or voluntary withdrawal",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `General partners in ${state.name} share joint and several liability for partnership debts unless registered as a limited liability partnership (LLP).`,
+      ];
+      break;
+
+    case "corporate-bylaws":
+      noticeDays = "Immediate upon Adoption";
+      statuteCitation = `${profile.legalCodePrefix} General Corporation Law & Corporate Governance Code`;
+      statuteName = `${state.name} Business Corporations Act and Governance Code`;
+      summary = `Establishes internal governance rules for C-Corps and S-Corps in ${state.name}, regulating shareholder annual meetings, board of directors authority, executive officer roles, and corporate indemnification.`;
+      penalties = `Operating without formal bylaws undermines corporate veil protection, exposing shareholders and directors to personal liability for company liabilities.`;
+      keyRequirements = [
+        "Designation of corporate offices, fiscal year end, and annual shareholder meeting schedule",
+        "Quorum requirements and voting thresholds for shareholder actions and board resolutions",
+        "Powers, term lengths, vacancies, and committee authorities of the Board of Directors",
+        "Statutory indemnification provisions protecting directors and executive officers from liability",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Under ${state.name} corporate law, bylaws must be maintained at the principal executive office along with corporate stock ledgers and board minutes.`,
+      ];
+      break;
+
+    case "letter-of-intent-purchase":
+      noticeDays = "Inspection Window Duration";
+      statuteCitation = `${profile.legalCodePrefix} Real Estate Purchase Contracts & Escrow Law`;
+      statuteName = `${state.name} Commercial Contracts and Due Diligence Standards`;
+      summary = `Formal acquisition LOI for real estate or business purchases in ${state.name}. Establishes proposed purchase price, earnest money escrow, due diligence inspection period, and binding exclusivity.`;
+      penalties = `Breach of binding exclusivity (no-shop) or confidentiality covenants subjects breaching party to injunctive relief and civil contract damages.`;
+      keyRequirements = [
+        "Clear definition of target real property or commercial assets and proposed purchase consideration",
+        "Earnest money escrow deposit amount and escrow agent designation",
+        "Due diligence inspection window allowing buyer termination for any reason without penalty",
+        "Binding exclusivity covenants barring seller from soliciting competing offers during diligence",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `In ${state.name}, letters of intent must clearly distinguish between non-binding business terms and binding covenants such as exclusivity and confidentiality.`,
+      ];
+      break;
+
+    case "consulting-agreement":
+      noticeDays = profile.defaultNoticeDays;
+      statuteCitation = `${profile.legalCodePrefix} Independent Contractor & Intellectual Property Assignment Law`;
+      statuteName = `${state.name} Professional Services and Commercial Contract Code`;
+      summary = `Professional consulting contract in ${state.name} defining scope of services, compensation retainer, work-for-hire IP assignment, and independent contractor autonomy under IRS 1099 standards.`;
+      penalties = `Client failure to pay consulting fees triggers breach of contract claims plus statutory prejudgment interest; consultant breach of confidentiality risks injunctions and damages.`;
+      keyRequirements = [
+        "Comprehensive Scope of Work (SOW) defining deliverables, milestones, and performance criteria",
+        "Fee schedule specifying hourly rate, fixed fee, or monthly retainer and expense reimbursement",
+        "Work-made-for-hire intellectual property assignment clause transferring all rights to client",
+        "Confirmation of autonomous contractor status with sole tax responsibility under IRS 1099 guidelines",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Independent contractor agreements in ${state.name} must respect economic reality tests and state labor classifications to avoid misclassification liabilities.`,
+      ];
+      break;
+
+    case "employee-warning-notice":
+      noticeDays = "30-Day Corrective Action Window";
+      statuteCitation = `${profile.legalCodePrefix} Employment at Will & Disciplinary Documentation Standards`;
+      statuteName = `${state.name} Labor Code and Progressive Discipline Standards`;
+      summary = `Progressive discipline instrument in ${state.name} establishing clear factual notice of performance or conduct violations, setting measurable corrective benchmarks, and warning of termination.`;
+      penalties = `Inadequate documentation of misconduct exposes employers to unemployment claim forfeitures, wrongful termination lawsuits, and administrative discrimination complaints.`;
+      keyRequirements = [
+        "Specific factual itemization of dates, conduct, policy sections, and observed deficiencies",
+        "Disciplinary classification (First Warning, Second Warning, or Final Termination Warning)",
+        "Measurable Corrective Action Plan (CAP) with explicit timeline for re-evaluation",
+        "Employee receipt acknowledgment signature with opportunity for written rebuttal submission",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Progressive discipline documentation in ${state.name} serves as crucial evidence in defending at-will employment terminations before administrative agencies.`,
+      ];
+      break;
+
+    case "resignation-letter":
+      noticeDays = "14 (Standard Two-Week Notice)";
+      statuteCitation = `${profile.legalCodePrefix} Final Wage Payment & Labor Code Regulations`;
+      statuteName = `${state.name} Wage Payment and Collection Act`;
+      summary = `Formal resignation notice in ${state.name} providing two-week notice, committing to project transition and company property return, and demanding final wages under state labor code deadlines.`;
+      penalties = `Employers failing to remit final wages and accrued PTO within state statutory deadlines face mandatory liquidated damages and attorney fees under ${state.name} labor law.`;
+      keyRequirements = [
+        "Clear, unambiguous statement of voluntary resignation with exact final working date",
+        "Commitment to handover assistance, project documentation, and knowledge transfer to team",
+        "Surrender and return of all company equipment, badges, proprietary materials, and digital logins",
+        `Formal demand for final earned compensation and accrued PTO pursuant to ${state.name} wage statutes`,
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Under ${state.name} labor law, employers must issue final paychecks within statutory timelines following employee voluntary resignation.`,
+      ];
+      break;
+
+    case "employee-invention-agreement":
+      noticeDays = "Immediate upon Employment";
+      statuteCitation = `${profile.legalCodePrefix} Employee Invention Assignment & Trade Secrets Act`;
+      statuteName = `${state.name} Uniform Trade Secrets Act and Invention Assignment Code`;
+      summary = `Proprietary Information and Inventions Agreement (PIIA) in ${state.name} securing company ownership of inventions, software, and trade secrets, with statutory prior invention carve-outs.`;
+      penalties = `Unauthorized disclosure or misappropriation of trade secrets triggers federal DTSA and state trade secret injunctions, treble exemplary damages, and attorney fees.`;
+      keyRequirements = [
+        "Broad assignment of all patentable discoveries, algorithms, copyrightable software, and technical trade secrets",
+        "Classification of employee creations as works made for hire under the US Copyright Act",
+        "Prior inventions disclosure schedule excluding personal discoveries made before employment",
+        `Statutory notice of employee rights under ${state.name} labor code governing non-work related inventions`,
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `State invention assignment statutes in ${state.name} protect employee side-projects developed without employer resources or proprietary trade secrets.`,
+      ];
+      break;
+
+    case "bounced-check-demand-letter":
+      noticeDays = 30;
+      statuteCitation = `${profile.legalCodePrefix} Dishonored Check Civil Recovery & Treble Damages Statute`;
+      statuteName = `${state.name} Commercial Code Bad Check Civil Liability Act`;
+      summary = `Formal statutory demand notice in ${state.name} requiring check drawer to pay dishonored check face amount plus statutory service charges within 30 days before filing suit for treble damages.`;
+      penalties = `Failure to remit certified funds within statutory notice period renders drawer liable for face amount plus statutory treble (3x) civil damages, court costs, and attorney fees.`;
+      keyRequirements = [
+        "Itemization of check number, face amount, issuance date, and drawee financial institution",
+        "Statutory returned check service fee authorized under state civil code",
+        "Strict 30-day (or state statutory) cure deadline to deliver certified cashier funds",
+        "Explicit statutory warning of treble damages liability and referral to civil litigation",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `In ${state.name}, delivering this statutory demand letter via certified mail is an essential legal prerequisite before initiating civil bad-check court proceedings.`,
+      ];
+      break;
+
+    case "boat-bill-of-sale":
+      noticeDays = "Immediate upon Transfer";
+      statuteCitation = `${profile.legalCodePrefix} Vessel Titling, Registration & Uniform Commercial Code Article 2`;
+      statuteName = `${state.name} Watercraft Titling and Marine Transfer Act`;
+      summary = `Official vessel bill of sale in ${state.name} transferring boat, outboard propulsion motor, and trailer with Hull Identification Number (HIN), state bow numbers, and as-is warranty disclaimers.`;
+      penalties = `Operating or transferring an untitled or incorrectly documented watercraft triggers state wildlife/DNR fines, registration suspension, and title transfer delays.`;
+      keyRequirements = [
+        "12-character Hull Identification Number (HIN) and state department of natural resources registration number",
+        "Outboard motor manufacturer, horsepower rating, and serial number specifications",
+        "Boat transport trailer make, model year, and 17-character vehicle identification number (VIN)",
+        "Seller warranty of unencumbered clear title free of maritime liens, combined with as-is condition disclaimer",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Watercraft titles and registration transfers in ${state.name} must be completed with the state licensing agency within the statutory grace period following sale.`,
+      ];
+      break;
+
+    case "satisfaction-of-lien":
+      noticeDays = "Immediate for County Recording";
+      statuteCitation = `${profile.legalCodePrefix} Mechanic's Lien Discharge & County Recording Act`;
+      statuteName = `${state.name} Real Property Code on Release and Cancellation of Liens`;
+      summary = `Official recorded document in ${state.name} certifying that a previously filed mechanic's lien, construction claim, or judgment encumbrance has been satisfied in full and discharged of record.`;
+      penalties = `Failure of a paid lienor to record a timely satisfaction of lien within statutory deadlines (typically 10 to 30 days) triggers statutory monetary penalties and liability for owner attorney fees.`;
+      keyRequirements = [
+        "Precise county recording reference number, book, page, and original recorded date of the lien claim",
+        "Legal description and Assessor Parcel Number (APN) of the encumbered real property",
+        "Formal certification by lienholder that all secured indebtedness has been paid in full",
+        "Notary Public acknowledgment jurat conforming to county clerk land recording statutes",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `In ${state.name}, property owners can demand statutory penalties against lienors who refuse or neglect to record a formal lien satisfaction following full payment.`,
+      ];
+      break;
+
+    case "affidavit-surviving-spouse":
+      noticeDays = "Recording Immediate";
+      statuteCitation = `${profile.legalCodePrefix} Survivorship Tenancy & Real Property Probate Transfer Code`;
+      statuteName = `${state.name} Joint Tenancy with Right of Survivorship Title Clearance Act`;
+      summary = `Sworn affidavit recorded in ${state.name} county land records by a surviving spouse or joint tenant to terminate survivorship tenancy, remove the deceased owner, and establish sole clear title.`;
+      penalties = `Failure to clear record title prevents subsequent sale, refinancing, or insurable title conveyance through title insurance underwriters.`;
+      keyRequirements = [
+        "Sworn statement of affiant surviving spouse or surviving joint tenant under penalty of perjury",
+        "Certified copy of decedent death certificate attached and incorporated into county land records",
+        "Recorded deed reference, legal description, and Assessor Parcel Number of the real property",
+        "Affirmation that all decedent debts and potential estate taxes have been paid or adequately provided for",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Recording an Affidavit of Surviving Spouse in ${state.name} legally clears real estate title without requiring full formal probate court administration.`,
+      ];
+      break;
+
   }
 
   return {

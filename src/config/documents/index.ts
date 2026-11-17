@@ -40,6 +40,28 @@ import { childTravelConsentConfig } from "./childTravelConsent";
 import { childMedicalConsentConfig } from "./childMedicalConsent";
 import { debtValidationLetterConfig } from "./debtValidationLetter";
 
+// New batch of 20 high-demand documents (41-60)
+import { monthToMonthLeaseConfig } from "./monthToMonthLease";
+import { commercialLeaseAgreementConfig } from "./commercialLeaseAgreement";
+import { leadPaintDisclosureConfig } from "./leadPaintDisclosure";
+import { rentalInspectionChecklistConfig } from "./rentalInspectionChecklist";
+import { noticeOfBeliefOfAbandonmentConfig } from "./noticeOfBeliefOfAbandonment";
+import { generalWarrantyDeedConfig } from "./generalWarrantyDeed";
+import { prenuptialAgreementConfig } from "./prenuptialAgreement";
+import { maritalSeparationAgreementConfig } from "./maritalSeparationAgreement";
+import { codicilToWillConfig } from "./codicilToWill";
+import { partnershipAgreementConfig } from "./partnershipAgreement";
+import { corporateBylawsConfig } from "./corporateBylaws";
+import { letterOfIntentPurchaseConfig } from "./letterOfIntentPurchase";
+import { consultingAgreementConfig } from "./consultingAgreement";
+import { employeeWarningNoticeConfig } from "./employeeWarningNotice";
+import { resignationLetterConfig } from "./resignationLetter";
+import { employeeInventionAgreementConfig } from "./employeeInventionAgreement";
+import { bouncedCheckDemandLetterConfig } from "./bouncedCheckDemandLetter";
+import { boatBillOfSaleConfig } from "./boatBillOfSale";
+import { satisfactionOfLienConfig } from "./satisfactionOfLien";
+import { affidavitSurvivingSpouseConfig } from "./affidavitSurvivingSpouse";
+
 export const ALL_DOCUMENTS: DocumentConfig[] = [
   ceaseAndDesistConfig,
   demandLetterConfig,
@@ -81,6 +103,27 @@ export const ALL_DOCUMENTS: DocumentConfig[] = [
   childTravelConsentConfig,
   childMedicalConsentConfig,
   debtValidationLetterConfig,
+  // 20 new documents (total 60)
+  monthToMonthLeaseConfig,
+  commercialLeaseAgreementConfig,
+  leadPaintDisclosureConfig,
+  rentalInspectionChecklistConfig,
+  noticeOfBeliefOfAbandonmentConfig,
+  generalWarrantyDeedConfig,
+  prenuptialAgreementConfig,
+  maritalSeparationAgreementConfig,
+  codicilToWillConfig,
+  partnershipAgreementConfig,
+  corporateBylawsConfig,
+  letterOfIntentPurchaseConfig,
+  consultingAgreementConfig,
+  employeeWarningNoticeConfig,
+  resignationLetterConfig,
+  employeeInventionAgreementConfig,
+  bouncedCheckDemandLetterConfig,
+  boatBillOfSaleConfig,
+  satisfactionOfLienConfig,
+  affidavitSurvivingSpouseConfig,
 ];
 
 export function getDocumentBySlug(slug: string): DocumentConfig | undefined {
