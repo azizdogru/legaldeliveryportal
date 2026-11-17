@@ -12,13 +12,18 @@ export async function POST(request: Request) {
     let urlList: string[] = body.urls || [];
 
     if (urlList.length === 0) {
-      // Build master URL list of core and pSEO routes
+      // Build master URL list of core and all 50-state pSEO routes
       urlList = [
         `https://${host}/`,
         `https://${host}/forms`,
+        `https://${host}/privacy`,
+        `https://${host}/terms`,
+        `https://${host}/disclaimer`,
+        `https://${host}/editorial-standards`,
+        `https://${host}/contact`,
         ...ALL_DOCUMENTS.map((doc) => `https://${host}/forms/${doc.slug}`),
         ...ALL_DOCUMENTS.flatMap((doc) =>
-          US_STATES.slice(0, 10).map((st) => `https://${host}/forms/${doc.slug}/${st.slug}`)
+          US_STATES.map((st) => `https://${host}/forms/${doc.slug}/${st.slug}`)
         ),
       ];
     }
