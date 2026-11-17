@@ -4,7 +4,7 @@ import { US_STATES } from "@/data/usStates";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://legaldeliveryportal.com";
-  const currentDate = new Date().toISOString();
+  const currentDate = new Date();
 
   const routes: MetadataRoute.Sitemap = [
     {

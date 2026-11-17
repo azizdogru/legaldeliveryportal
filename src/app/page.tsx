@@ -25,6 +25,7 @@ import { CustomerReviewsSection } from "@/components/common/CustomerReviewsSecti
 import { CompetitorComparison } from "@/components/common/CompetitorComparison";
 import { AGGREGATE_RATING } from "@/data/reviews";
 import { HomepageShowcase } from "@/components/forms/HomepageShowcase";
+import { StateStatuteExplorer } from "@/components/forms/StateStatuteExplorer";
 
 export const metadata = {
   title: "Court-Admissible Legal Documents in 3 Minutes | LegalDeliveryPortal.com",
@@ -267,40 +268,10 @@ export default function HomePage() {
         <CustomerReviewsSection />
       </section>
 
-      {/* 50-STATE STATUTE EXPLORER SECTION */}
-      <section id="statutes" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        <div className="text-center max-w-2xl mx-auto space-y-2">
-          <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">
-            Nationwide Coverage
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-white">
-            Programmatic Statutes for All 50 States
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-400">
-            Browse our state-specific statutory landing pages. Every page includes exact legal citations, small claims limits, and notice deadlines.
-          </p>
-        </div>
-
-        <div className="p-6 bg-slate-900/60 border border-slate-800 rounded-2xl">
-          <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-4">
-            Select Any State to View Dedicated Legal Guides:
-          </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2 text-xs">
-            {US_STATES.map((state) => (
-              <Link
-                key={state.code}
-                href={`/forms/demand-letter/${state.slug}`}
-                className="p-2 bg-slate-950 hover:bg-blue-950/50 border border-slate-800/80 hover:border-blue-700/60 rounded-xl text-slate-300 hover:text-white transition-colors flex items-center justify-between"
-              >
-                <span className="truncate">{state.name}</span>
-                <span className="text-[10px] text-slate-500 font-mono ml-1">
-                  {state.code}
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* 50-STATE STATUTE EXPLORER SECTION WITH DYNAMIC DOCUMENT SELECTOR */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <StateStatuteExplorer />
+      </div>
 
       {/* FAQ SECTION */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
