@@ -112,6 +112,60 @@ export default function StateDocumentLandingPage({ params }: PageProps) {
     },
   ];
 
+  const jsonLdProduct = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: `${doc.title} (${state.name} Legal Form)`,
+    description: `Official court-admissible ${doc.title} formatted specifically for ${state.name} under ${statute.statuteCitation}. Includes statutory notice periods, notary jurat, and proof of service.`,
+    image: "https://legaldeliveryportal.com/og-image.png",
+    brand: {
+      "@type": "Brand",
+      name: "Legal Delivery Portal",
+    },
+    sku: `LDP-${doc.slug}-${state.code}`,
+    mpn: `LDP-${doc.slug.toUpperCase()}-${state.code}`,
+    offers: {
+      "@type": "Offer",
+      url: `https://legaldeliveryportal.com/forms/${doc.slug}/${state.slug}`,
+      price: doc.priceAmount.toFixed(2),
+      priceCurrency: "USD",
+      priceValidUntil: "2027-12-31",
+      itemCondition: "https://schema.org/NewCondition",
+      availability: "https://schema.org/InStock",
+      seller: {
+        "@type": "Organization",
+        name: "Legal Delivery Portal",
+        url: "https://legaldeliveryportal.com",
+      },
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: AGGREGATE_RATING.ratingValue.toString(),
+      reviewCount: AGGREGATE_RATING.reviewCount.toString(),
+      bestRating: "5",
+      worstRating: "1",
+    },
+  };
+
+  const jsonLdLegalService = {
+    "@context": "https://schema.org",
+    "@type": "LegalService",
+    name: `Legal Delivery Portal: ${state.name}`,
+    url: `https://legaldeliveryportal.com/forms/${doc.slug}/${state.slug}`,
+    description: `Automated official legal document and statutory notice portal for ${state.name}. Compliant with ${statute.statuteCitation}.`,
+    priceRange: "$9.90",
+    telephone: "+1-800-555-0199",
+    areaServed: {
+      "@type": "AdministrativeArea",
+      name: state.name,
+    },
+    address: {
+      "@type": "PostalAddress",
+      addressCountry: "US",
+      addressRegion: state.code,
+    },
+  };
+
   const jsonLdWebApp = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
@@ -182,6 +236,14 @@ export default function StateDocumentLandingPage({ params }: PageProps) {
 
   return (
     <div className="space-y-12 pb-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdProduct) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdLegalService) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebApp) }}

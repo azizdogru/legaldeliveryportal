@@ -25,6 +25,7 @@ import {
   ExternalLink,
   Lock,
   CheckCircle2,
+  ShieldCheck,
 } from "lucide-react";
 
 interface DynamicDocumentFormProps {
@@ -584,6 +585,25 @@ export function DynamicDocumentForm({
                 <span>Proceed to Secure Delivery ($9.90)</span>
                 <ExternalLink className="w-4 h-4 ml-1 opacity-80" />
               </a>
+
+              {/* Authority Trust Seals */}
+              <div className="pt-2 border-t border-slate-800/80 grid grid-cols-3 gap-2 text-center">
+                <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-slate-950/80 border border-slate-800">
+                  <Lock className="w-3.5 h-3.5 text-blue-400 mb-1" />
+                  <span className="text-[10px] font-bold text-slate-200">256-Bit SSL</span>
+                  <span className="text-[9px] text-slate-400">Bank-Grade Security</span>
+                </div>
+                <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-slate-950/80 border border-slate-800">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 mb-1" />
+                  <span className="text-[10px] font-bold text-slate-200">2026 Statute</span>
+                  <span className="text-[9px] text-slate-400">State Law Verified</span>
+                </div>
+                <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-slate-950/80 border border-slate-800">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-400 mb-1" />
+                  <span className="text-[10px] font-bold text-slate-200">100% Guarantee</span>
+                  <span className="text-[9px] text-slate-400">Full Money-Back</span>
+                </div>
+              </div>
 
               <button
                 type="button"
