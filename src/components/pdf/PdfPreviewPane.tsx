@@ -13,6 +13,7 @@ import {
   RefreshCw,
   FileText,
   AlertCircle,
+  Mail,
 } from "lucide-react";
 
 interface PdfPreviewPaneProps {
@@ -20,6 +21,8 @@ interface PdfPreviewPaneProps {
   formData: Record<string, any>;
   stateInfo: StateStatuteInfo;
   isUnlocked?: boolean;
+  userEmail?: string;
+  onOpenCheckout?: () => void;
 }
 
 export function PdfPreviewPane({
@@ -27,13 +30,15 @@ export function PdfPreviewPane({
   formData,
   stateInfo,
   isUnlocked = false,
+  userEmail = "",
+  onOpenCheckout,
 }: PdfPreviewPaneProps) {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [unlockedState, setUnlockedState] = useState<boolean>(isUnlocked);
 
-  // Check URL params or localStorage for unlock status
+  // Check URL params or legitimate storage for unlock status
   useEffect(() => {
     if (typeof window !== "undefined") {
       const urlParams = new URLSearchParams(window.location.search);
@@ -134,9 +139,13 @@ export function PdfPreviewPane({
     }
   };
 
-  const checkoutUrl =
+  const baseCheckout =
     process.env.NEXT_PUBLIC_LEMON_CHECKOUT_URL ||
     "https://depositdemand.lemonsqueezy.com/checkout/buy/e5a2b41d-69b2-4d5a-bb86-0218378c2373";
+
+  const emailParam = userEmail ? `&checkout[email]=${encodeURIComponent(userEmail)}` : "";
+  const customParams = `&checkout[custom][doc]=${encodeURIComponent(config.slug)}&checkout[custom][state]=${encodeURIComponent(stateInfo.stateCode)}`;
+  const checkoutUrl = `${baseCheckout}${baseCheckout.includes("?") ? "&" : "?"}${emailParam}${customParams}`;
 
   return (
     <div className="flex flex-col h-full bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
@@ -161,7 +170,7 @@ export function PdfPreviewPane({
           ) : unlockedState ? (
             <span className="inline-flex items-center text-xs font-medium text-emerald-400 bg-emerald-950/40 border border-emerald-800/50 px-2 py-0.5 rounded-full">
               <Unlock className="w-3 h-3 mr-1" />
-              Full Unlocked Mode
+              Official Mode Unlocked
             </span>
           ) : (
             <span className="inline-flex items-center text-xs font-medium text-amber-400 bg-amber-950/40 border border-amber-800/50 px-2 py-0.5 rounded-full">
@@ -199,7 +208,7 @@ export function PdfPreviewPane({
           <div className="space-y-2">
             <div className="flex items-center space-x-2 text-xs text-emerald-400">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-              <span className="font-semibold">Document Unlocked: Clean court-admissible vector PDF</span>
+              <span className="font-semibold">Official Copy Unlocked: Vector PDF without watermarks</span>
             </div>
             <button
               onClick={handleDownloadOfficial}
@@ -217,11 +226,11 @@ export function PdfPreviewPane({
                   <span className="text-lg font-bold text-white">$9.90</span>
                   <span className="text-xs text-slate-400 line-through">$49.00</span>
                   <span className="text-[10px] font-semibold text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-2 py-0.5 rounded">
-                    Instant Digital Delivery
+                    Email Delivery + Instant Download
                   </span>
                 </div>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  Removes all watermarks. Fully formatted with state statutes and signature blocks.
+                  Delivered directly to your email inbox and unlocked in browser.
                 </p>
               </div>
 
@@ -231,17 +240,39 @@ export function PdfPreviewPane({
               </div>
             </div>
 
+            {/* Email Dispatch Notice */}
+            <div className="bg-slate-900/90 border border-slate-800 p-2.5 rounded-xl flex items-center space-x-2.5 text-xs text-slate-300">
+              <Mail className="w-4 h-4 text-blue-400 flex-shrink-0" />
+              <div className="truncate">
+                <span className="text-slate-400 block text-[10px]">Digital Delivery Inbox:</span>
+                <span className="font-medium text-slate-200">
+                  {userEmail && userEmail.includes("@") ? userEmail : "Enter email in Step 3 for delivery"}
+                </span>
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              <a
-                href={checkoutUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-3 px-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl text-xs sm:text-sm shadow-lg shadow-blue-950/50 flex items-center justify-center space-x-2 transition-all"
-              >
-                <Unlock className="w-4 h-4" />
-                <span>Unlock Official PDF ($9.90)</span>
-                <ExternalLink className="w-3.5 h-3.5 ml-1 opacity-80" />
-              </a>
+              {onOpenCheckout ? (
+                <button
+                  type="button"
+                  onClick={onOpenCheckout}
+                  className="w-full py-3 px-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl text-xs sm:text-sm shadow-lg shadow-blue-950/50 flex items-center justify-center space-x-2 transition-all"
+                >
+                  <Unlock className="w-4 h-4" />
+                  <span>Unlock Official PDF ($9.90)</span>
+                </button>
+              ) : (
+                <a
+                  href={checkoutUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-3 px-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl text-xs sm:text-sm shadow-lg shadow-blue-950/50 flex items-center justify-center space-x-2 transition-all"
+                >
+                  <Unlock className="w-4 h-4" />
+                  <span>Unlock Official PDF ($9.90)</span>
+                  <ExternalLink className="w-3.5 h-3.5 ml-1 opacity-80" />
+                </a>
+              )}
 
               <button
                 type="button"
@@ -254,19 +285,13 @@ export function PdfPreviewPane({
             </div>
 
             <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1">
-              <span>One-time fee: no monthly subscription</span>
-              <button
-                type="button"
-                onClick={() => {
-                  setUnlockedState(true);
-                  if (typeof window !== "undefined") {
-                    localStorage.setItem(`ldp_unlocked_${config.id}`, "true");
-                  }
-                }}
-                className="text-slate-500 hover:text-slate-300 underline text-[10px]"
-              >
-                Already purchased? Enter receipt
-              </button>
+              <span className="flex items-center space-x-1">
+                <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                <span>One-time fee: no monthly subscription</span>
+              </span>
+              <span className="text-slate-400">
+                Resend email dispatch included
+              </span>
             </div>
           </div>
         )}

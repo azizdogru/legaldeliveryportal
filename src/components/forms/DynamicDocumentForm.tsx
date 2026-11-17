@@ -19,6 +19,12 @@ import {
   Clock,
   Shield,
   FileCheck2,
+  Mail,
+  AlertCircle,
+  X,
+  ExternalLink,
+  Lock,
+  CheckCircle2,
 } from "lucide-react";
 
 interface DynamicDocumentFormProps {
@@ -39,6 +45,9 @@ export function DynamicDocumentForm({
   const [formData, setFormData] = useState<Record<string, any>>(() => {
     return { ...(config?.defaultValues || {}), stateCode: initialStateCode.toUpperCase() };
   });
+  const [userDeliveryEmail, setUserDeliveryEmail] = useState<string>("");
+  const [showReviewModal, setShowReviewModal] = useState<boolean>(false);
+  const [emailError, setEmailError] = useState<string | null>(null);
   const [mobileTab, setMobileTab] = useState<"form" | "preview">("form");
   const [lastSavedTime, setLastSavedTime] = useState<string | null>(null);
 
@@ -63,6 +72,11 @@ export function DynamicDocumentForm({
             ...config.defaultValues,
             stateCode: selectedStateCode,
           });
+        }
+
+        const savedEmail = localStorage.getItem("ldp_delivery_email") || "";
+        if (savedEmail) {
+          setUserDeliveryEmail(savedEmail);
         }
       } catch (e) {
         console.error("Failed to load saved form:", e);
@@ -99,6 +113,18 @@ export function DynamicDocumentForm({
     });
   };
 
+  const handleDeliveryEmailChange = (val: string) => {
+    setUserDeliveryEmail(val);
+    setEmailError(null);
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("ldp_delivery_email", val);
+      } catch (e) {
+        console.error("Storage error:", e);
+      }
+    }
+  };
+
   const stateStatute: StateStatuteInfo = getStatuteForDocumentAndState(
     config.slug,
     selectedStateCode
@@ -112,8 +138,17 @@ export function DynamicDocumentForm({
     if (currentStepIndex < totalSteps - 1) {
       setCurrentStepIndex((prev) => prev + 1);
     } else {
-      // Last step: switch to live preview on mobile
-      setMobileTab("preview");
+      // Final Step: Complete & Review PDF
+      if (!userDeliveryEmail || !userDeliveryEmail.includes("@")) {
+        setEmailError("Please enter a valid email address to receive your official document.");
+        const emailInput = document.getElementById("deliveryEmail");
+        if (emailInput) {
+          emailInput.focus();
+        }
+        return;
+      }
+      setEmailError(null);
+      setShowReviewModal(true);
     }
   };
 
@@ -139,118 +174,116 @@ export function DynamicDocumentForm({
           </label>
         </div>
 
-        {field.type === "text" && (
-          <input
-            id={field.name}
-            type="text"
-            value={value}
-            placeholder={field.placeholder}
-            onChange={(e) => handleFieldChange(field.name, e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700/80 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all shadow-sm"
-          />
-        )}
-
-        {field.type === "date" && (
-          <input
-            id={field.name}
-            type="date"
-            value={value}
-            onChange={(e) => handleFieldChange(field.name, e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700/80 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all shadow-sm"
-          />
-        )}
-
-        {field.type === "currency" && (
-          <div className="relative rounded-xl shadow-sm">
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
-              <span className="text-slate-400 text-sm font-semibold">$</span>
-            </div>
-            <input
-              id={field.name}
-              type="number"
-              step="0.01"
-              value={value}
-              placeholder={field.placeholder || "0.00"}
-              onChange={(e) => handleFieldChange(field.name, e.target.value)}
-              className="w-full pl-8 pr-3.5 py-2.5 bg-slate-900 border border-slate-700/80 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all shadow-sm"
-            />
-          </div>
-        )}
-
-        {field.type === "textarea" && (
+        {field.type === "textarea" ? (
           <textarea
             id={field.name}
-            rows={4}
+            rows={3}
             value={value}
-            placeholder={field.placeholder}
             onChange={(e) => handleFieldChange(field.name, e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700/80 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all shadow-sm resize-y"
+            placeholder={field.placeholder}
+            className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors"
           />
-        )}
-
-        {field.type === "select" && (
+        ) : field.type === "select" ? (
           <select
             id={field.name}
             value={value}
             onChange={(e) => handleFieldChange(field.name, e.target.value)}
-            className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700/80 rounded-xl text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all shadow-sm"
+            className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors"
           >
             {field.options?.map((opt) => (
-              <option key={opt.value} value={opt.value}>
+              <option key={opt.value} value={opt.value} className="bg-slate-900 text-white">
                 {opt.label}
               </option>
             ))}
           </select>
+        ) : field.type === "currency" ? (
+          <div className="relative">
+            <span className="absolute left-3 top-2 text-xs text-slate-500 font-mono">$</span>
+            <input
+              type="number"
+              id={field.name}
+              value={value}
+              onChange={(e) => handleFieldChange(field.name, e.target.value)}
+              placeholder={field.placeholder}
+              step="0.01"
+              className="w-full pl-7 pr-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors font-mono"
+            />
+          </div>
+        ) : field.type === "date" ? (
+          <input
+            type="date"
+            id={field.name}
+            value={value}
+            onChange={(e) => handleFieldChange(field.name, e.target.value)}
+            className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+          />
+        ) : (
+          <input
+            type="text"
+            id={field.name}
+            value={value}
+            onChange={(e) => handleFieldChange(field.name, e.target.value)}
+            placeholder={field.placeholder}
+            className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+          />
         )}
 
         {field.helperText && (
-          <p className="text-[11px] text-slate-400 leading-relaxed">
-            {field.helperText}
-          </p>
+          <p className="text-[11px] text-slate-500">{field.helperText}</p>
         )}
       </div>
     );
   };
 
+  const baseCheckout =
+    process.env.NEXT_PUBLIC_LEMON_CHECKOUT_URL ||
+    "https://depositdemand.lemonsqueezy.com/checkout/buy/e5a2b41d-69b2-4d5a-bb86-0218378c2373";
+
+  const emailParam = userDeliveryEmail ? `&checkout[email]=${encodeURIComponent(userDeliveryEmail)}` : "";
+  const customParams = `&checkout[custom][doc]=${encodeURIComponent(config.slug)}&checkout[custom][state]=${encodeURIComponent(selectedStateCode)}`;
+  const checkoutUrl = `${baseCheckout}${baseCheckout.includes("?") ? "&" : "?"}${emailParam}${customParams}`;
+
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      {/* State Jurisdiction Header Bar */}
-      <div className="mb-6 p-4 bg-slate-900/90 border border-slate-800 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 backdrop-blur-md shadow-lg">
+    <div className="space-y-6">
+      {/* Top Banner: State Selector & Jurisdiction Badge */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-slate-900/90 border border-slate-800 rounded-2xl">
         <div className="flex items-center space-x-3">
-          <div className="p-2.5 bg-blue-600/10 border border-blue-500/20 rounded-xl text-blue-400">
+          <div className="w-10 h-10 rounded-xl bg-blue-950/60 border border-blue-800/80 flex items-center justify-center text-blue-400">
             <Scale className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <span className="text-sm font-bold text-white tracking-tight">
-                {config.title}
+              <span className="text-xs font-semibold text-white">
+                Governing Jurisdiction:
               </span>
-              <span className="text-xs bg-blue-950 text-blue-300 border border-blue-800 px-2 py-0.5 rounded-full font-semibold">
-                {stateStatute.stateCode} Edition
+              <span className="text-xs font-bold text-blue-400">
+                {stateStatute.stateName}
               </span>
             </div>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Governed by: <span className="text-slate-300 font-medium">{stateStatute.statuteCitation}</span>
+            <p className="text-[11px] text-slate-400">
+              Statute: <span className="font-mono text-slate-300">{stateStatute.statuteCitation}</span>
             </p>
           </div>
         </div>
 
-        {/* State Selector Dropdown */}
+        {/* State Switcher */}
         <div className="flex items-center space-x-2">
-          <MapPin className="w-4 h-4 text-slate-400" />
-          <span className="text-xs text-slate-300 font-medium">Jurisdiction:</span>
+          <label htmlFor="state-select" className="text-xs text-slate-400 font-medium">
+            Switch State:
+          </label>
           <select
+            id="state-select"
             value={selectedStateCode}
             onChange={(e) => {
               const code = e.target.value;
               setSelectedStateCode(code);
               handleFieldChange("stateCode", code);
             }}
-            className="px-3 py-1.5 bg-slate-950 border border-slate-700 rounded-xl text-xs font-semibold text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-3 py-1.5 bg-slate-950 border border-slate-700 text-xs text-white rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"
           >
-            {US_STATES.map((s) => (
-              <option key={s.code} value={s.code}>
-                {s.name} ({s.code})
+            {US_STATES.map((st) => (
+              <option key={st.code} value={st.code} className="bg-slate-900 text-white">
+                {st.name} ({st.code})
               </option>
             ))}
           </select>
@@ -349,6 +382,42 @@ export function DynamicDocumentForm({
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm space-y-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {currentStep.fields.map((f) => renderField(f))}
+
+              {/* Delivery Step: Dedicated Email Input */}
+              {currentStepIndex === totalSteps - 1 && (
+                <div className="sm:col-span-2 p-4 bg-slate-950 border border-blue-900/50 rounded-xl space-y-2 mt-2">
+                  <div className="flex items-center justify-between">
+                    <label
+                      htmlFor="deliveryEmail"
+                      className="text-xs font-semibold text-white flex items-center space-x-1.5"
+                    >
+                      <Mail className="w-4 h-4 text-blue-400" />
+                      <span>Your Email for Official PDF Delivery</span>
+                      <span className="text-red-400">*</span>
+                    </label>
+                    <span className="text-[10px] font-semibold text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-2 py-0.5 rounded">
+                      Direct Email Delivery
+                    </span>
+                  </div>
+                  <input
+                    id="deliveryEmail"
+                    type="email"
+                    value={userDeliveryEmail}
+                    onChange={(e) => handleDeliveryEmailChange(e.target.value)}
+                    placeholder="e.g., yourname@domain.com"
+                    className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl text-xs text-white placeholder-slate-500 outline-none transition-colors"
+                  />
+                  {emailError && (
+                    <p className="text-[11px] text-red-400 font-medium flex items-center space-x-1">
+                      <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
+                      <span>{emailError}</span>
+                    </p>
+                  )}
+                  <p className="text-[11px] text-slate-400 leading-relaxed">
+                    Your court-admissible vector PDF (clean original without watermarks) will be immediately dispatched to this email address upon checkout, and available for instant browser download.
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Stepper Navigation Buttons */}
@@ -416,9 +485,114 @@ export function DynamicDocumentForm({
             config={config}
             formData={formData}
             stateInfo={stateStatute}
+            userEmail={userDeliveryEmail}
+            onOpenCheckout={() => {
+              if (!userDeliveryEmail || !userDeliveryEmail.includes("@")) {
+                setCurrentStepIndex(totalSteps - 1);
+                setEmailError("Please enter your email address for document delivery.");
+                const emailInput = document.getElementById("deliveryEmail");
+                if (emailInput) emailInput.focus();
+              } else {
+                setShowReviewModal(true);
+              }
+            }}
           />
         </div>
       </div>
+
+      {/* Review & Delivery Modal */}
+      {showReviewModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="relative w-full max-w-lg bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
+            <button
+              type="button"
+              onClick={() => setShowReviewModal(false)}
+              className="absolute top-5 right-5 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Modal Header */}
+            <div className="space-y-2">
+              <span className="text-[11px] font-bold text-blue-400 uppercase tracking-wider">
+                Step 3 of 3: Final Delivery Review
+              </span>
+              <h3 className="text-xl font-bold text-white">
+                Official Document Ready for Delivery
+              </h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Your legal notice has been validated against {stateStatute.stateName} statutory requirements.
+              </p>
+            </div>
+
+            {/* Order Specification Summary */}
+            <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-2.5 text-xs">
+              <div className="flex justify-between items-center pb-2 border-b border-slate-800/80">
+                <span className="text-slate-400">Document Type:</span>
+                <span className="font-semibold text-white">{config.title}</span>
+              </div>
+              <div className="flex justify-between items-center pb-2 border-b border-slate-800/80">
+                <span className="text-slate-400">Governing State:</span>
+                <span className="font-semibold text-white">{stateStatute.stateName} ({stateStatute.stateCode})</span>
+              </div>
+              <div className="flex justify-between items-center pb-2 border-b border-slate-800/80">
+                <span className="text-slate-400">Statutory Citation:</span>
+                <span className="font-mono text-slate-300">{stateStatute.statuteCitation}</span>
+              </div>
+              <div className="flex justify-between items-center pb-2 border-b border-slate-800/80">
+                <span className="text-slate-400">Delivery Inbox:</span>
+                <span className="font-semibold text-emerald-400">{userDeliveryEmail}</span>
+              </div>
+              <div className="flex justify-between items-center pt-0.5">
+                <span className="text-slate-400">Price:</span>
+                <span className="font-bold text-base text-white">$9.90 USD</span>
+              </div>
+            </div>
+
+            {/* Guarantees & Features */}
+            <div className="space-y-2 text-xs text-slate-300">
+              <div className="flex items-center space-x-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                <span>Instant dispatch to your email inbox via Resend</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                <span>Immediate in-browser download of clean, unwatermarked PDF</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                <span>Includes Certificate of Service and Dual Execution lines</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                <span>One-time purchase: zero monthly subscriptions or auto-renewals</span>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="space-y-3 pt-2">
+              <a
+                href={checkoutUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-3.5 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl text-sm shadow-xl shadow-blue-950/50 flex items-center justify-center space-x-2 transition-all"
+              >
+                <Lock className="w-4 h-4" />
+                <span>Proceed to Secure Delivery ($9.90)</span>
+                <ExternalLink className="w-4 h-4 ml-1 opacity-80" />
+              </a>
+
+              <button
+                type="button"
+                onClick={() => setShowReviewModal(false)}
+                className="w-full py-2.5 px-4 bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium rounded-xl text-xs transition-colors"
+              >
+                Back to Form Editor
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
