@@ -2,18 +2,49 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Mail, Clock, ShieldCheck, CheckCircle2, Send, MessageSquare } from "lucide-react";
+import { Mail, Clock, ShieldCheck, CheckCircle2, Send, MessageSquare, AlertCircle, RefreshCw } from "lucide-react";
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [ticketRef, setTicketRef] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("Order Delivery Question");
   const [message, setMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setErrorMessage(null);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          subject,
+          message,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "Failed to submit message. Please try again.");
+      }
+
+      setTicketRef(data.refId || null);
+      setSubmitted(true);
+    } catch (err: any) {
+      console.error("Submission failed:", err);
+      setErrorMessage(err.message || "An unexpected error occurred. You may also email orders@legaldeliveryportal.com directly.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -76,13 +107,22 @@ export default function ContactPage() {
             <div className="text-center py-10 space-y-3">
               <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto" />
               <h2 className="text-lg font-bold text-white">Thank you for your message</h2>
+              {ticketRef && (
+                <div className="inline-block px-3 py-1 rounded-full bg-blue-950 border border-blue-800 text-blue-300 text-xs font-mono font-semibold">
+                  Reference: {ticketRef}
+                </div>
+              )}
               <p className="text-xs text-slate-400 max-w-sm mx-auto">
-                We have received your inquiry. A support specialist will respond to <span className="text-slate-200 font-semibold">{email}</span> within 2 to 4 business hours.
+                We have received your inquiry. A confirmation has been dispatched to <span className="text-slate-200 font-semibold">{email}</span>. A support specialist will respond within 2 to 4 business hours.
               </p>
               <button
                 type="button"
-                onClick={() => setSubmitted(false)}
-                className="mt-4 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs font-semibold rounded-xl text-slate-200"
+                onClick={() => {
+                  setSubmitted(false);
+                  setMessage("");
+                  setTicketRef(null);
+                }}
+                className="mt-4 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs font-semibold rounded-xl text-slate-200 transition-colors"
               >
                 Send Another Inquiry
               </button>
@@ -90,6 +130,13 @@ export default function ContactPage() {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <h2 className="text-base font-bold text-white mb-2">Send Us a Direct Message</h2>
+
+              {errorMessage && (
+                <div className="p-3 bg-red-950/60 border border-red-800 rounded-xl text-xs text-red-300 flex items-start space-x-2">
+                  <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+                  <span>{errorMessage}</span>
+                </div>
+              )}
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
@@ -158,10 +205,20 @@ export default function ContactPage() {
 
               <button
                 type="submit"
-                className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl text-xs sm:text-sm shadow-md shadow-blue-950/50 flex items-center justify-center space-x-2 transition-all"
+                disabled={isSubmitting}
+                className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 disabled:opacity-50 text-white font-semibold rounded-xl text-xs sm:text-sm shadow-md shadow-blue-950/50 flex items-center justify-center space-x-2 transition-all cursor-pointer disabled:cursor-not-allowed"
               >
-                <Send className="w-4 h-4" />
-                <span>Submit Inquiry</span>
+                {isSubmitting ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                    <span>Transmitting to Support...</span>
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    <span>Submit Inquiry</span>
+                  </>
+                )}
               </button>
             </form>
           )}
