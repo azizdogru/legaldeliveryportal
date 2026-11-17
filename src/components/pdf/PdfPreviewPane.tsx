@@ -178,7 +178,7 @@ export function PdfPreviewPane({
       </div>
 
       {/* PDF View Container */}
-      <div className="relative flex-1 min-h-[460px] lg:min-h-[560px] bg-slate-950 flex flex-col items-center justify-center p-2">
+      <div className="relative flex-1 min-h-[340px] sm:min-h-[400px] lg:min-h-[460px] max-h-[500px] bg-slate-950 flex flex-col items-center justify-center p-2">
         {pdfUrl && (
           <div className="lg:hidden w-full flex items-center justify-between px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-lg mb-2 text-[11px] text-slate-300">
             <span>Mobile Preview:</span>
@@ -201,7 +201,7 @@ export function PdfPreviewPane({
         ) : pdfUrl ? (
           <iframe
             src={`${pdfUrl}#toolbar=0&navpanes=0&view=FitH`}
-            className="w-full h-full min-h-[460px] lg:min-h-[560px] rounded-lg border border-slate-800 shadow-inner bg-slate-900"
+            className="w-full h-full min-h-[340px] sm:min-h-[400px] lg:min-h-[460px] max-h-[500px] rounded-lg border border-slate-800 shadow-inner bg-slate-900"
             title="Legal Document PDF Preview"
           />
         ) : (
@@ -213,7 +213,7 @@ export function PdfPreviewPane({
       </div>
 
       {/* Conversion & Action Banner */}
-      <div className="p-4 bg-slate-950 border-t border-slate-800 space-y-3">
+      <div className="p-3.5 sm:p-4 bg-slate-950 border-t border-slate-800 space-y-2.5">
         {unlockedState ? (
           <div className="space-y-2">
             <div className="flex items-center space-x-2 text-xs text-emerald-400">
@@ -229,7 +229,7 @@ export function PdfPreviewPane({
             </button>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             <div className="flex items-start justify-between">
               <div>
                 <div className="flex items-center space-x-2">
@@ -239,23 +239,23 @@ export function PdfPreviewPane({
                     Email Delivery + Instant Download
                   </span>
                 </div>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-[11px] text-slate-400 mt-0.5">
                   Delivered directly to your email inbox and unlocked in browser.
                 </p>
               </div>
 
               <div className="flex items-center text-xs text-slate-300 space-x-1">
-                <ShieldCheck className="w-4 h-4 text-blue-400" />
-                <span className="text-[11px]">Guaranteed Admissible</span>
+                <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+                <span className="text-[10px]">Guaranteed Admissible</span>
               </div>
             </div>
 
             {/* Email Dispatch Notice */}
-            <div className="bg-slate-900/90 border border-slate-800 p-2.5 rounded-xl flex items-center space-x-2.5 text-xs text-slate-300">
-              <Mail className="w-4 h-4 text-blue-400 flex-shrink-0" />
+            <div className="bg-slate-900/90 border border-slate-800 p-2 rounded-xl flex items-center space-x-2 text-xs text-slate-300">
+              <Mail className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" />
               <div className="truncate">
-                <span className="text-slate-400 block text-[10px]">Digital Delivery Inbox:</span>
-                <span className="font-medium text-slate-200">
+                <span className="text-slate-400 block text-[9px]">Digital Delivery Inbox:</span>
+                <span className="font-medium text-slate-200 text-[11px]">
                   {userEmail && userEmail.includes("@") ? userEmail : "Enter email in Step 3 for delivery"}
                 </span>
               </div>
@@ -266,9 +266,9 @@ export function PdfPreviewPane({
                 <button
                   type="button"
                   onClick={onOpenCheckout}
-                  className="w-full py-3 px-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl text-xs sm:text-sm shadow-lg shadow-blue-950/50 flex items-center justify-center space-x-2 transition-all"
+                  className="w-full py-2.5 px-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl text-xs sm:text-sm shadow-lg shadow-blue-950/50 flex items-center justify-center space-x-2 transition-all"
                 >
-                  <Unlock className="w-4 h-4" />
+                  <Unlock className="w-3.5 h-3.5" />
                   <span>Unlock Official PDF ($9.90)</span>
                 </button>
               ) : (
@@ -276,9 +276,9 @@ export function PdfPreviewPane({
                   href={checkoutUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-3 px-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl text-xs sm:text-sm shadow-lg shadow-blue-950/50 flex items-center justify-center space-x-2 transition-all"
+                  className="w-full py-2.5 px-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl text-xs sm:text-sm shadow-lg shadow-blue-950/50 flex items-center justify-center space-x-2 transition-all"
                 >
-                  <Unlock className="w-4 h-4" />
+                  <Unlock className="w-3.5 h-3.5" />
                   <span>Unlock Official PDF ($9.90)</span>
                   <ExternalLink className="w-3.5 h-3.5 ml-1 opacity-80" />
                 </a>
@@ -287,17 +287,17 @@ export function PdfPreviewPane({
               <button
                 type="button"
                 onClick={handleDownloadDraft}
-                className="w-full py-3 px-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium rounded-xl text-xs sm:text-sm border border-slate-700 flex items-center justify-center space-x-1.5 transition-colors"
+                className="w-full py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium rounded-xl text-xs sm:text-sm border border-slate-700 flex items-center justify-center space-x-1.5 transition-colors"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>Download Watermarked Draft</span>
               </button>
             </div>
 
-            <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1">
+            <div className="flex items-center justify-between text-[10px] text-slate-400 pt-0.5">
               <span className="flex items-center space-x-1">
                 <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-                <span>One-time fee: no monthly subscription</span>
+                <span>One-time fee: zero monthly subscriptions</span>
               </span>
               <span className="text-slate-400">
                 Resend email dispatch included
@@ -306,20 +306,20 @@ export function PdfPreviewPane({
 
             {/* Authority Trust Seals */}
             <div className="pt-2 border-t border-slate-800/80 grid grid-cols-3 gap-1.5 text-center">
-              <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-slate-900/80 border border-slate-800/80">
-                <Lock className="w-3.5 h-3.5 text-blue-400 mb-1" />
+              <div className="flex flex-col items-center justify-center p-1.5 rounded-lg bg-slate-900/80 border border-slate-800/80">
+                <Lock className="w-3 h-3 text-blue-400 mb-0.5" />
                 <span className="text-[10px] font-bold text-slate-200">256-Bit SSL</span>
-                <span className="text-[9px] text-slate-400">Bank-Grade Encryption</span>
+                <span className="text-[9px] text-slate-400">Bank Encryption</span>
               </div>
-              <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-slate-900/80 border border-slate-800/80">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 mb-1" />
+              <div className="flex flex-col items-center justify-center p-1.5 rounded-lg bg-slate-900/80 border border-slate-800/80">
+                <ShieldCheck className="w-3 h-3 text-emerald-400 mb-0.5" />
                 <span className="text-[10px] font-bold text-slate-200">2026 Statute</span>
-                <span className="text-[9px] text-slate-400">State Law Verified</span>
+                <span className="text-[9px] text-slate-400">State Verified</span>
               </div>
-              <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-slate-900/80 border border-slate-800/80">
-                <CheckCircle2 className="w-3.5 h-3.5 text-amber-400 mb-1" />
-                <span className="text-[10px] font-bold text-slate-200">100% Guarantee</span>
-                <span className="text-[9px] text-slate-400">Money-Back Refund</span>
+              <div className="flex flex-col items-center justify-center p-1.5 rounded-lg bg-slate-900/80 border border-slate-800/80">
+                <CheckCircle2 className="w-3 h-3 text-amber-400 mb-0.5" />
+                <span className="text-[10px] font-bold text-slate-200">100% Refund</span>
+                <span className="text-[9px] text-slate-400">Money Back</span>
               </div>
             </div>
           </div>

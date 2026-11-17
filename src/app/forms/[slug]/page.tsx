@@ -225,13 +225,13 @@ export default function DocumentOverviewPage({ params }: PageProps) {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-2">
-            <Link
-              href="#builder"
+            <a
+              href="#document-builder"
               className="py-3 px-5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl text-xs sm:text-sm shadow-md shadow-blue-950/50 flex items-center justify-center space-x-2 transition-all"
             >
               <span>Launch Live Form & Preview</span>
               <ArrowRight className="w-4 h-4" />
-            </Link>
+            </a>
           </div>
         </div>
 
@@ -251,7 +251,7 @@ export default function DocumentOverviewPage({ params }: PageProps) {
 
       {/* Interactive 50-State Selector Matrix for this document */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="p-6 bg-slate-900/70 border border-slate-800 rounded-2xl space-y-4">
+        <div className="p-5 sm:p-6 bg-slate-900/70 border border-slate-800 rounded-2xl space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <h2 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
@@ -262,9 +262,15 @@ export default function DocumentOverviewPage({ params }: PageProps) {
                 Every state enforces unique notice periods, filing deadlines, and service rules.
               </p>
             </div>
+            <a
+              href="#document-builder"
+              className="text-xs text-blue-400 hover:text-blue-300 font-semibold self-start sm:self-auto"
+            >
+              Skip to form below &darr;
+            </a>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-1.5 text-xs">
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-1.5 text-xs max-h-48 sm:max-h-none overflow-y-auto sm:overflow-visible pr-1 sm:pr-0 scrollbar-none">
             {US_STATES.map((st) => (
               <Link
                 key={st.code}
@@ -282,16 +288,18 @@ export default function DocumentOverviewPage({ params }: PageProps) {
       </section>
 
       {/* Embedded Live Form & Preview Builder */}
-      <section id="builder" className="border-t border-slate-800/80 pt-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4">
-          <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">
-            Interactive Editor
-          </span>
-          <h2 className="text-xl sm:text-2xl font-bold text-white mt-1">
-            Fill Out the Information Below to Generate Your Document
-          </h2>
-          <p className="text-xs text-slate-400 mt-1">
-            Data is auto-saved to your browser. Preview renders instantly on the right.
+      <section id="document-builder" className="border-t border-slate-800/80 pt-6 scroll-mt-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-3 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+          <div>
+            <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">
+              Interactive Editor
+            </span>
+            <h2 className="text-lg sm:text-xl font-bold text-white mt-0.5">
+              Draft Your {doc.title}
+            </h2>
+          </div>
+          <p className="text-xs text-slate-400">
+            Data is auto-saved in your browser. Live preview updates continuously.
           </p>
         </div>
 
@@ -309,6 +317,25 @@ export default function DocumentOverviewPage({ params }: PageProps) {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <CustomerReviewsSection docTitle={doc.title} />
       </section>
+
+      {/* Floating Sticky Mobile Quick Action Bar */}
+      <div className="lg:hidden fixed bottom-3 inset-x-3 z-30 bg-slate-900/95 border border-blue-600/40 p-2.5 rounded-2xl backdrop-blur-md shadow-2xl flex items-center justify-between">
+        <div className="truncate mr-2">
+          <span className="text-[10px] text-blue-400 font-semibold uppercase block truncate">
+            {doc.shortTitle}
+          </span>
+          <span className="text-xs font-bold text-white">
+            $9.90 Flat Fee: Instant PDF
+          </span>
+        </div>
+        <a
+          href="#document-builder"
+          className="py-2 px-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-xs rounded-xl shadow flex items-center space-x-1 whitespace-nowrap"
+        >
+          <span>Start Form</span>
+          <ArrowRight className="w-3.5 h-3.5" />
+        </a>
+      </div>
     </div>
   );
 }

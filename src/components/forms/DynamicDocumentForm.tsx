@@ -377,111 +377,114 @@ export function DynamicDocumentForm({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: Form Stepper (Cols 1 to 7 on desktop) */}
         <div
-          className={`lg:col-span-7 space-y-5 ${
+          className={`lg:col-span-7 space-y-4 ${
             mobileTab === "form" ? "block" : "hidden lg:block"
           }`}
         >
-          {/* Stepper Progress Bar */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <span className="text-[11px] font-semibold text-blue-400 uppercase tracking-wider">
-                  Step {currentStepIndex + 1} of {totalSteps}
-                </span>
-                <h2 className="text-base font-bold text-white mt-0.5">
-                  {currentStep.title}
-                </h2>
-                <p className="text-xs text-slate-400 mt-1">
-                  {currentStep.description}
-                </p>
-              </div>
-
-              {lastSavedTime && (
-                <div className="hidden sm:flex items-center space-x-1.5 text-[11px] text-slate-500">
-                  <Save className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>{lastSavedTime}</span>
-                </div>
-              )}
-            </div>
-
-            {/* Stepper Dots & Line */}
-            <div className="space-y-1.5">
-              <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
-                <div
-                  className="bg-gradient-to-r from-blue-500 to-indigo-500 h-full transition-all duration-300 ease-out"
-                  style={{ width: `${progressPercent}%` }}
-                />
-              </div>
-              <div className="flex justify-between text-[10px] text-slate-500 font-medium">
-                {config.steps.map((st, idx) => (
-                  <button
-                    key={st.id}
-                    type="button"
-                    onClick={() => setCurrentStepIndex(idx)}
-                    className={`hover:text-slate-300 transition-colors ${
-                      idx === currentStepIndex
-                        ? "text-blue-400 font-semibold"
-                        : idx < currentStepIndex
-                        ? "text-slate-400"
-                        : "text-slate-600"
-                    }`}
-                  >
-                    {idx + 1}. {st.title.split(" ")[0]}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Form Fields Card */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm space-y-5">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {currentStep.fields.map((f) => renderField(f))}
-
-              {/* Delivery Step: Dedicated Email Input */}
-              {currentStepIndex === totalSteps - 1 && (
-                <div className="sm:col-span-2 p-4 bg-slate-950 border border-blue-900/50 rounded-xl space-y-2 mt-2">
-                  <div className="flex items-center justify-between">
-                    <label
-                      htmlFor="deliveryEmail"
-                      className="text-xs font-semibold text-white flex items-center space-x-1.5"
-                    >
-                      <Mail className="w-4 h-4 text-blue-400" />
-                      <span>Your Email for Official PDF Delivery</span>
-                      <span className="text-red-400">*</span>
-                    </label>
-                    <span className="text-[10px] font-semibold text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-2 py-0.5 rounded">
-                      Direct Email Delivery
-                    </span>
-                  </div>
-                  <input
-                    id="deliveryEmail"
-                    type="email"
-                    value={userDeliveryEmail}
-                    onChange={(e) => handleDeliveryEmailChange(e.target.value)}
-                    placeholder="e.g., yourname@domain.com"
-                    className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl text-xs text-white placeholder-slate-500 outline-none transition-colors"
-                  />
-                  {emailError && (
-                    <p className="text-[11px] text-red-400 font-medium flex items-center space-x-1">
-                      <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
-                      <span>{emailError}</span>
-                    </p>
-                  )}
-                  <p className="text-[11px] text-slate-400 leading-relaxed">
-                    Your court-admissible vector PDF (clean original without watermarks) will be immediately dispatched to this email address upon checkout, and available for instant browser download.
+          {/* Unified Form Stepper Card */}
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+            {/* Stepper Progress Bar Header */}
+            <div className="p-4 sm:p-5 bg-slate-950/70 border-b border-slate-800/80 space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] font-semibold text-blue-400 uppercase tracking-wider">
+                    Step {currentStepIndex + 1} of {totalSteps}
+                  </span>
+                  <h3 className="text-sm sm:text-base font-bold text-white mt-0.5">
+                    {currentStep.title}
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    {currentStep.description}
                   </p>
                 </div>
-              )}
+
+                {lastSavedTime && (
+                  <div className="hidden sm:flex items-center space-x-1.5 text-[10px] text-slate-400 bg-slate-900/90 border border-slate-800 px-2 py-1 rounded-lg">
+                    <Save className="w-3 h-3 text-emerald-400" />
+                    <span>{lastSavedTime}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Stepper Dots & Line */}
+              <div className="space-y-1.5">
+                <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                  <div
+                    className="bg-gradient-to-r from-blue-500 to-indigo-500 h-full transition-all duration-300 ease-out"
+                    style={{ width: `${progressPercent}%` }}
+                  />
+                </div>
+                <div className="flex justify-between text-[10px] text-slate-500 font-medium">
+                  {config.steps.map((st, idx) => (
+                    <button
+                      key={st.id}
+                      type="button"
+                      onClick={() => setCurrentStepIndex(idx)}
+                      className={`hover:text-slate-300 transition-colors ${
+                        idx === currentStepIndex
+                          ? "text-blue-400 font-semibold"
+                          : idx < currentStepIndex
+                          ? "text-slate-400"
+                          : "text-slate-600"
+                      }`}
+                    >
+                      {idx + 1}. {st.title.split(" ")[0]}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
 
-            {/* Stepper Navigation Buttons */}
-            <div className="pt-4 border-t border-slate-800 flex items-center justify-between gap-3">
+            {/* Form Fields Body */}
+            <div className="p-4 sm:p-5 space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
+                {currentStep.fields.map((f) => renderField(f))}
+
+                {/* Delivery Step: Dedicated Email Input */}
+                {currentStepIndex === totalSteps - 1 && (
+                  <div className="sm:col-span-2 p-3.5 bg-slate-950 border border-blue-900/50 rounded-xl space-y-2 mt-1">
+                    <div className="flex items-center justify-between">
+                      <label
+                        htmlFor="deliveryEmail"
+                        className="text-xs font-semibold text-white flex items-center space-x-1.5"
+                      >
+                        <Mail className="w-4 h-4 text-blue-400" />
+                        <span>Your Email for Official PDF Delivery</span>
+                        <span className="text-red-400">*</span>
+                      </label>
+                      <span className="text-[10px] font-semibold text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-2 py-0.5 rounded">
+                        Direct Email Delivery
+                      </span>
+                    </div>
+                    <input
+                      id="deliveryEmail"
+                      type="email"
+                      value={userDeliveryEmail}
+                      onChange={(e) => handleDeliveryEmailChange(e.target.value)}
+                      placeholder="e.g., yourname@domain.com"
+                      className="w-full px-3 py-2 bg-slate-900 border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl text-xs text-white placeholder-slate-500 outline-none transition-colors"
+                    />
+                    {emailError && (
+                      <p className="text-[11px] text-red-400 font-medium flex items-center space-x-1">
+                        <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
+                        <span>{emailError}</span>
+                      </p>
+                    )}
+                    <p className="text-[10px] text-slate-400 leading-relaxed">
+                      Your court-admissible vector PDF (clean original without watermarks) will be immediately dispatched to this email address upon checkout, and available for instant browser download.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Stepper Navigation Buttons Footer */}
+            <div className="p-4 sm:p-5 bg-slate-950/50 border-t border-slate-800 flex items-center justify-between gap-3">
               <button
                 type="button"
                 onClick={handlePrevStep}
                 disabled={currentStepIndex === 0}
-                className={`py-2.5 px-4 rounded-xl text-xs font-semibold flex items-center space-x-1.5 transition-all ${
+                className={`py-2 px-3.5 rounded-xl text-xs font-semibold flex items-center space-x-1.5 transition-all ${
                   currentStepIndex === 0
                     ? "opacity-30 cursor-not-allowed text-slate-600 bg-slate-950"
                     : "bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700"
@@ -492,10 +495,20 @@ export function DynamicDocumentForm({
               </button>
 
               <div className="flex items-center space-x-2">
+                {/* Mobile Quick Preview Toggle */}
+                <button
+                  type="button"
+                  onClick={() => setMobileTab("preview")}
+                  className="lg:hidden py-2 px-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-medium border border-slate-700 flex items-center space-x-1 transition-colors"
+                >
+                  <Eye className="w-3.5 h-3.5 text-blue-400" />
+                  <span>Preview PDF</span>
+                </button>
+
                 <button
                   type="button"
                   onClick={handleNextStep}
-                  className="py-2.5 px-5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl text-xs shadow-md shadow-blue-950/40 flex items-center space-x-1.5 transition-all"
+                  className="py-2 px-4.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl text-xs shadow-md shadow-blue-950/40 flex items-center space-x-1.5 transition-all"
                 >
                   <span>
                     {currentStepIndex === totalSteps - 1
@@ -507,35 +520,29 @@ export function DynamicDocumentForm({
               </div>
             </div>
           </div>
-
-          {/* Statutory Insight Box */}
-          <div className="p-4 bg-slate-950 border border-slate-800 rounded-2xl space-y-2">
-            <div className="flex items-center space-x-2 text-xs font-semibold text-slate-300">
-              <Shield className="w-4 h-4 text-blue-400" />
-              <span>{stateStatute.stateName} Statutory Rules & Notice Requirements</span>
-            </div>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              {stateStatute.statuteSummary}
-            </p>
-            <div className="grid grid-cols-2 gap-2 pt-2 text-[11px]">
-              <div className="bg-slate-900/80 p-2 rounded-lg border border-slate-800/80">
-                <span className="text-slate-500 block">Notice Period:</span>
-                <span className="text-slate-200 font-semibold">{stateStatute.noticePeriodDays} Days</span>
-              </div>
-              <div className="bg-slate-900/80 p-2 rounded-lg border border-slate-800/80">
-                <span className="text-slate-500 block">Jurisdiction:</span>
-                <span className="text-slate-200 font-semibold truncate block">{stateStatute.courtJurisdiction}</span>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Right Column: Sticky Live PDF Preview (Cols 8 to 12 on desktop) */}
         <div
-          className={`lg:col-span-5 lg:sticky lg:top-20 ${
+          className={`lg:col-span-5 lg:sticky lg:top-20 space-y-2 ${
             mobileTab === "preview" ? "block" : "hidden lg:block"
           }`}
         >
+          {/* Mobile Back-to-Form Header */}
+          <div className="lg:hidden flex items-center justify-between p-2 bg-slate-900 border border-slate-800 rounded-xl">
+            <button
+              type="button"
+              onClick={() => setMobileTab("form")}
+              className="text-xs text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1.5 px-2 py-1"
+            >
+              <Edit3 className="w-3.5 h-3.5" />
+              <span>Back to Form Inputs</span>
+            </button>
+            <span className="text-[11px] text-slate-400 pr-2">
+              Step {currentStepIndex + 1} of {totalSteps}
+            </span>
+          </div>
+
           <PdfPreviewPane
             config={config}
             formData={formData}

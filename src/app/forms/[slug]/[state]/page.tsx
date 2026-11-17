@@ -309,10 +309,61 @@ export default function StateDocumentLandingPage({ params }: PageProps) {
           <p className="text-sm sm:text-base text-slate-400 leading-relaxed">
             Researched for {state.name} practice. Formatted with official court captioning, {statute.statuteCitation} references, and full Certificate of Service for filing in the {state.courtSystemName}.
           </p>
+
+          {/* Quick-Action Hero Jump Button */}
+          <div className="flex flex-wrap items-center gap-3 pt-1">
+            <a
+              href="#document-builder"
+              className="py-2.5 px-5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl text-xs sm:text-sm shadow-md shadow-blue-950/50 flex items-center space-x-2 transition-all"
+            >
+              <span>Start Drafting {state.code} Document ($9.90)</span>
+              <ArrowRight className="w-4 h-4" />
+            </a>
+            <span className="text-xs text-slate-400 font-medium">
+              Instant PDF | Zero Subscriptions
+            </span>
+          </div>
         </div>
 
-        {/* State Statutes Table Card */}
-        <div className="mt-6 p-6 bg-slate-900/80 border border-slate-800 rounded-2xl shadow-xl space-y-4">
+        {/* Mobile-Optimized Compact Statute Summary (Mobile Viewport) */}
+        <div className="block lg:hidden p-4 bg-slate-900/90 border border-slate-800 rounded-2xl space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+              <Scale className="w-3.5 h-3.5 text-blue-400" />
+              <span>{state.name} Statutory Law</span>
+            </span>
+            <span className="text-[11px] font-mono font-semibold text-blue-300 bg-blue-950 px-2 py-0.5 rounded border border-blue-800">
+              {statute.statuteCitation}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2 text-xs">
+            <div className="p-2 bg-slate-950 rounded-xl border border-slate-800/80">
+              <span className="text-slate-500 block text-[10px]">Notice Window:</span>
+              <span className="text-blue-400 font-bold text-xs">{statute.noticePeriodDays} Days</span>
+            </div>
+            <div className="p-2 bg-slate-950 rounded-xl border border-slate-800/80">
+              <span className="text-slate-500 block text-[10px]">Small Claims Limit:</span>
+              <span className="text-slate-200 font-bold text-xs">{state.smallClaimsLimit}</span>
+            </div>
+          </div>
+
+          {/* Expandable Full Legal Details */}
+          <details className="text-xs text-slate-300 pt-1 group">
+            <summary className="cursor-pointer font-semibold text-blue-400 hover:text-blue-300 flex items-center justify-between py-1">
+              <span>View Full Legal Matrix & Penalties</span>
+              <span className="text-slate-500 text-[10px] group-open:rotate-90 transition-transform">&rarr;</span>
+            </summary>
+            <div className="pt-2 space-y-2 text-xs text-slate-400 border-t border-slate-800/80 mt-1">
+              <p><strong className="text-white">Summary:</strong> {statute.statuteSummary}</p>
+              <p><strong className="text-white">Court:</strong> {state.courtSystemName}</p>
+              <p><strong className="text-white">Penalties:</strong> {statute.penaltiesOrConsequences}</p>
+            </div>
+          </details>
+        </div>
+
+        {/* Desktop State Statutes Table Card (Large Viewports) */}
+        <div className="hidden lg:block mt-6 p-6 bg-slate-900/80 border border-slate-800 rounded-2xl shadow-xl space-y-4">
           <div className="flex items-center space-x-2 text-sm font-bold text-white uppercase tracking-wider">
             <Scale className="w-4 h-4 text-blue-400" />
             <span>{state.name} Statutory Law & Requirements Matrix</span>
@@ -378,17 +429,19 @@ export default function StateDocumentLandingPage({ params }: PageProps) {
       </section>
 
       {/* Embedded Live Builder for this State */}
-      <section id="form" className="border-t border-slate-800/80 pt-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4">
-          <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">
-            {state.name} Legal Form Builder
+      <section id="document-builder" className="border-t border-slate-800/80 pt-6 scroll-mt-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-3 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+          <div>
+            <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">
+              {state.name} Legal Form Builder
+            </span>
+            <h2 className="text-lg sm:text-xl font-bold text-white mt-0.5">
+              Draft Your {state.name} {doc.shortTitle}
+            </h2>
+          </div>
+          <span className="text-xs text-slate-400 font-medium">
+            All fields adapt to {state.name} statutory rules. Live PDF updates continuously.
           </span>
-          <h2 className="text-xl sm:text-2xl font-bold text-white mt-1">
-            Complete the Form to Generate Your {state.name} Document
-          </h2>
-          <p className="text-xs text-slate-400 mt-1">
-            All fields automatically adapt to {state.name} statutory rules. Live PDF updates continuously.
-          </p>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -510,6 +563,25 @@ export default function StateDocumentLandingPage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      {/* Floating Sticky Mobile Quick Action Bar */}
+      <div className="lg:hidden fixed bottom-3 inset-x-3 z-30 bg-slate-900/95 border border-blue-600/40 p-2.5 rounded-2xl backdrop-blur-md shadow-2xl flex items-center justify-between">
+        <div className="truncate mr-2">
+          <span className="text-[10px] text-blue-400 font-semibold uppercase block truncate">
+            {state.code} {doc.shortTitle}
+          </span>
+          <span className="text-xs font-bold text-white">
+            $9.90 Flat Fee: Instant PDF
+          </span>
+        </div>
+        <a
+          href="#document-builder"
+          className="py-2 px-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-xs rounded-xl shadow flex items-center space-x-1 whitespace-nowrap"
+        >
+          <span>Start Form</span>
+          <ArrowRight className="w-3.5 h-3.5" />
+        </a>
+      </div>
     </div>
   );
 }
