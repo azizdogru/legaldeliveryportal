@@ -229,7 +229,9 @@ export default function DocumentOverviewPage({ params }: PageProps) {
           </p>
         </div>
 
-        <DynamicDocumentForm docSlug={doc.slug} initialStateCode="CA" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <DynamicDocumentForm docSlug={doc.slug} initialStateCode="CA" />
+        </div>
       </section>
 
       {/* Competitor Comparison */}

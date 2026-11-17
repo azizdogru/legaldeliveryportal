@@ -5,6 +5,7 @@ import { getDocumentBySlug, ALL_DOCUMENTS } from "@/config/documents";
 import { getStateByCode } from "@/data/usStates";
 import { getStatuteForDocumentAndState } from "@/data/statutes";
 import { generateDocumentPdf } from "@/lib/pdf/pdfGenerator";
+import { uploadPdfToVault } from "@/lib/storage/s3";
 
 export async function POST(req: NextRequest) {
   try {
@@ -41,6 +42,8 @@ export async function POST(req: NextRequest) {
 
       // Generate official clean PDF
       let pdfBase64: string | undefined;
+      let pdfBuffer: Buffer | undefined;
+
       try {
         const statute = getStatuteForDocumentAndState(doc.slug, state.code);
         const sections = doc.generatePdfSections(doc.defaultValues, statute);
@@ -53,10 +56,26 @@ export async function POST(req: NextRequest) {
           previewMode: false,
         });
 
-        const buffer = Buffer.from(pdfBytes.buffer as ArrayBuffer);
-        pdfBase64 = buffer.toString("base64");
+        pdfBuffer = Buffer.from(pdfBytes.buffer as ArrayBuffer);
+        pdfBase64 = pdfBuffer.toString("base64");
       } catch (pdfErr) {
         console.error("Failed to generate PDF for webhook order:", pdfErr);
+      }
+
+      // Archive PDF to AWS S3 Vault
+      if (pdfBuffer) {
+        try {
+          await uploadPdfToVault({
+            pdfBuffer,
+            fileName: `${doc.slug}-${state.code}-OFFICIAL.pdf`,
+            docSlug: doc.slug,
+            stateCode: state.code,
+            customerEmail: userEmail,
+            customerName: userName,
+          });
+        } catch (s3Err) {
+          console.error("Webhook S3 archive error:", s3Err);
+        }
       }
 
       // Send email via Resend
@@ -77,7 +96,7 @@ export async function POST(req: NextRequest) {
       const chatId = process.env.TELEGRAM_CHAT_ID;
       if (botToken && chatId) {
         try {
-          const telegramMessage = `New Order Confirmed ($9.90 USD)\nDocument: ${doc.title}\nState: ${state.name} (${state.code})\nCustomer: ${userName} (${userEmail})\nDelivery: Dispatched via Resend`;
+          const telegramMessage = `New Order Confirmed ($9.90 USD)\nDocument: ${doc.title}\nState: ${state.name} (${state.code})\nCustomer: ${userName} (${userEmail})\nDelivery: Resend Dispatched & AWS S3 Archived`;
           await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },

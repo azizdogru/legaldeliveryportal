@@ -325,7 +325,9 @@ export default function StateDocumentLandingPage({ params }: PageProps) {
           </p>
         </div>
 
-        <DynamicDocumentForm docSlug={doc.slug} initialStateCode={state.code} />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <DynamicDocumentForm docSlug={doc.slug} initialStateCode={state.code} />
+        </div>
       </section>
 
       {/* Substantive In-Depth Legal Guidance for this State */}

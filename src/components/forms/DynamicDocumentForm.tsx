@@ -244,32 +244,26 @@ export function DynamicDocumentForm({
   const checkoutUrl = `${baseCheckout}${baseCheckout.includes("?") ? "&" : "?"}${emailParam}${customParams}`;
 
   return (
-    <div className="space-y-6">
-      {/* Top Banner: State Selector & Jurisdiction Badge */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-slate-900/90 border border-slate-800 rounded-2xl">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-xl bg-blue-950/60 border border-blue-800/80 flex items-center justify-center text-blue-400">
-            <Scale className="w-5 h-5" />
+    <div className="space-y-5">
+      {/* Sleek Jurisdiction Toolbar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-2.5 bg-slate-900/80 border border-slate-800 rounded-xl text-xs">
+        <div className="flex items-center space-x-2.5">
+          <div className="p-1 rounded bg-blue-950/80 border border-blue-800/80 text-blue-400">
+            <Scale className="w-3.5 h-3.5" />
           </div>
-          <div>
-            <div className="flex items-center space-x-2">
-              <span className="text-xs font-semibold text-white">
-                Governing Jurisdiction:
-              </span>
-              <span className="text-xs font-bold text-blue-400">
-                {stateStatute.stateName}
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-400">
-              Statute: <span className="font-mono text-slate-300">{stateStatute.statuteCitation}</span>
-            </p>
-          </div>
+          <span className="text-slate-400">Statutory Rules:</span>
+          <span className="font-bold text-white bg-blue-950/60 border border-blue-800/60 px-2 py-0.5 rounded text-blue-300">
+            {stateStatute.stateName} ({selectedStateCode})
+          </span>
+          <span className="hidden md:inline text-slate-500 font-mono text-[11px] truncate max-w-xs">
+            {stateStatute.statuteCitation}
+          </span>
         </div>
 
         {/* State Switcher */}
-        <div className="flex items-center space-x-2">
-          <label htmlFor="state-select" className="text-xs text-slate-400 font-medium">
-            Switch State:
+        <div className="flex items-center space-x-2 ml-auto">
+          <label htmlFor="state-select" className="text-[11px] text-slate-400">
+            Change State:
           </label>
           <select
             id="state-select"
@@ -279,7 +273,7 @@ export function DynamicDocumentForm({
               setSelectedStateCode(code);
               handleFieldChange("stateCode", code);
             }}
-            className="px-3 py-1.5 bg-slate-950 border border-slate-700 text-xs text-white rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"
+            className="px-2.5 py-1 bg-slate-950 border border-slate-700 text-xs text-white rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 font-medium"
           >
             {US_STATES.map((st) => (
               <option key={st.code} value={st.code} className="bg-slate-900 text-white">
@@ -291,7 +285,7 @@ export function DynamicDocumentForm({
       </div>
 
       {/* Mobile Tab Switcher */}
-      <div className="lg:hidden flex mb-6 p-1 bg-slate-900 border border-slate-800 rounded-xl">
+      <div className="lg:hidden flex mb-4 p-1 bg-slate-900 border border-slate-800 rounded-xl">
         <button
           type="button"
           onClick={() => setMobileTab("form")}
@@ -318,11 +312,11 @@ export function DynamicDocumentForm({
         </button>
       </div>
 
-      {/* Main 2-Pane Layout (Desktop: 50% Form, 50% Live Sticky PDF) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left Column: Form Stepper (Cols 1 to 6 on desktop) */}
+      {/* Main 2-Pane Layout (Desktop: 7 cols Form Stepper / 5 cols Sticky Live PDF) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Left Column: Form Stepper (Cols 1 to 7 on desktop) */}
         <div
-          className={`lg:col-span-6 space-y-6 ${
+          className={`lg:col-span-7 space-y-5 ${
             mobileTab === "form" ? "block" : "hidden lg:block"
           }`}
         >
@@ -475,9 +469,9 @@ export function DynamicDocumentForm({
           </div>
         </div>
 
-        {/* Right Column: Sticky Live PDF Preview (Cols 7 to 12 on desktop) */}
+        {/* Right Column: Sticky Live PDF Preview (Cols 8 to 12 on desktop) */}
         <div
-          className={`lg:col-span-6 lg:sticky lg:top-20 ${
+          className={`lg:col-span-5 lg:sticky lg:top-20 ${
             mobileTab === "preview" ? "block" : "hidden lg:block"
           }`}
         >

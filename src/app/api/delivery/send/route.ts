@@ -4,6 +4,7 @@ import { getDocumentBySlug } from "@/config/documents";
 import { getStateByCode } from "@/data/usStates";
 import { getStatuteForDocumentAndState } from "@/data/statutes";
 import { generateDocumentPdf } from "@/lib/pdf/pdfGenerator";
+import { uploadPdfToVault } from "@/lib/storage/s3";
 
 export async function POST(req: NextRequest) {
   try {
@@ -31,9 +32,11 @@ export async function POST(req: NextRequest) {
     };
 
     let pdfBase64 = incomingPdfBase64;
+    let pdfBuffer: Buffer | null = null;
 
-    // If PDF base64 was not provided by client, generate it server-side
-    if (!pdfBase64) {
+    if (pdfBase64) {
+      pdfBuffer = Buffer.from(pdfBase64, "base64");
+    } else {
       try {
         const mergedFormData = {
           ...doc.defaultValues,
@@ -51,10 +54,27 @@ export async function POST(req: NextRequest) {
           previewMode: false, // Official clean copy!
         });
 
-        const buffer = Buffer.from(pdfBytes.buffer as ArrayBuffer);
-        pdfBase64 = buffer.toString("base64");
+        pdfBuffer = Buffer.from(pdfBytes.buffer as ArrayBuffer);
+        pdfBase64 = pdfBuffer.toString("base64");
       } catch (pdfErr) {
         console.error("Server-side PDF generation error during delivery:", pdfErr);
+      }
+    }
+
+    // Archive to AWS S3 Vault in the background
+    let s3ArchiveResult: { success: boolean; s3Key?: string } = { success: false };
+    if (pdfBuffer) {
+      try {
+        s3ArchiveResult = await uploadPdfToVault({
+          pdfBuffer,
+          fileName: `${doc.slug}-${state.code}-OFFICIAL.pdf`,
+          docSlug: doc.slug,
+          stateCode: state.code,
+          customerEmail: toEmail,
+          customerName: customerName || (formData ? formData.senderName || formData.claimantName || formData.landlordName : undefined),
+        });
+      } catch (s3Err) {
+        console.error("S3 upload exception:", s3Err);
       }
     }
 
@@ -79,6 +99,8 @@ export async function POST(req: NextRequest) {
       success: true,
       message: `Official document dispatched to ${toEmail}.`,
       emailId: result.id,
+      s3Archived: s3ArchiveResult.success,
+      s3Key: s3ArchiveResult.s3Key,
     });
   } catch (err: any) {
     console.error("Delivery API error:", err);
