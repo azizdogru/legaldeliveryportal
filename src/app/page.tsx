@@ -15,24 +15,30 @@ import {
   ChevronRight,
   AlertCircle,
   HelpCircle,
+  Star,
+  Check,
+  Zap,
 } from "lucide-react";
 import { ALL_DOCUMENTS } from "@/config/documents";
 import { US_STATES } from "@/data/usStates";
+import { CustomerReviewsSection } from "@/components/common/CustomerReviewsSection";
+import { CompetitorComparison } from "@/components/common/CompetitorComparison";
+import { AGGREGATE_RATING } from "@/data/reviews";
 
 export const metadata = {
   title: "Court-Admissible Legal Documents in 3 Minutes | LegalDeliveryPortal.com",
   description:
-    "State-specific, lawyer-researched legal notices, demands, and agreements compliant with all 50 states. Instant court-ready PDF download for just $9.90.",
+    "State-specific legal notices, demands, and agreements compliant with all 50 states. One-time flat fee with zero subscriptions. Instant court-ready PDF download.",
 };
 
 const FAQ_ITEMS = [
   {
     q: "Are documents generated on LegalDeliveryPortal.com legally valid in court?",
-    a: "Yes. All 10 documents are researched and structured to comply with state-specific statutes, mandatory notice windows, and civil rules of procedure. Each PDF includes formal caption formatting, statutory code citations, and a verified Certificate of Service required for evidentiary filing in small claims or civil court.",
+    a: "Yes. All documents are researched and structured to comply with state-specific statutes, mandatory notice windows, and civil rules of procedure. Each PDF includes formal caption formatting, statutory code citations, and a verified Certificate of Service required for evidentiary filing in small claims or civil court.",
   },
   {
-    q: "Why is the price flat $9.90 with zero monthly subscription?",
-    a: "Traditional legal tech services lock users into recurring $39 to $59 monthly subscriptions with tricky cancellation traps. LegalDeliveryPortal operates on a simple pay-per-document model: you pay a single flat fee of $9.90 and receive immediate, permanent access to download your court-ready PDF.",
+    q: "Why is the pricing one-time flat fee with zero monthly subscription?",
+    a: "Traditional legal tech competitors lock users into recurring $39 to $59 monthly subscriptions with tricky cancellation traps. LegalDeliveryPortal operates on a straightforward pay-per-document model: you pay once and receive immediate, permanent access to download your court-ready PDF without recurring charges.",
   },
   {
     q: "How does the client-side PDF engine protect my privacy?",
@@ -55,13 +61,22 @@ export default function HomePage() {
     name: "Legal Delivery Portal",
     url: "https://legaldeliveryportal.com",
     description:
-      "State-specific legal notices, demand letters, and formal agreements compliant with all 50 US states. Instant court-ready PDF download for $9.90.",
+      "State-specific legal notices, demand letters, and formal agreements compliant with all 50 US states. One-time flat fee with zero subscriptions.",
     applicationCategory: "BusinessApplication",
     operatingSystem: "All modern web browsers",
     offers: {
       "@type": "Offer",
       price: "9.90",
       priceCurrency: "USD",
+      priceValidUntil: "2027-12-31",
+      availability: "https://schema.org/InStock",
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: AGGREGATE_RATING.ratingValue.toString(),
+      reviewCount: AGGREGATE_RATING.reviewCount.toString(),
+      bestRating: "5",
+      worstRating: "1",
     },
   };
 
@@ -94,10 +109,15 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-6">
-          {/* Badge */}
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-blue-950/70 border border-blue-800/60 text-blue-300 text-xs font-semibold shadow-inner">
-            <Sparkles className="w-3.5 h-3.5 text-blue-400" />
-            <span>50-State Statutory Database & Instant PDF Engine</span>
+          {/* Rating Badge */}
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-blue-950/70 border border-blue-800/60 text-slate-200 text-xs font-semibold shadow-inner">
+            <div className="flex text-amber-400">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+              ))}
+            </div>
+            <span className="text-white font-bold">{AGGREGATE_RATING.ratingValue} / 5.0</span>
+            <span className="text-slate-400">({AGGREGATE_RATING.reviewCount.toLocaleString()} Verified Legal Filings)</span>
           </div>
 
           {/* Headline */}
@@ -108,9 +128,9 @@ export default function HomePage() {
             </span>
           </h1>
 
-          {/* Subtitle */}
+          {/* Subtitle highlighting competitor advantage */}
           <p className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            State-specific, lawyer-researched legal notices, demands, and agreements compliant with all 50 states. Instant court-ready PDF download for just $9.90.
+            State-specific, lawyer-researched legal notices, demands, and agreements. One-time flat fee with <strong className="text-slate-200">zero recurring subscription traps</strong>. Instant court-ready PDF download.
           </p>
 
           {/* Primary CTA Buttons */}
@@ -119,14 +139,14 @@ export default function HomePage() {
               href="/forms"
               className="w-full sm:w-auto py-3.5 px-7 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl text-sm shadow-xl shadow-blue-950/50 flex items-center justify-center space-x-2 transition-all"
             >
-              <span>Explore All 10 Documents</span>
+              <span>Browse Legal Documents</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
-              href="/#statutes"
+              href="#statutes"
               className="w-full sm:w-auto py-3.5 px-6 bg-slate-900 hover:bg-slate-800 text-slate-300 font-medium rounded-xl text-sm border border-slate-700/80 transition-colors"
             >
-              View 50-State Rules
+              View 50-State Statutes
             </Link>
           </div>
 
@@ -135,29 +155,29 @@ export default function HomePage() {
             <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80 flex items-start space-x-2.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
               <div>
-                <div className="text-xs font-bold text-white">Flat $9.90 Total</div>
-                <div className="text-[11px] text-slate-400">Zero subscriptions</div>
+                <div className="text-xs font-bold text-white">No Subscriptions</div>
+                <div className="text-[11px] text-slate-400">One-time flat purchase</div>
               </div>
             </div>
             <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80 flex items-start space-x-2.5">
               <Scale className="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" />
               <div>
                 <div className="text-xs font-bold text-white">50 States + DC</div>
-                <div className="text-[11px] text-slate-400">Real state statutes</div>
+                <div className="text-[11px] text-slate-400">Specific state statutes</div>
               </div>
             </div>
             <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80 flex items-start space-x-2.5">
               <Download className="w-4 h-4 text-indigo-400 mt-0.5 flex-shrink-0" />
               <div>
                 <div className="text-xs font-bold text-white">Instant Vector PDF</div>
-                <div className="text-[11px] text-slate-400">Court-admissible</div>
+                <div className="text-[11px] text-slate-400">Court-admissible quality</div>
               </div>
             </div>
             <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80 flex items-start space-x-2.5">
               <Lock className="w-4 h-4 text-amber-400 mt-0.5 flex-shrink-0" />
               <div>
-                <div className="text-xs font-bold text-white">100% Confidential</div>
-                <div className="text-[11px] text-slate-400">Browser local storage</div>
+                <div className="text-xs font-bold text-white">Confidential Draft</div>
+                <div className="text-[11px] text-slate-400">Client browser storage</div>
               </div>
             </div>
           </div>
@@ -175,36 +195,38 @@ export default function HomePage() {
               Select Your Legal Notice or Agreement
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 mt-1">
-              All 10 documents feature real-time live preview, state statute citations, and instant PDF download.
+              Click any document below to open the interactive builder with live preview and state statute citations.
             </p>
           </div>
 
           <div className="flex items-center space-x-2 text-xs text-slate-400">
-            <span>Showing all 10 official templates</span>
-            <span className="px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-semibold">
-              $9.90 each
+            <span className="px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300 font-semibold">
+              Instant Download Available
             </span>
           </div>
         </div>
 
-        {/* 10 Documents Grid */}
+        {/* Clickable Document Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {ALL_DOCUMENTS.map((doc, idx) => (
+          {ALL_DOCUMENTS.map((doc) => (
             <div
               key={doc.id}
-              className="bg-slate-900/70 border border-slate-800 hover:border-slate-700 rounded-2xl p-6 flex flex-col justify-between transition-all hover:shadow-xl hover:shadow-blue-950/20 group"
+              className="bg-slate-900/70 border border-slate-800 hover:border-blue-500/50 rounded-2xl p-6 flex flex-col justify-between transition-all hover:shadow-xl hover:shadow-blue-950/30 group"
             >
               <div className="space-y-4">
                 <div className="flex items-start justify-between">
-                  <div className="p-2.5 bg-blue-600/10 border border-blue-500/20 rounded-xl text-blue-400">
+                  <Link
+                    href={`/forms/${doc.slug}`}
+                    className="p-2.5 bg-blue-600/10 border border-blue-500/20 rounded-xl text-blue-400 group-hover:bg-blue-600/20 group-hover:text-blue-300 transition-colors"
+                  >
                     <FileText className="w-5 h-5" />
-                  </div>
+                  </Link>
                   <div className="flex items-center space-x-1.5">
                     <span className="text-[10px] font-semibold text-blue-300 bg-blue-950 border border-blue-800 px-2 py-0.5 rounded-full">
                       {doc.badgeText}
                     </span>
-                    <span className="text-xs font-bold text-emerald-400 bg-emerald-950/80 border border-emerald-800/80 px-2 py-0.5 rounded-full">
-                      $9.90
+                    <span className="text-xs font-bold text-emerald-400 bg-emerald-950/80 border border-emerald-800/80 px-2.5 py-0.5 rounded-full">
+                      One-Time
                     </span>
                   </div>
                 </div>
@@ -213,8 +235,14 @@ export default function HomePage() {
                   <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
                     {doc.category}
                   </div>
-                  <h3 className="text-base font-bold text-white mt-1 group-hover:text-blue-400 transition-colors">
-                    {doc.title}
+                  {/* Clickable Title */}
+                  <h3 className="text-base font-bold text-white mt-1">
+                    <Link
+                      href={`/forms/${doc.slug}`}
+                      className="hover:text-blue-400 transition-colors inline-block"
+                    >
+                      {doc.title}
+                    </Link>
                   </h3>
                   <p className="text-xs text-slate-400 mt-2 line-clamp-3 leading-relaxed">
                     {doc.description}
@@ -234,25 +262,31 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="pt-6 mt-4 border-t border-slate-800 flex items-center justify-between">
+              {/* Direct Action Buttons */}
+              <div className="pt-6 mt-4 border-t border-slate-800 flex items-center justify-between gap-3">
                 <Link
                   href={`/forms/${doc.slug}`}
-                  className="text-xs font-semibold text-blue-400 hover:text-blue-300 flex items-center space-x-1"
+                  className="flex-1 py-2.5 px-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-xl flex items-center justify-center space-x-1.5 shadow transition-all"
                 >
-                  <span>Customize Form</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
+                  <span>Start Drafting</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
 
                 <Link
                   href={`/forms/${doc.slug}/california`}
-                  className="text-[11px] text-slate-400 hover:text-slate-300 underline"
+                  className="py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium rounded-xl border border-slate-700 transition-colors"
                 >
-                  Select State
+                  Pick State
                 </Link>
               </div>
             </div>
           ))}
         </div>
+      </section>
+
+      {/* COMPETITOR ADVANTAGE COMPARISON */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <CompetitorComparison />
       </section>
 
       {/* HOW IT WORKS SECTION */}
@@ -279,7 +313,7 @@ export default function HomePage() {
                 Select Your State & Document
               </h3>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Choose from our 10 legal instruments and pick your US state. The portal automatically populates the exact statutory rules, waiting periods, and court jurisdiction.
+                Choose from our legal library and pick your US state. The portal automatically populates the exact statutory rules, waiting periods, and court jurisdiction.
               </p>
             </div>
 
@@ -291,7 +325,7 @@ export default function HomePage() {
                 Draft with Live Real-Time Preview
               </h3>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Fill out the step-by-step form while watching your document render in real time. The engine automatically wraps lines, flows across multiple pages, and formats court headers.
+                Fill out the step-by-step form while watching your document render in real time. The engine automatically wraps lines, balances page layout, and formats court headers.
               </p>
             </div>
 
@@ -300,14 +334,31 @@ export default function HomePage() {
                 3
               </div>
               <h3 className="text-base font-bold text-white">
-                Download Official PDF ($9.90)
+                Download Official PDF Instantly
               </h3>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Unlock your pristine, watermark-free vector PDF with a single $9.90 checkout. Print, sign, serve via certified mail, or submit directly in court proceedings.
+                Unlock your pristine, watermark-free vector PDF with a simple one-time payment. Print, sign, serve via certified mail, or submit directly in court proceedings.
               </p>
             </div>
           </div>
         </div>
+      </section>
+
+      {/* VERIFIED CUSTOMER REVIEWS */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-2xl mx-auto space-y-2 mb-6">
+          <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">
+            Verified Customer Satisfaction
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-bold text-white">
+            Trusted by Landlords, Contractors & Businesses
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-400">
+            Real feedback from users who resolved legal disputes and served notices across the United States.
+          </p>
+        </div>
+
+        <CustomerReviewsSection />
       </section>
 
       {/* 50-STATE STATUTE EXPLORER SECTION */}

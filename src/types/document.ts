@@ -57,6 +57,8 @@ export interface StateStatuteInfo {
   keyRequirements: string[];
   statuteSummary: string;
   penaltiesOrConsequences?: string;
+  stateSpecificRules?: string[];
+  prejudgmentInterestRate?: string;
 }
 
 export interface DocumentConfig {

@@ -6,6 +6,9 @@ import { ALL_DOCUMENTS, getDocumentBySlug } from "@/config/documents";
 import { US_STATES, getStateBySlug } from "@/data/usStates";
 import { getStatuteForDocumentAndState } from "@/data/statutes";
 import { DynamicDocumentForm } from "@/components/forms/DynamicDocumentForm";
+import { CustomerReviewsSection } from "@/components/common/CustomerReviewsSection";
+import { CompetitorComparison } from "@/components/common/CompetitorComparison";
+import { AGGREGATE_RATING } from "@/data/reviews";
 import {
   Scale,
   ShieldCheck,
@@ -20,6 +23,9 @@ import {
   HelpCircle,
   AlertTriangle,
   Building,
+  Star,
+  Check,
+  BookOpen,
 } from "lucide-react";
 
 interface PageProps {
@@ -49,8 +55,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const statute = getStatuteForDocumentAndState(doc.slug, state.code);
 
-  const title = `${doc.title} in ${state.name} (${state.code}): Court-Ready PDF ($9.90)`;
-  const description = `Create an official ${doc.title} for ${state.name}. Cites ${statute.statuteCitation}, requires ${statute.noticePeriodDays} days statutory notice, and files in ${state.courtSystemName}. Instant download for $9.90.`;
+  const title = `${doc.title} in ${state.name} (${state.code}): Court-Ready PDF`;
+  const description = `Create an official ${doc.title} for ${state.name}. Complies with ${statute.statuteCitation}, requires ${statute.noticePeriodDays} days notice in the ${state.courtSystemName}. Rated 4.9/5 with zero subscriptions.`;
 
   return {
     title,
@@ -82,11 +88,11 @@ export default function StateDocumentLandingPage({ params }: PageProps) {
   const stateFaqs = [
     {
       q: `What is the statutory notice period for a ${doc.title} in ${state.name}?`,
-      a: `Under ${statute.statuteCitation}, the required statutory notice period in ${state.name} is ${statute.noticePeriodDays} days. The issuing party must provide this full statutory window before initiating formal civil litigation or enforcement proceedings.`,
+      a: `Under ${statute.statuteCitation}, the required statutory notice period in ${state.name} is ${statute.noticePeriodDays} calendar days. The issuing party must provide this full statutory window before initiating formal civil litigation or eviction proceedings. Notice days begin the day after valid service.`,
     },
     {
       q: `Which court system possesses jurisdiction for ${doc.title} disputes in ${state.name}?`,
-      a: `In ${state.name}, actions arising from this notice or agreement are adjudicated in the ${state.courtSystemName}. For monetary claims within small claims limits (up to ${state.smallClaimsLimit}), proceedings are handled in the local small claims or district division.`,
+      a: `In ${state.name}, actions arising from this notice or agreement are adjudicated in the ${state.courtSystemName}. For monetary claims within small claims limits (up to ${state.smallClaimsLimit}), proceedings are handled in the local small claims or district division without mandatory attorney representation.`,
     },
     {
       q: `How must this legal document be delivered to be admissible in ${state.name}?`,
@@ -102,7 +108,7 @@ export default function StateDocumentLandingPage({ params }: PageProps) {
     },
     {
       q: `Why use LegalDeliveryPortal for ${state.name} instead of a generic form?`,
-      a: `Generic legal forms online lack state-specific statutory citations and notice days. LegalDeliveryPortal specifically incorporates ${statute.statuteCitation} and ${state.name} court jurisdiction standards directly into the vector PDF output for a one-time flat fee of $9.90.`,
+      a: `Generic legal forms online lack state-specific statutory citations and notice days. LegalDeliveryPortal specifically incorporates ${statute.statuteCitation} and ${state.name} court jurisdiction standards directly into the vector PDF output for a simple one-time flat fee with zero subscriptions.`,
     },
   ];
 
@@ -116,8 +122,17 @@ export default function StateDocumentLandingPage({ params }: PageProps) {
     operatingSystem: "All modern web browsers",
     offers: {
       "@type": "Offer",
-      price: "9.90",
+      price: doc.priceAmount.toFixed(2),
       priceCurrency: "USD",
+      priceValidUntil: "2027-12-31",
+      availability: "https://schema.org/InStock",
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: AGGREGATE_RATING.ratingValue.toString(),
+      reviewCount: AGGREGATE_RATING.reviewCount.toString(),
+      bestRating: "5",
+      worstRating: "1",
     },
   };
 
@@ -203,17 +218,22 @@ export default function StateDocumentLandingPage({ params }: PageProps) {
 
       {/* State-Specific Hero Header */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
-        <div className="space-y-2 max-w-3xl">
+        <div className="space-y-3 max-w-3xl">
           <div className="flex flex-wrap items-center gap-2">
             <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-950 text-blue-300 border border-blue-800">
               {state.name} Legal Jurisdiction
             </span>
             <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-950/80 text-emerald-400 border border-emerald-800/80">
-              $9.90 Court-Ready PDF
+              One-Time Purchase
             </span>
             <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-900 text-slate-300 border border-slate-700 font-mono">
               Notice Window: {statute.noticePeriodDays} Days
             </span>
+            <div className="flex items-center space-x-1 text-amber-400 text-xs pl-1">
+              <Star className="w-3.5 h-3.5 fill-amber-400" />
+              <span className="font-bold text-white">{AGGREGATE_RATING.ratingValue}</span>
+              <span className="text-slate-500">({AGGREGATE_RATING.reviewCount})</span>
+            </div>
           </div>
 
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
@@ -221,7 +241,7 @@ export default function StateDocumentLandingPage({ params }: PageProps) {
           </h1>
 
           <p className="text-sm sm:text-base text-slate-400 leading-relaxed">
-            Lawyer-researched for {state.name}. Formatted with official court captioning, {statute.statuteCitation} references, and full Certificate of Service for filing in the {state.courtSystemName}.
+            Researched for {state.name} practice. Formatted with official court captioning, {statute.statuteCitation} references, and full Certificate of Service for filing in the {state.courtSystemName}.
           </p>
         </div>
 
@@ -257,9 +277,27 @@ export default function StateDocumentLandingPage({ params }: PageProps) {
             <strong className="text-white">State Statutory Summary:</strong> {statute.statuteSummary}
           </div>
 
+          {/* Deep State Guidance Specific to this State */}
+          {statute.stateSpecificRules && statute.stateSpecificRules.length > 0 && (
+            <div className="p-4 bg-slate-950/80 rounded-xl border border-slate-800/80 space-y-2">
+              <span className="text-[11px] font-bold text-blue-400 uppercase tracking-wider block flex items-center gap-1.5">
+                <BookOpen className="w-3.5 h-3.5" />
+                <span>{state.name} Procedural Practice Notes:</span>
+              </span>
+              <ul className="space-y-1.5 text-xs text-slate-300">
+                {statute.stateSpecificRules.map((rule, idx) => (
+                  <li key={idx} className="flex items-start space-x-2">
+                    <span className="text-blue-400 font-bold mt-0.5">•</span>
+                    <span>{rule}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <div className="space-y-1.5 pt-2">
             <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
-              Key Requirements Mandated by {state.name} Law:
+              Key Statutory Requirements Mandated by {state.name} Law:
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {statute.keyRequirements.map((req, rIdx) => (
@@ -290,8 +328,67 @@ export default function StateDocumentLandingPage({ params }: PageProps) {
         <DynamicDocumentForm docSlug={doc.slug} initialStateCode={state.code} />
       </section>
 
+      {/* Substantive In-Depth Legal Guidance for this State */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 pt-6">
+        <div className="p-8 rounded-3xl bg-slate-900/60 border border-slate-800 space-y-8">
+          <div>
+            <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">
+              Legal Admissibility Guide
+            </span>
+            <h2 className="text-2xl font-bold text-white mt-1">
+              Enforcing a {doc.title} in {state.name} Courts
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">
+              Essential civil procedure guidelines, proof of service protocols, and court filing standards for {state.name}.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-slate-300 leading-relaxed">
+            <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+              <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
+                <Clock className="w-4 h-4 text-blue-400" />
+                <span>Notice Window & Timing</span>
+              </h3>
+              <p>
+                In {state.name}, the statutory notice clock begins the day after formal delivery is perfected. Under {statute.statuteCitation}, you must provide the full statutory waiting period of {statute.noticePeriodDays} calendar days. If the final day falls on a weekend or state judicial holiday, compliance time extends to the next business day.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+              <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
+                <FileText className="w-4 h-4 text-indigo-400" />
+                <span>Proof of Service Protocol</span>
+              </h3>
+              <p>
+                Courts in {state.name} strictly enforce verified service. Serving via USPS Certified Mail with Return Receipt Requested or licensed process server creates an unassailable record. Our generated PDF includes a formal Certificate of Service signed under penalty of perjury to satisfy local evidentiary rules.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+              <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
+                <Building className="w-4 h-4 text-emerald-400" />
+                <span>Jurisdiction & Small Claims</span>
+              </h3>
+              <p>
+                Should litigation become necessary, claims up to {state.smallClaimsLimit} are heard in the small claims division of {state.courtSystemName}. Claims exceeding this limit must be filed in the general civil division. Citing {statute.statuteCitation} establishes formal condition precedent.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Competitor Comparison (Why Flat Pricing Wins) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <CompetitorComparison />
+      </section>
+
+      {/* Verified Customer Reviews */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <CustomerReviewsSection docTitle={doc.title} stateName={state.name} />
+      </section>
+
       {/* State-Specific FAQ Section */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 pt-10">
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 pt-6">
         <div className="text-center space-y-2">
           <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">
             {state.name} Legal Insights

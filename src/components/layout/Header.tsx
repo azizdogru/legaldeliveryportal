@@ -42,7 +42,7 @@ export function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-7 text-xs font-medium text-slate-300">
             <Link href="/forms" className="hover:text-white transition-colors">
-              All 10 Documents
+              Legal Documents
             </Link>
             <Link href="/#how-it-works" className="hover:text-white transition-colors">
               How It Works
@@ -97,7 +97,7 @@ export function Header() {
               onClick={() => setMobileMenuOpen(false)}
               className="block py-2 text-sm font-medium text-slate-200 hover:text-blue-400"
             >
-              All 10 Legal Documents
+              Legal Document Library
             </Link>
             <Link
               href="/#how-it-works"
@@ -119,7 +119,7 @@ export function Header() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-xl flex items-center justify-center space-x-2"
               >
-                <span>Browse All Templates ($9.90)</span>
+                <span>Browse All Templates</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>

@@ -116,7 +116,7 @@ export function Footer() {
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
             <p>(c) {new Date().getFullYear()} LegalDeliveryPortal.com. All rights reserved.</p>
-            <p>Flat $9.90 Standard Digital Court-Ready PDF Delivery across all 50 States.</p>
+            <p>Court-Ready Legal Document Delivery across all 50 States.</p>
           </div>
         </div>
       </div>

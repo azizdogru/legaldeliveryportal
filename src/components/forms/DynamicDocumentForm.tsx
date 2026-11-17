@@ -111,9 +111,8 @@ export function DynamicDocumentForm({
   const handleNextStep = () => {
     if (currentStepIndex < totalSteps - 1) {
       setCurrentStepIndex((prev) => prev + 1);
-      window.scrollTo({ top: 120, behavior: "smooth" });
     } else {
-      // Last step: switch to preview on mobile
+      // Last step: switch to live preview on mobile
       setMobileTab("preview");
     }
   };
@@ -121,7 +120,6 @@ export function DynamicDocumentForm({
   const handlePrevStep = () => {
     if (currentStepIndex > 0) {
       setCurrentStepIndex((prev) => prev - 1);
-      window.scrollTo({ top: 120, behavior: "smooth" });
     }
   };
 

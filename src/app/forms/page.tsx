@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { ALL_DOCUMENTS } from "@/config/documents";
 import { US_STATES } from "@/data/usStates";
+import { AGGREGATE_RATING } from "@/data/reviews";
 import {
   FileText,
   Search,
@@ -13,6 +14,7 @@ import {
   ArrowRight,
   ShieldCheck,
   Scale,
+  Star,
 } from "lucide-react";
 
 const CATEGORIES = [
@@ -49,15 +51,27 @@ export default function FormsCatalogPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
       {/* Header Banner */}
       <div className="space-y-4 max-w-3xl">
-        <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-950 border border-blue-800 text-blue-300 text-xs font-semibold">
-          <Scale className="w-3.5 h-3.5" />
-          <span>Full 10-Document Professional Library</span>
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-blue-950 border border-blue-800 text-blue-300 text-xs font-semibold">
+            <Scale className="w-3.5 h-3.5" />
+            <span>Official Legal Library</span>
+          </div>
+
+          <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300 text-xs font-semibold">
+            <div className="flex text-amber-400">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />
+              ))}
+            </div>
+            <span>{AGGREGATE_RATING.ratingValue} / 5.0 ({AGGREGATE_RATING.reviewCount} Ratings)</span>
+          </div>
         </div>
+
         <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-          Court-Admissible Document Catalog
+          Court-Admissible Legal Document Catalog
         </h1>
         <p className="text-sm text-slate-400 leading-relaxed">
-          Every template is researched by legal professionals and programmatically linked to your state statutes. Fixed $9.90 one-time fee with instant court-ready PDF download.
+          Every template is researched by legal professionals and programmatically linked to state statutes. One-time flat fee with zero subscriptions and instant court-ready PDF download.
         </p>
       </div>
 
@@ -128,19 +142,22 @@ export default function FormsCatalogPage() {
           {filteredDocs.map((doc) => (
             <div
               key={doc.id}
-              className="bg-slate-900/70 border border-slate-800 hover:border-slate-700 rounded-2xl p-6 flex flex-col justify-between transition-all hover:shadow-xl hover:shadow-blue-950/20 group"
+              className="bg-slate-900/70 border border-slate-800 hover:border-blue-500/50 rounded-2xl p-6 flex flex-col justify-between transition-all hover:shadow-xl hover:shadow-blue-950/20 group"
             >
               <div className="space-y-4">
                 <div className="flex items-start justify-between">
-                  <div className="p-2.5 bg-blue-600/10 border border-blue-500/20 rounded-xl text-blue-400">
+                  <Link
+                    href={`/forms/${doc.slug}`}
+                    className="p-2.5 bg-blue-600/10 border border-blue-500/20 rounded-xl text-blue-400 group-hover:bg-blue-600/20 group-hover:text-blue-300 transition-colors"
+                  >
                     <FileText className="w-5 h-5" />
-                  </div>
+                  </Link>
                   <div className="flex items-center space-x-1.5">
                     <span className="text-[10px] font-semibold text-blue-300 bg-blue-950 border border-blue-800 px-2 py-0.5 rounded-full">
                       {doc.badgeText}
                     </span>
-                    <span className="text-xs font-bold text-emerald-400 bg-emerald-950/80 border border-emerald-800/80 px-2 py-0.5 rounded-full">
-                      $9.90
+                    <span className="text-xs font-bold text-emerald-400 bg-emerald-950/80 border border-emerald-800/80 px-2.5 py-0.5 rounded-full">
+                      No Subscription
                     </span>
                   </div>
                 </div>
@@ -149,8 +166,13 @@ export default function FormsCatalogPage() {
                   <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
                     {doc.category}
                   </div>
-                  <h2 className="text-base font-bold text-white mt-1 group-hover:text-blue-400 transition-colors">
-                    {doc.title}
+                  <h2 className="text-base font-bold text-white mt-1">
+                    <Link
+                      href={`/forms/${doc.slug}`}
+                      className="hover:text-blue-400 transition-colors inline-block"
+                    >
+                      {doc.title}
+                    </Link>
                   </h2>
                   <p className="text-xs text-slate-400 mt-2 leading-relaxed">
                     {doc.description}
@@ -170,18 +192,18 @@ export default function FormsCatalogPage() {
                 </div>
               </div>
 
-              <div className="pt-6 mt-4 border-t border-slate-800 flex items-center justify-between gap-2">
+              <div className="pt-6 mt-4 border-t border-slate-800 flex items-center justify-between gap-3">
                 <Link
                   href={`/forms/${doc.slug}/${selectedState.slug}`}
-                  className="py-2 px-3.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-xl flex items-center space-x-1.5 shadow transition-all"
+                  className="flex-1 py-2.5 px-3.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-xl flex items-center justify-center space-x-1.5 shadow transition-all"
                 >
-                  <span>Generate for {selectedState.code}</span>
+                  <span>Draft for {selectedState.code}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
 
                 <Link
                   href={`/forms/${doc.slug}`}
-                  className="text-xs font-medium text-slate-400 hover:text-white"
+                  className="py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium rounded-xl border border-slate-700 transition-colors"
                 >
                   Overview
                 </Link>

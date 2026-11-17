@@ -5,6 +5,9 @@ import { Metadata } from "next";
 import { ALL_DOCUMENTS, getDocumentBySlug } from "@/config/documents";
 import { US_STATES } from "@/data/usStates";
 import { DynamicDocumentForm } from "@/components/forms/DynamicDocumentForm";
+import { CustomerReviewsSection } from "@/components/common/CustomerReviewsSection";
+import { CompetitorComparison } from "@/components/common/CompetitorComparison";
+import { AGGREGATE_RATING } from "@/data/reviews";
 import {
   Scale,
   ShieldCheck,
@@ -17,6 +20,8 @@ import {
   MapPin,
   ChevronRight,
   HelpCircle,
+  Star,
+  Check,
 } from "lucide-react";
 
 interface PageProps {
@@ -63,6 +68,15 @@ export default function DocumentOverviewPage({ params }: PageProps) {
       "@type": "Offer",
       price: doc.priceAmount.toFixed(2),
       priceCurrency: "USD",
+      priceValidUntil: "2027-12-31",
+      availability: "https://schema.org/InStock",
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: AGGREGATE_RATING.ratingValue.toString(),
+      reviewCount: AGGREGATE_RATING.reviewCount.toString(),
+      bestRating: "5",
+      worstRating: "1",
     },
   };
 
@@ -123,13 +137,18 @@ export default function DocumentOverviewPage({ params }: PageProps) {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-2 max-w-3xl">
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-950 text-blue-300 border border-blue-800">
                 {doc.category}
               </span>
               <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-950/80 text-emerald-400 border border-emerald-800/80">
-                Flat $9.90 Standard Digital PDF
+                One-Time Purchase - Zero Subscriptions
               </span>
+              <div className="flex items-center space-x-1 text-amber-400 text-xs pl-1">
+                <Star className="w-3.5 h-3.5 fill-amber-400" />
+                <span className="font-bold text-white">{AGGREGATE_RATING.ratingValue}</span>
+                <span className="text-slate-500">({AGGREGATE_RATING.reviewCount} Ratings)</span>
+              </div>
             </div>
             <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
               {doc.title}
@@ -211,6 +230,16 @@ export default function DocumentOverviewPage({ params }: PageProps) {
         </div>
 
         <DynamicDocumentForm docSlug={doc.slug} initialStateCode="CA" />
+      </section>
+
+      {/* Competitor Comparison */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <CompetitorComparison />
+      </section>
+
+      {/* Verified Customer Reviews */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <CustomerReviewsSection docTitle={doc.title} />
       </section>
     </div>
   );
