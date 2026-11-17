@@ -1,0 +1,217 @@
+import React from "react";
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import { Metadata } from "next";
+import { ALL_DOCUMENTS, getDocumentBySlug } from "@/config/documents";
+import { US_STATES } from "@/data/usStates";
+import { DynamicDocumentForm } from "@/components/forms/DynamicDocumentForm";
+import {
+  Scale,
+  ShieldCheck,
+  CheckCircle2,
+  Clock,
+  Download,
+  FileText,
+  Lock,
+  ArrowRight,
+  MapPin,
+  ChevronRight,
+  HelpCircle,
+} from "lucide-react";
+
+interface PageProps {
+  params: {
+    slug: string;
+  };
+}
+
+export async function generateStaticParams() {
+  return ALL_DOCUMENTS.map((doc) => ({
+    slug: doc.slug,
+  }));
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const doc = getDocumentBySlug(params.slug);
+  if (!doc) return {};
+
+  return {
+    title: `${doc.title} (50-State Compliant PDF Generator)`,
+    description: doc.metaDescription,
+    keywords: doc.searchKeywords,
+    openGraph: {
+      title: `${doc.title} | LegalDeliveryPortal.com`,
+      description: doc.metaDescription,
+      url: `https://legaldeliveryportal.com/forms/${doc.slug}`,
+    },
+  };
+}
+
+export default function DocumentOverviewPage({ params }: PageProps) {
+  const doc = getDocumentBySlug(params.slug);
+  if (!doc) notFound();
+
+  const jsonLdWebApp = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: doc.title,
+    url: `https://legaldeliveryportal.com/forms/${doc.slug}`,
+    description: doc.metaDescription,
+    applicationCategory: "LegalService",
+    operatingSystem: "All modern web browsers",
+    offers: {
+      "@type": "Offer",
+      price: doc.priceAmount.toFixed(2),
+      priceCurrency: "USD",
+    },
+  };
+
+  const jsonLdBreadcrumb = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://legaldeliveryportal.com",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Forms",
+        item: "https://legaldeliveryportal.com/forms",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: doc.title,
+        item: `https://legaldeliveryportal.com/forms/${doc.slug}`,
+      },
+    ],
+  };
+
+  return (
+    <div className="space-y-12 pb-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebApp) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdBreadcrumb) }}
+      />
+
+      {/* Breadcrumb & Top Bar */}
+      <div className="border-b border-slate-800 bg-slate-950/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <nav className="flex items-center space-x-2 text-xs text-slate-400">
+            <Link href="/" className="hover:text-white transition-colors">
+              Home
+            </Link>
+            <ChevronRight className="w-3.5 h-3.5" />
+            <Link href="/forms" className="hover:text-white transition-colors">
+              Legal Documents
+            </Link>
+            <ChevronRight className="w-3.5 h-3.5" />
+            <span className="text-slate-200 font-semibold">{doc.shortTitle}</span>
+          </nav>
+        </div>
+      </div>
+
+      {/* Document Header Intro */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-2 max-w-3xl">
+            <div className="flex items-center space-x-2">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-950 text-blue-300 border border-blue-800">
+                {doc.category}
+              </span>
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-950/80 text-emerald-400 border border-emerald-800/80">
+                Flat $9.90 Standard Digital PDF
+              </span>
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              {doc.title}
+            </h1>
+            <p className="text-sm text-slate-400 leading-relaxed">
+              {doc.description}
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Link
+              href="#builder"
+              className="py-3 px-5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl text-xs sm:text-sm shadow-md shadow-blue-950/50 flex items-center justify-center space-x-2 transition-all"
+            >
+              <span>Launch Live Form & Preview</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+
+        {/* Feature Pills */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
+          {doc.features.map((feat, idx) => (
+            <div
+              key={idx}
+              className="p-3 bg-slate-900/60 border border-slate-800 rounded-xl flex items-center space-x-2 text-xs text-slate-300"
+            >
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+              <span>{feat}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Interactive 50-State Selector Matrix for this document */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="p-6 bg-slate-900/70 border border-slate-800 rounded-2xl space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h2 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                <MapPin className="w-4 h-4 text-blue-400" />
+                <span>Select Your State for Exact Statute Citations</span>
+              </h2>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Every state enforces unique notice periods, filing deadlines, and service rules.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-1.5 text-xs">
+            {US_STATES.map((st) => (
+              <Link
+                key={st.code}
+                href={`/forms/${doc.slug}/${st.slug}`}
+                className="p-2 bg-slate-950 hover:bg-blue-900/40 border border-slate-800/80 hover:border-blue-700/60 rounded-lg text-slate-300 hover:text-white transition-all text-center flex items-center justify-between"
+              >
+                <span className="font-semibold">{st.code}</span>
+                <span className="text-[10px] text-slate-500 truncate ml-1">
+                  {st.name}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Embedded Live Form & Preview Builder */}
+      <section id="builder" className="border-t border-slate-800/80 pt-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4">
+          <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">
+            Interactive Editor
+          </span>
+          <h2 className="text-xl sm:text-2xl font-bold text-white mt-1">
+            Fill Out the Information Below to Generate Your Document
+          </h2>
+          <p className="text-xs text-slate-400 mt-1">
+            Data is auto-saved to your browser. Preview renders instantly on the right.
+          </p>
+        </div>
+
+        <DynamicDocumentForm docSlug={doc.slug} initialStateCode="CA" />
+      </section>
+    </div>
+  );
+}
