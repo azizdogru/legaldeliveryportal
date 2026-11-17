@@ -276,6 +276,196 @@ export function getStatuteForDocumentAndState(docSlug: string, stateCode: string
         `Claims under equipment leases in ${state.name} may be filed in ${state.courtSystemName} up to ${state.smallClaimsLimit} in small claims division.`,
       ];
       break;
+
+    case "independent-contractor-agreement":
+      noticeDays = 14;
+      statuteCitation = `${profile.legalCodePrefix} Independent Contractor Classification & Labor Code`;
+      statuteName = `${state.name} Independent Contractor and Wage Standards Code`;
+      summary = `In ${state.name}, hiring entities must establish worker classification under IRS 20-factor guidelines and state ABC tests. A properly executed agreement substantiates that the contractor is free from control, operates an independent trade, and performs work outside core client operations.`;
+      penalties = `Worker misclassification exposes hiring entities to state labor department audits, mandatory retroactive unemployment and workers compensation contributions, and statutory wage penalties in ${state.courtSystemName}.`;
+      keyRequirements = [
+        "Express declaration of independent contractor status without employee benefits",
+        "Complete contractor discretion over performance methods, schedule, and tools",
+        "Contractor responsibility for reporting and paying all 1099 self-employment taxes",
+        "Comprehensive work-for-hire intellectual property assignment and confidentiality covenants",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Under ${state.name} labor standards, written contracts detailing independent operations provide essential defense evidence during worker classification audits.`,
+        `Independent contractors in ${state.name} are exempt from minimum wage and overtime rules provided the statutory classification test is satisfied.`,
+      ];
+      break;
+
+    case "lien-waiver-release":
+      noticeDays = "Immediate upon Payment";
+      statuteCitation = `${profile.legalCodePrefix} Statutory Mechanic's Lien Waiver Law`;
+      statuteName = `${state.name} Construction Lien Waiver and Release Statutes`;
+      summary = `Construction lien waivers in ${state.name} are strictly regulated to protect contractors, subcontractors, and property owners. Statutory conditional waivers ensure rights are surrendered only after payment clears, while unconditional releases provide title certainty.`;
+      penalties = `Signing an unconditional waiver prior to receiving cleared funds forfeits lien rights irrevocably under ${state.name} law, leaving the claimant with breach of contract remedies only.`;
+      keyRequirements = [
+        "Exact statutory wording for conditional vs unconditional progress or final release",
+        "Explicit through-date defining the period of furnished labor and materials covered",
+        "Specific enumeration of exceptions for retainage, unapproved change orders, or disputed extras",
+        "Sworn contractor execution under penalty of perjury",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `In ${state.name}, statutory lien waiver forms cannot be altered by contract to waive rights prior to progress or final payment.`,
+        `Unconditional waivers become legally binding upon signature regardless of whether the issuing check subsequently clears.`,
+      ];
+      break;
+
+    case "living-will-directive":
+      noticeDays = "Immediate Upon Incapacity";
+      statuteCitation = `${profile.legalCodePrefix} Health Care Decisions & Advance Directive Act`;
+      statuteName = `${state.name} Uniform Health-Care Decisions and Probate Code`;
+      summary = `Under ${state.name} probate and healthcare codes, competent adults have the fundamental legal right to execute an advance directive and designate a healthcare proxy to make medical decisions upon incapacity, including withholding of artificial life support.`;
+      penalties = `Without a valid directive in ${state.name}, medical decisions default to statutory next-of-kin hierarchies or require costly, contentious guardianship proceedings in ${state.courtSystemName}.`;
+      keyRequirements = [
+        "Designation of primary and alternate healthcare agents (Medical Power of Attorney)",
+        "Specific instructions regarding artificial nutrition, hydration, and cardiopulmonary resuscitation",
+        "Full HIPAA authorization permitting medical proxy access to protected health records",
+        "Execution in the presence of two qualified disinterested adult witnesses or a licensed Notary Public",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Under ${state.name} advance directive law, healthcare providers must follow a patient's documented instructions or transfer care promptly.`,
+        `Directives executed pursuant to ${state.name} statutory formalities are recognized across healthcare networks statewide.`,
+      ];
+      break;
+
+    case "firearm-bill-of-sale":
+      noticeDays = "Immediate upon Transfer";
+      statuteCitation = `18 U.S.C. Section 922 & ${profile.legalCodePrefix} Firearm Transfer Law`;
+      statuteName = `Federal Gun Control Act and ${state.name} Firearm Code`;
+      summary = `Private firearm transfers in ${state.name} must comply with federal regulations under 18 U.S.C. Section 922(g) and state transfer statutes. Documenting the transaction establishes a formal paper trail and proves the seller did not knowingly transfer a weapon to a prohibited person.`;
+      penalties = `Unlawful transfer of a firearm to a prohibited person carries severe federal felony penalties of up to 15 years imprisonment, heavy fines, and civil negligence liability.`;
+      keyRequirements = [
+        "Detailed firearm ballistic record: serial number, make, model, caliber, and barrel length",
+        "Buyer sworn certification of non-prohibited status under federal 18 U.S.C. Section 922(g)",
+        "Government-issued photo identification and Concealed Handgun License verification",
+        "Seller warranty of unencumbered lawful title and dual signed acknowledgment",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Private sales in ${state.name} must comply with state background check requirements where applicable.`,
+        `Maintaining a signed bill of sale protects the lawful transferor if the firearm is subsequently recovered in a crime.`,
+      ];
+      break;
+
+    case "debt-settlement-agreement":
+      noticeDays = profile.defaultNoticeDays;
+      statuteCitation = `UCC Section 3-311 & ${profile.legalCodePrefix} Accord and Satisfaction Rules`;
+      statuteName = `${state.name} Commercial Code and Debt Compromise Standards`;
+      summary = `In ${state.name}, an accord and satisfaction agreement compromises a disputed or delinquent debt for an agreed discounted amount. Once paid pursuant to agreement, the underlying obligation is extinguished as a matter of law.`;
+      penalties = `Breach of the settlement agreement or failure to pay authorizes the creditor to sue for the full original balance plus accrued statutory interest at ${profile.statutoryInterest} in ${state.courtSystemName}.`;
+      keyRequirements = [
+        "Clear accounting of original balance versus negotiated compromise payoff amount",
+        "Definitive payment deadline and certified funds remittance method",
+        "Stipulation for credit bureau reporting tradeline deletion (pay-for-delete) or status update",
+        "IRS Form 1099-C cancellation of debt tax disclosure notice",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Under ${state.name} contract principles, accord and satisfaction requires mutual assent and valid consideration in compromised disputed claims.`,
+        `Creditors operating in ${state.name} must comply with fair debt collection practices when executing debt compromises.`,
+      ];
+      break;
+
+    case "revocation-of-power-of-attorney":
+      noticeDays = "Immediate upon Service";
+      statuteCitation = `${profile.legalCodePrefix} Uniform Power of Attorney Act`;
+      statuteName = `${state.name} Power of Attorney Revocation and Agency Code`;
+      summary = `A principal in ${state.name} may revoke an agent's authority at any time while possessing mental capacity. Delivering written notice of revocation to the agent and third-party institutions immediately cuts off apparent authority.`;
+      penalties = `Failure to formally serve written revocation upon banks and title agencies leaves the principal exposed to unauthorized transactions under the apparent authority doctrine.`;
+      keyRequirements = [
+        "Explicit identification of the prior power of attorney instrument and date of execution",
+        "Immediate and unconditional cancellation of all financial or healthcare agent powers",
+        "Written notification served upon all banks, brokerages, and healthcare systems",
+        "County land records recording block for previously recorded real estate powers",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `In ${state.name}, third parties receiving written notice of POA revocation are legally prohibited from honoring agent transactions.`,
+        `Recording revocation in the county deed records protects real property from unauthorized encumbrances or transfers.`,
+      ];
+      break;
+
+    case "parking-space-lease":
+      noticeDays = 30;
+      statuteCitation = `${profile.legalCodePrefix} Nonconsensual Towing & Parking Statutes`;
+      statuteName = `${state.name} Real Property and Commercial Parking Regulations`;
+      summary = `Regulates parking stall and vehicle storage rentals in ${state.name}. Incorporates mandatory nonconsensual towing warning language required by state vehicle codes to legally authorize removal of unauthorized or delinquent vehicles.`;
+      penalties = `Unauthorized parking or lease breach authorizes landlord impoundment and towing at vehicle owner's expense, plus storage lien enforcement.`;
+      keyRequirements = [
+        "Designation of specific parking stall, carport, garage bay, or RV storage space",
+        "Permitted vehicle identification including license plate, make, model, and registration state",
+        "Statutory nonconsensual towing warning posted pursuant to state vehicle code standards",
+        "Comprehensive property damage, theft, and vandalism liability waiver",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Towing unauthorized vehicles in ${state.name} requires adherence to statutory signage and notice waiting periods.`,
+        `Parking space leases operating on periodic terms require 30 days written notice to terminate under ${state.name} code.`,
+      ];
+      break;
+
+    case "temporary-guardianship-agreement":
+      noticeDays = "Immediate upon Execution";
+      statuteCitation = `${profile.legalCodePrefix} Minor Power of Attorney & Caregiver Act`;
+      statuteName = `${state.name} Minor Custodial Consent and Caregiver Authorization Law`;
+      summary = `Under ${state.name} family codes, custodial parents may temporarily delegate caregiving authority to an adult relative or trusted friend without surrendering permanent parental custody or going through formal family court proceedings.`;
+      penalties = `Unauthorized caregiving without parental consent prevents healthcare providers from administering non-emergency medical treatment and blocks public school enrollment.`;
+      keyRequirements = [
+        "Clear identification of custodial parents, designated temporary caregiver, and minor child",
+        "Authority to consent to emergency, surgical, medical, and dental procedures under HIPAA",
+        "Authority to enroll child in educational institutions and access student records under FERPA",
+        "Parental reservation of right to unilaterally revoke agreement and retrieve child at any time",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Temporary guardianship agreements in ${state.name} typically cannot exceed one year without re-execution or court order.`,
+        `Parental consent must be sworn before a licensed Notary Public to satisfy hospital and school district admission requirements.`,
+      ];
+      break;
+
+    case "affidavit-of-heirship":
+      noticeDays = "Immediate upon Recording";
+      statuteCitation = `${profile.legalCodePrefix} Intestate Succession & Heirship Evidence Code`;
+      statuteName = `${state.name} Estates Code and Heirship Recording Act`;
+      summary = `In ${state.name}, an Affidavit of Heirship recorded in county deed records serves as prima facie evidence of family descent and title transfer for real property when an owner dies without a will, avoiding formal probate court administration.`;
+      penalties = `Filing a false affidavit of heirship constitutes perjury under state law and subjects the affiant to felony criminal charges and civil fraud damages in ${state.courtSystemName}.`;
+      keyRequirements = [
+        "Sworn affiant statement by a disinterested individual with personal knowledge of decedent",
+        "Exhaustive family genealogy: marital history, surviving spouse, biological and adopted children",
+        "Formal real property legal description (Lot/Block or Metes-and-Bounds) and parcel ID",
+        "Execution under oath before a licensed Notary Public for recording in county deed records",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Title companies in ${state.name} rely on recorded affidavits of heirship after statutory notice periods to issue title insurance policies.`,
+        `Affidavits should be executed by disinterested witnesses who do not inherit any financial interest from the estate.`,
+      ];
+      break;
+
+    case "non-compete-agreement":
+      noticeDays = "Term of Covenant";
+      statuteCitation = `${profile.legalCodePrefix} Restrictive Covenant and Trade Secrets Act`;
+      statuteName = `${state.name} Employment Restrictive Covenant and Trade Secret Law`;
+      summary = `In ${state.name}, post-employment non-compete agreements are strictly scrutinized and enforced only if ancillary to an otherwise enforceable agreement, protecting legitimate business interests, and reasonable in time, geography, and scope of activity. In states where non-competes are void (e.g. California), non-solicitation and trade secret protections apply.`;
+      penalties = `Breach of an enforceable covenant authorizes temporary injunctive relief (TRO), preliminary injunctions, and recovery of actual damages and attorney fees in ${state.courtSystemName}.`;
+      keyRequirements = [
+        "Protection of legitimate business interests: proprietary trade secrets, customer goodwill, specialized training",
+        "Reasonable temporal limit (generally 12 to 24 months maximum under state law)",
+        "Reasonable geographic radius limited to territories where employee actually performed services",
+        "Judicial blue-pencil reformation clause permitting court modification of overbroad covenants",
+      ];
+      stateRules = [
+        profile.uniqueStateGuidance,
+        `Under ${state.name} jurisprudence, covenants cannot impose an undue hardship on the employee or harm the general public interest.`,
+        `Courts in ${state.name} may exercise blue-pencil discretion to narrow overbroad restrictions rather than declaring the entire agreement void.`,
+      ];
+      break;
   }
 
   return {

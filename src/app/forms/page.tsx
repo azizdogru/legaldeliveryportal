@@ -21,9 +21,11 @@ const CATEGORIES = [
   "All",
   "Demands & Disputes",
   "Landlord & Tenant",
-  "Real Estate & Liens",
-  "Contracts & Releases",
-  "Healthcare & Privacy",
+  "Real Estate & Construction",
+  "Business & Employment",
+  "Estate Planning & Healthcare",
+  "Bills of Sale & Transfers",
+  "Finance & Debt Relief",
 ] as const;
 
 export default function FormsCatalogPage() {
@@ -33,7 +35,10 @@ export default function FormsCatalogPage() {
 
   const filteredDocs = ALL_DOCUMENTS.filter((doc) => {
     const matchesCategory =
-      selectedCategory === "All" || doc.category === selectedCategory;
+      selectedCategory === "All" ||
+      doc.category === selectedCategory ||
+      doc.category.toLowerCase().includes(selectedCategory.toLowerCase()) ||
+      selectedCategory.toLowerCase().includes(doc.category.toLowerCase());
     const matchesSearch =
       searchQuery.trim() === "" ||
       doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||

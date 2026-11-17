@@ -66,7 +66,22 @@ export interface DocumentConfig {
   slug: string;
   title: string;
   shortTitle: string;
-  category: "Demands & Disputes" | "Landlord & Tenant" | "Real Estate & Liens" | "Contracts & Releases" | "Healthcare & Privacy";
+  category:
+    | "Demands & Disputes"
+    | "Landlord & Tenant"
+    | "Real Estate & Liens"
+    | "Real Estate & Construction"
+    | "Real Estate & Storage"
+    | "Contracts & Releases"
+    | "Business & Employment"
+    | "Healthcare & Privacy"
+    | "Estate Planning & Healthcare"
+    | "Estate Planning & Legal Authority"
+    | "Estate Planning & Real Estate"
+    | "Family Law & Caregiving"
+    | "Bills of Sale & Transfers"
+    | "Finance & Debt Relief"
+    | string;
   description: string;
   metaDescription: string;
   priceFormatted: string; // "$9.90"

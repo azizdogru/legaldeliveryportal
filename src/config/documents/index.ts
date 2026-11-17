@@ -9,6 +9,16 @@ import { mechanicsLienNoticeConfig } from "./mechanicsLienNotice";
 import { hipaaMedicalReleaseConfig } from "./hipaaMedicalRelease";
 import { petAddendumConfig } from "./petAddendum";
 import { equipmentRentalAgreementConfig } from "./equipmentRentalAgreement";
+import { independentContractorAgreementConfig } from "./independentContractorAgreement";
+import { lienWaiverReleaseConfig } from "./lienWaiverRelease";
+import { livingWillDirectiveConfig } from "./livingWillDirective";
+import { firearmBillOfSaleConfig } from "./firearmBillOfSale";
+import { debtSettlementAgreementConfig } from "./debtSettlementAgreement";
+import { revocationOfPowerOfAttorneyConfig } from "./revocationOfPowerOfAttorney";
+import { parkingSpaceLeaseConfig } from "./parkingSpaceLease";
+import { temporaryGuardianshipAgreementConfig } from "./temporaryGuardianshipAgreement";
+import { affidavitOfHeirshipConfig } from "./affidavitOfHeirship";
+import { nonCompeteAgreementConfig } from "./nonCompeteAgreement";
 
 export const ALL_DOCUMENTS: DocumentConfig[] = [
   ceaseAndDesistConfig,
@@ -21,6 +31,16 @@ export const ALL_DOCUMENTS: DocumentConfig[] = [
   hipaaMedicalReleaseConfig,
   petAddendumConfig,
   equipmentRentalAgreementConfig,
+  independentContractorAgreementConfig,
+  lienWaiverReleaseConfig,
+  livingWillDirectiveConfig,
+  firearmBillOfSaleConfig,
+  debtSettlementAgreementConfig,
+  revocationOfPowerOfAttorneyConfig,
+  parkingSpaceLeaseConfig,
+  temporaryGuardianshipAgreementConfig,
+  affidavitOfHeirshipConfig,
+  nonCompeteAgreementConfig,
 ];
 
 export function getDocumentBySlug(slug: string): DocumentConfig | undefined {
