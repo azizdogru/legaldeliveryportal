@@ -111,7 +111,7 @@ export async function saveCheckoutSession(session: CheckoutSessionData): Promise
       Metadata: {
         docslug: session.docSlug,
         statecode: session.stateCode,
-        customeremail: session.customerEmail || "unspecified",
+        customeremail: (session.customerEmail || "unspecified").replace(/[^a-zA-Z0-9@._-]/g, ""),
       },
     });
 
