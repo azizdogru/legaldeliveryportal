@@ -68,6 +68,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       `${state.code} ${doc.shortTitle.toLowerCase()}`,
       statute.statuteCitation,
     ],
+    alternates: {
+      canonical: `https://legaldeliveryportal.com/forms/${doc.slug}/${state.slug}`,
+    },
     openGraph: {
       title,
       description,

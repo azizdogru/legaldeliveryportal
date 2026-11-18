@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     "bill of sale templates",
     "50 state legal notices",
   ],
+  alternates: {
+    canonical: "https://legaldeliveryportal.com/forms",
+  },
   openGraph: {
     title: "Court-Admissible Legal Document Catalog | LegalDeliveryPortal.com",
     description:

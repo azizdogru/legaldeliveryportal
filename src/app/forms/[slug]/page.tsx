@@ -44,6 +44,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: `${doc.title} (50-State Compliant PDF Generator)`,
     description: doc.metaDescription,
     keywords: doc.searchKeywords,
+    alternates: {
+      canonical: `https://legaldeliveryportal.com/forms/${doc.slug}`,
+    },
     openGraph: {
       title: `${doc.title} | LegalDeliveryPortal.com`,
       description: doc.metaDescription,

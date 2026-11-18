@@ -66,7 +66,7 @@ export function PdfPreviewPane({
         });
 
         if (!active) return;
-        const blob = new Blob([pdfBytes.buffer as ArrayBuffer], { type: "application/pdf" });
+        const blob = new Blob([pdfBytes], { type: "application/pdf" });
         const url = URL.createObjectURL(blob);
 
         setPdfUrl((prev) => {
@@ -100,7 +100,7 @@ export function PdfPreviewPane({
         formData,
         previewMode: true,
       });
-      const blob = new Blob([pdfBytes.buffer as ArrayBuffer], { type: "application/pdf" });
+      const blob = new Blob([pdfBytes], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
@@ -123,7 +123,7 @@ export function PdfPreviewPane({
         formData,
         previewMode: false,
       });
-      const blob = new Blob([pdfBytes.buffer as ArrayBuffer], { type: "application/pdf" });
+      const blob = new Blob([pdfBytes], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;

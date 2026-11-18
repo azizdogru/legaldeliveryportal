@@ -13,16 +13,24 @@ export async function POST(req: NextRequest) {
     const signature = req.headers.get("x-signature") || "";
     const secret = process.env.LEMON_WEBHOOK_SECRET || "";
 
-    // Verify webhook HMAC SHA256 signature
-    if (secret && signature) {
-      const hmac = crypto.createHmac("sha256", secret);
-      const digest = Buffer.from(hmac.update(rawBody).digest("hex"), "utf8");
-      const sigBuffer = Buffer.from(signature, "utf8");
+    // Mandatory webhook signature verification (protects against CWE-347 forgery)
+    if (!secret) {
+      console.error("LEMON_WEBHOOK_SECRET is not configured in server environment");
+      return NextResponse.json({ error: "Server webhook secret unconfigured" }, { status: 500 });
+    }
 
-      if (digest.length !== sigBuffer.length || !crypto.timingSafeEqual(digest, sigBuffer)) {
-        console.error("Invalid LemonSqueezy webhook signature");
-        return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
-      }
+    if (!signature) {
+      console.warn("LemonSqueezy webhook rejected: Missing x-signature header");
+      return NextResponse.json({ error: "Missing signature" }, { status: 401 });
+    }
+
+    const hmac = crypto.createHmac("sha256", secret);
+    const digest = Buffer.from(hmac.update(rawBody).digest("hex"), "utf8");
+    const sigBuffer = Buffer.from(signature, "utf8");
+
+    if (digest.length !== sigBuffer.length || !crypto.timingSafeEqual(digest, sigBuffer)) {
+      console.warn("LemonSqueezy webhook rejected: Invalid signature");
+      return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
     const payload = JSON.parse(rawBody);
@@ -30,8 +38,8 @@ export async function POST(req: NextRequest) {
 
     if (eventName === "order_created") {
       const attributes = payload?.data?.attributes || {};
-      const userEmail = attributes.user_email;
-      const userName = attributes.user_name || "Valued Customer";
+      const checkoutEmail = (attributes.user_email || "").trim();
+      const checkoutName = (attributes.user_name || "Valued Customer").trim();
       const customData = payload?.meta?.custom_data || {};
 
       const docSlug = customData.doc || "demand-letter";
@@ -42,23 +50,47 @@ export async function POST(req: NextRequest) {
 
       const sessionId = customData.session_id;
       let userFormData: Record<string, any> = { ...doc.defaultValues, stateCode: state.code };
+      let sessionCustomerEmail = "";
 
       if (sessionId) {
         try {
           const session = await getCheckoutSession(sessionId);
-          if (session && session.formData) {
-            userFormData = { ...doc.defaultValues, ...session.formData, stateCode: state.code };
+          if (session) {
+            sessionCustomerEmail = (session.customerEmail || "").trim();
+            if (session.formData) {
+              userFormData = { ...doc.defaultValues, ...session.formData, stateCode: state.code };
+            }
           }
         } catch (sErr) {
           console.error("Failed to load checkout session from S3 in webhook:", sErr);
         }
       }
 
+      // Priority resolution for recipient email (Fixes Apple Pay relay @privaterelay.appleid.com trap):
+      // If user provided a specific delivery email in the form/session, prioritize it over Apple Relay.
+      const formEnteredEmail = (
+        sessionCustomerEmail ||
+        userFormData.deliveryEmail ||
+        userFormData.customerEmail ||
+        userFormData.email ||
+        ""
+      ).trim();
+
+      const isAppleRelay = checkoutEmail.toLowerCase().includes("privaterelay.appleid.com");
+
+      let targetRecipientEmail = checkoutEmail;
+      if (formEnteredEmail && formEnteredEmail.includes("@")) {
+        // User explicitly specified this email in form Step 3: use it as primary delivery target
+        targetRecipientEmail = formEnteredEmail;
+      } else if (!targetRecipientEmail || !targetRecipientEmail.includes("@")) {
+        targetRecipientEmail = formEnteredEmail;
+      }
+
       const effectiveCustomerName =
         userFormData.senderName ||
         userFormData.claimantName ||
         userFormData.landlordName ||
-        userName;
+        checkoutName;
 
       // Generate official clean PDF with real user input data
       let pdfBase64: string | undefined;
@@ -76,7 +108,7 @@ export async function POST(req: NextRequest) {
           previewMode: false,
         });
 
-        pdfBuffer = Buffer.from(pdfBytes.buffer as ArrayBuffer);
+        pdfBuffer = Buffer.from(pdfBytes);
         pdfBase64 = pdfBuffer.toString("base64");
       } catch (pdfErr) {
         console.error("Failed to generate PDF for webhook order:", pdfErr);
@@ -90,7 +122,7 @@ export async function POST(req: NextRequest) {
             fileName: `${doc.slug}-${state.code}-OFFICIAL.pdf`,
             docSlug: doc.slug,
             stateCode: state.code,
-            customerEmail: userEmail,
+            customerEmail: targetRecipientEmail,
             customerName: effectiveCustomerName,
           });
         } catch (s3Err) {
@@ -99,9 +131,9 @@ export async function POST(req: NextRequest) {
       }
 
       // Send email via Resend
-      if (userEmail) {
+      if (targetRecipientEmail && targetRecipientEmail.includes("@")) {
         await sendDocumentDeliveryEmail({
-          toEmail: userEmail,
+          toEmail: targetRecipientEmail,
           documentTitle: doc.title,
           stateName: state.name,
           stateCode: state.code,
@@ -116,7 +148,10 @@ export async function POST(req: NextRequest) {
       const chatId = process.env.TELEGRAM_CHAT_ID;
       if (botToken && chatId) {
         try {
-          const telegramMessage = `New Order Confirmed ($9.90 USD)\nDocument: ${doc.title}\nState: ${state.name} (${state.code})\nCustomer: ${effectiveCustomerName} (${userEmail})\nDelivery: Resend Dispatched & AWS S3 Archived`;
+          const appleNotice = isAppleRelay
+            ? `\nNotice: Apple Pay Relay (${checkoutEmail}) redirected to Form Email: ${targetRecipientEmail}`
+            : "";
+          const telegramMessage = `New Order Confirmed ($9.90 USD)\nDocument: ${doc.title}\nState: ${state.name} (${state.code})\nCustomer: ${effectiveCustomerName} (${targetRecipientEmail})${appleNotice}\nDelivery: Resend Dispatched & AWS S3 Archived`;
           await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },

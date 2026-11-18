@@ -293,9 +293,11 @@ export function DynamicDocumentForm({
       console.error("Failed to sync checkout session to S3:", err);
     }
 
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://legaldeliveryportal.com";
+    const redirectParam = `&checkout[redirect_url]=${encodeURIComponent(`${origin}/success?doc=${config.slug}&state=${selectedStateCode}&session_id=${sessionId}`)}`;
     const emailParam = userDeliveryEmail ? `&checkout[email]=${encodeURIComponent(userDeliveryEmail)}` : "";
     const customParams = `&checkout[custom][session_id]=${encodeURIComponent(sessionId)}&checkout[custom][doc]=${encodeURIComponent(config.slug)}&checkout[custom][state]=${encodeURIComponent(selectedStateCode)}`;
-    const checkoutUrl = `${baseCheckout}${baseCheckout.includes("?") ? "&" : "?"}${emailParam}${customParams}`;
+    const checkoutUrl = `${baseCheckout}${baseCheckout.includes("?") ? "&" : "?"}${emailParam}${customParams}${redirectParam}`;
 
     window.location.href = checkoutUrl;
   };
@@ -564,8 +566,8 @@ export function DynamicDocumentForm({
 
       {/* Review & Delivery Modal */}
       {showReviewModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="relative w-full max-w-lg bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200 overflow-y-auto">
+          <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-2xl space-y-5 sm:space-y-6 my-auto scrollbar-thin scrollbar-thumb-slate-700">
             <button
               type="button"
               onClick={() => setShowReviewModal(false)}

@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
           previewMode: false, // Official clean copy!
         });
 
-        pdfBuffer = Buffer.from(pdfBytes.buffer as ArrayBuffer);
+        pdfBuffer = Buffer.from(pdfBytes);
         pdfBase64 = pdfBuffer.toString("base64");
       } catch (pdfErr) {
         console.error("Server-side PDF generation error during delivery:", pdfErr);

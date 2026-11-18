@@ -274,7 +274,9 @@ export async function generateDocumentPdf(options: GeneratePdfOptions): Promise<
   // Render All Structured Sections with Balanced Spacing
   for (const section of sections) {
     if (section.title) {
-      engine.ensureSpace(20);
+      // Ensure space for both the section heading (~20pt) and at least the first content lines (~32pt)
+      // to strictly prevent "orphan headings" at the bottom of pages.
+      engine.ensureSpace(52);
       engine.currentY -= 4;
       engine.drawText(section.title.toUpperCase(), engine.fontHeading, 9.5, rgb(0.1, 0.16, 0.26));
       engine.currentY -= 11;

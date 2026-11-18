@@ -31,6 +31,9 @@ export const metadata = {
   title: "Court-Admissible Legal Documents in 3 Minutes | LegalDeliveryPortal.com",
   description:
     "State-specific legal notices, demands, and agreements compliant with all 50 states. One-time flat fee with zero subscriptions. Instant court-ready PDF download.",
+  alternates: {
+    canonical: "https://legaldeliveryportal.com",
+  },
 };
 
 const FAQ_ITEMS = [

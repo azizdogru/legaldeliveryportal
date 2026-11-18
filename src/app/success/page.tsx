@@ -67,8 +67,9 @@ function OrderSuccessContent() {
         const savedEmail = localStorage.getItem("ldp_delivery_email") || searchParams.get("email") || "";
         if (savedEmail) {
           setDeliveryEmail(savedEmail);
-          // Automatically trigger Resend delivery to user's saved email
-          triggerEmailDelivery(savedEmail);
+          // Set status as dispatched by webhook, avoiding race-condition duplicate email
+          setEmailStatus("sent");
+          setEmailMessage(`Official PDF copy is being dispatched to ${savedEmail}. Check your inbox or resend anytime below.`);
         }
       } catch (e) {
         console.error("Storage error:", e);
@@ -218,7 +219,7 @@ function OrderSuccessContent() {
         previewMode: false,
       });
 
-      const blob = new Blob([pdfBytes.buffer as ArrayBuffer], { type: "application/pdf" });
+      const blob = new Blob([pdfBytes], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
