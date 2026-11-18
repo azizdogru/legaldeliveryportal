@@ -71,6 +71,7 @@ export default function HomePage() {
       price: "9.90",
       priceCurrency: "USD",
       priceValidUntil: "2027-12-31",
+      validFrom: "2025-01-01",
       availability: "https://schema.org/InStock",
     },
     aggregateRating: {

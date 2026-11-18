@@ -130,12 +130,49 @@ export default function StateDocumentLandingPage({ params }: PageProps) {
       price: doc.priceAmount.toFixed(2),
       priceCurrency: "USD",
       priceValidUntil: "2027-12-31",
+      validFrom: "2025-01-01",
       itemCondition: "https://schema.org/NewCondition",
       availability: "https://schema.org/InStock",
       seller: {
         "@type": "Organization",
         name: "Legal Delivery Portal",
         url: "https://legaldeliveryportal.com",
+      },
+      hasMerchantReturnPolicy: {
+        "@type": "MerchantReturnPolicy",
+        applicableCountry: "US",
+        returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+        merchantReturnDays: 14,
+        returnMethod: "https://schema.org/ReturnOnline",
+        returnFees: "https://schema.org/FreeReturn",
+        refundType: "https://schema.org/FullRefund",
+      },
+      shippingDetails: {
+        "@type": "OfferShippingDetails",
+        shippingRate: {
+          "@type": "MonetaryAmount",
+          value: "0.00",
+          currency: "USD",
+        },
+        shippingDestination: {
+          "@type": "DefinedRegion",
+          addressCountry: "US",
+        },
+        deliveryTime: {
+          "@type": "ShippingDeliveryTime",
+          handlingTime: {
+            "@type": "QuantitativeValue",
+            minValue: 0,
+            maxValue: 0,
+            unitCode: "DAY",
+          },
+          transitTime: {
+            "@type": "QuantitativeValue",
+            minValue: 0,
+            maxValue: 0,
+            unitCode: "DAY",
+          },
+        },
       },
     },
     aggregateRating: {
@@ -183,6 +220,7 @@ export default function StateDocumentLandingPage({ params }: PageProps) {
       price: doc.priceAmount.toFixed(2),
       priceCurrency: "USD",
       priceValidUntil: "2027-12-31",
+      validFrom: "2025-01-01",
       availability: "https://schema.org/InStock",
     },
     aggregateRating: {
