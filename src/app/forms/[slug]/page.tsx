@@ -90,7 +90,7 @@ export default function DocumentOverviewPage({ params }: PageProps) {
         applicableCountry: "US",
         returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
         merchantReturnDays: 14,
-        returnMethod: "https://schema.org/ReturnOnline",
+        returnMethod: "https://schema.org/ReturnByMail",
         returnFees: "https://schema.org/FreeReturn",
         refundType: "https://schema.org/FullRefund",
       },
